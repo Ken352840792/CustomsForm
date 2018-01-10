@@ -1,0 +1,13 @@
+{
+    "Status": 1,
+    "ErrorCode": null,
+    "Data": [{
+            "name": "UserName",
+            "roleGuids": ["1111", "2222", "3333"]
+        },
+        {
+            "name": "UserName11",
+            "roleGuids": ["1111", "2222", "3333"]
+        }
+    ]
+}

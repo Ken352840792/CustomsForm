@@ -1,0 +1,23 @@
+{
+  "name": "customfrom",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ken"
+  ],
+  "author": "ken",
+  "license": "ISC",
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "webpack": "^3.10.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1"
+  }
+}

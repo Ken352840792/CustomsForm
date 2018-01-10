@@ -1,0 +1,35 @@
+{
+    "Status": 1,
+    "ErrorCode": null,
+    "Data": [{
+        "type": "Text",
+        "name": "UserName",
+        "lable": "姓名",
+        "placeholder": "请输入姓名",
+        "input": "<input id='dom_core_UserName' type='text'/>",
+        "regexp": {
+            "lableRequire": false, 
+            "require": false, 
+            "msg": "输入浮点数", 
+            "test": "" 
+        },
+        "events":
+            {
+                "click": "function(){console.log('1');}",
+                "focus" : "function(){console.log('焦点来了');}"
+            }
+    },
+    {
+        "name": "UserName11",
+        "type": "Text",
+        "lable": "姓名", 
+        "placeholder": "请输入姓名",
+        "input": "<input type='text'/>",
+        "regexp": {
+            "require": false,  
+            "msg": "输入浮点数", 
+            "test": ""  
+        }
+    }
+]
+}
