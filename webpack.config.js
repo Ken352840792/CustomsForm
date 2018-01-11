@@ -7,10 +7,10 @@ module.exports = {
         path: __dirname+'/built',
         filename: 'bundle.js'
     }, 
-    plugins:[
-        // 每个成员代表一个插件
-        new UglifyJsPlugin()
-    ],
+    // plugins:[
+    //     // 每个成员代表一个插件
+    //     new UglifyJsPlugin()
+    // ],
     module: {    
         loaders: [{    
             test: /\.js$/,    

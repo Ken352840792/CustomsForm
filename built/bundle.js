@@ -1,1 +1,497 @@
-!function(e){function t(o){if(n[o])return n[o].exports;var r=n[o]={i:o,l:!1,exports:{}};return e[o].call(r.exports,r,r.exports,t),r.l=!0,r.exports}var n={};t.m=e,t.c=n,t.d=function(e,n,o){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:o})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="",t(t.s=0)}([function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t._selfFrom=void 0;var o=n(1),r=n(2),s=void 0;t._selfFrom=s,function(){var e={Text:r.aa},n=function(e,n){var r={saveUrl:"",ruleUrl:"",ruleData:[],myRuleData:[],myRuleGuid:"",sourceUrl:"",sourceData:[],components:{}};t._selfFrom=s=e,this._self_=e,this.opts=$.extend({},r,n),this.server=o.app.server,this.server.add({ruleUrl:this.opts.ruleUrl,sourceUrl:this.opts.sourceUrl,saveUrl:this.opts.saveUrl}),this.init()};n.prototype={init:function(){var t=this,n=this.opts;t.setSourceData(function(){t.setRuleData(),n.sourceData.forEach(function(t){if(-1!==n.myRuleData.indexOf(t.name)){var o=t.type+"_"+t.name;n.components[o]=new e[t.type](t);for(var r in t.events)r in n.components[o]?n.components[o][r]=new Function("return "+t.events[r])():$("#dom_core_"+t.name).on(r,Function("return "+t.events[r])())}})})},setSourceData:function(e){var t=this,n=this.opts;0===n.sourceData.length?t.server.sourceUrl.get({data:{},success:function(t){n.sourceData=t,e()}}):e()},setRuleData:function(e){var t=this,n=this.opts;0===n.ruleData.length&&t.server.ruleUrl.get({data:{},async:!1,success:function(e){n.ruleData=e}}),n.sourceData.forEach(function(e){n.ruleData.forEach(function(t){t.name===e.name&&-1!==t.roleGuids.indexOf(n.myRuleGuid)&&n.myRuleData.push(e.name)})})},getValue:function(){var e=this.opts,t={};for(var n in e.components)t[n.split("_")[1]]=e.components[n].getValue();return t},setValue:function(e){var t=this.opts;for(var n in t.components)e.forEach(function(e){e.name===n.split("_")[1]&&t.components[n].setValue(e.value)})},valid:function(){var e=this.opts,t=!0;for(var n in e.components)e.components[n].valid()||(t=!1);return t},save:function(){var e=this;this.opts;e.valid()?e.server.saveUrl.post({data:e.getValue(),success:function(e){alert("提交成功")}}):alert("验证失败咯")}},$.fn.extend({customFrom:function(e){if(o.app.basepage.server(),"string"!=typeof e){var t=new n($(this),e);return $(this).data("customFrom",t),t}var r=$(this).data("customFrom");r[e].apply(r,Array.prototype.slice.call(arguments,1))}})}()},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var o="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};!function(){function e(e,n){var o=t.deepClone(n),r={befoureFn:function(e,o){var r="Basic "+encodeURI(t.Cookie("Authorization"));e.setRequestHeader("Authorization",r),n.beforeSend&&n.beforeSend()},completeFn:function(){n.complete&&n.complete()},errorFn:function(){n.error&&n.error()},successFn:function(e){o.forceSuccess?n.success&&n.success(e):e.Status?n.success&&n.success(e.Data):msgShowInfo(e.Message?e.Message:getLan(e.ErrorCode))}};if(o.url=n.url?n.url:this.url,o.beforeSend=r.befoureFn,o.type=e,o.complete=r.completeFn,o.success=r.successFn,o.error=r.errorFn,o.dataType=n.dataType?n.dataType:"json","DELETE"==e||"PUT"==e){o.url+="?",o.contentType=n.contentType?n.contentType:"application/json";for(var s in n.data)o.url+=s+"="+n.data[s]+"&";o.url=o.url.substring(0,o.url.length-1)}return o}var t={global:{debug:1,remoteBaseUri:"",debugBaseUri:""},deepClone:function(e){return JSON.parse(JSON.stringify(e))},Cookie:function(e,t,n){if(void 0===t){var r=null;if(document.cookie&&""!=document.cookie)for(var s=document.cookie.split(";"),a=0;a<s.length;a++){var i=jQuery.trim(s[a]);if(i.substring(0,e.length+1)==e+"="){try{r=decodeURIComponent(i.substring(e.length+1))}catch(t){r=i.substring(e.length+1)}break}}if(jQuery.evalJSON&&r&&r.match(/^\s*\{/))try{r=jQuery.evalJSON(r)}catch(e){}return r}n=n||{},null===t&&(t="",n.expires=-1),"object"===(void 0===t?"undefined":o(t))&&JSON.stringify&&(t=JSON.stringify(t));var u="";if(n.expires&&("number"==typeof n.expires||n.expires.toUTCString)){var c;"number"==typeof n.expires?(c=new Date,c.setTime(c.getTime()+24*n.expires*60*60*1e3)):c=n.expires,u="; expires="+c.toUTCString()}var l=n.path?"; path="+n.path:"",p=n.domain?"; domain="+n.domain:"",f=n.secure?"; secure":"";document.cookie=[e,"=",encodeURIComponent(t),u,l,p,f].join("")}},n=function(e){t.global.debug?this.url=t.global.debugBaseUri+e:this.url=t.global.remoteBaseUri+e};n.prototype={toString:function(){return this.url},post:function(t){$.ajax(e.call(this,"POST",t))},get:function(t){$.ajax(e.call(this,"GET",t))},del:function(t){$.ajax(e.call(this,"DELETE",t))},put:function(t){$.ajax(e.call(this,"PUT",t))}},t.basepage={server:function(e){var o={add:function(e){var t;for(t in e)e[t]&&(this[t]=new n(e[t]))}};return o.add(e),t.server=o,o}},window.app=t}(),t.app=app},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.aa=void 0;var o=n(0);!function(){var e=function(e){return console.log(e),this.opts=e,this.init(),this};e.prototype={init:function(){o._selfFrom.append(this.opts.input)},getValue:function(){return console.log("测试方法"),"我是返回值！"},setValue:function(e){console.log("我是设置的:"+e)},valid:function(){return!0}},window.aa=e}(),t.aa=aa}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports._selfFrom = undefined;
+
+var _basepage = __webpack_require__(1);
+
+var _index = __webpack_require__(2);
+
+var _selfFrom = void 0;
+exports._selfFrom = _selfFrom;
+
+(function () {
+    var componentMapping = {
+        text: _index.Text
+    };
+    var _customFrom = function _customFrom(_self, options) {
+        var defaults = {
+            saveUrl: '',
+            ruleUrl: '',
+            ruleData: [],
+            myRuleData: [],
+            myRuleGuid: '',
+            sourceUrl: '',
+            sourceData: [],
+            components: {} //组件集合
+        };
+        exports._selfFrom = _selfFrom = _self, this._self_ = _self, this.opts = $.extend({}, defaults, options), this.server = _basepage.app.server;
+        this.server.add({
+            ruleUrl: this.opts.ruleUrl,
+            sourceUrl: this.opts.sourceUrl,
+            saveUrl: this.opts.saveUrl
+        });
+        this.init();
+    };
+    _customFrom.prototype = {
+        init: function init() {
+            //创建循环创建组件
+            var _this = this,
+                opts = this.opts;
+            //初始化数据源配置数据
+            _this.setSourceData(function () {
+                //初始化表单角色数据
+                _this.setRuleData();
+                opts.sourceData.forEach(function (item) {
+                    if (opts.myRuleData.indexOf(item.name) !== -1 && componentMapping.hasOwnProperty(item.type)) {
+                        var componentName = item.type + '_' + item.name;
+                        opts.components[componentName] = new componentMapping[item.type](item);
+                        //绑定事件
+                        for (var e in item.events) {
+                            if (e in opts.components[componentName]) {} else {
+                                opts.components[componentName].input.on(e, typeof item.events[e] === "string" ? Function("return " + item.events[e])() : item.events[e]);
+                            }
+                        }
+                    }
+                });
+            });
+        },
+        setSourceData: function setSourceData(callback) {
+            var _this = this,
+                opts = this.opts;
+            if (opts.sourceData.length === 0) {
+                _this.server.sourceUrl.get({
+                    data: {},
+                    success: function success(obj) {
+                        opts.sourceData = obj;
+                        callback();
+                    }
+                });
+            } else {
+                callback();
+            }
+        },
+        setRuleData: function setRuleData(url) {
+            var _this = this,
+                opts = this.opts;
+            if (opts.ruleData.length === 0) {
+                _this.server.ruleUrl.get({
+                    data: {},
+                    async: false,
+                    success: function success(obj) {
+                        opts.ruleData = obj;
+                    }
+                });
+            }
+            opts.sourceData.forEach(function (item) {
+                opts.ruleData.forEach(function (ruleItem) {
+                    if (ruleItem.name === item.name && ruleItem.roleGuids.indexOf(opts.myRuleGuid) !== -1) {
+                        opts.myRuleData.push(item.name);
+                    }
+                });
+            });
+        },
+        getValue: function getValue() {
+            var _this = this,
+                opts = this.opts;
+            var retrunObj = {};
+            for (var itemAttr in opts.components) {
+                retrunObj[itemAttr.split('_')[1]] = opts.components[itemAttr].getValue();
+            }
+            return retrunObj;
+        },
+        ///[{'name':'UserName','value':'123'}]
+        setValue: function setValue(values) {
+            var _this = this,
+                opts = this.opts;
+            for (var itemAttr in opts.components) {
+                values.forEach(function (item) {
+                    if (item.name === itemAttr.split('_')[1]) {
+                        opts.components[itemAttr].setValue(item.value);
+                    }
+                });
+            }
+        },
+        valid: function valid() {
+            var _this = this,
+                opts = this.opts,
+                v = true;
+            for (var itemAttr in opts.components) {
+                if (!opts.components[itemAttr].valid()) {
+                    v = false;
+                }
+            }
+            return v;
+        },
+        save: function save() {
+            var _this = this,
+                opts = this.opts;
+            if (_this.valid()) {
+                _this.server.saveUrl.post({
+                    data: _this.getValue(),
+                    success: function success(obj) {
+                        alert('提交成功');
+                    }
+                });
+            } else {
+                alert('验证失败咯');
+            }
+        }
+    };
+    $.fn.extend({
+        customFrom: function customFrom(options) {
+            _basepage.app.basepage.server();
+            if (typeof options === 'string') {
+                var data = $(this).data('customFrom');
+                data[options].apply(data, Array.prototype.slice.call(arguments, 1));
+            } else {
+                var modal = new _customFrom($(this), options);
+                $(this).data('customFrom', modal);
+                return modal;
+            }
+        }
+    });
+})();
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+(function () {
+    var app = {
+        global: {
+            debug: 1,
+            remoteBaseUri: '',
+            debugBaseUri: ''
+        },
+        deepClone: function deepClone(obj) {
+            return JSON.parse(JSON.stringify(obj));
+        },
+        Cookie: function Cookie(name, value, options) {
+            if (typeof value != 'undefined') {
+                // name and value given, set cookie
+                options = options || {};
+                if (value === null) {
+                    value = '';
+                    options.expires = -1;
+                }
+                // convert value to JSON string
+                if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && JSON.stringify) {
+                    value = JSON.stringify(value);
+                }
+                var expires = '';
+                // Set expiry
+                if (options.expires && (typeof options.expires == 'number' || options.expires.toUTCString)) {
+                    var date;
+                    if (typeof options.expires == 'number') {
+                        date = new Date();
+                        date.setTime(date.getTime() + options.expires * 24 * 60 * 60 * 1000);
+                    } else {
+                        date = options.expires;
+                    }
+                    expires = '; expires=' + date.toUTCString(); // use expires attribute, max-age is not supported by IE
+                }
+                // CAUTION: Needed to parenthesize options.path and options.domain
+                // in the following expressions, otherwise they evaluate to undefined
+                // in the packed version for some reason...
+                var path = options.path ? '; path=' + options.path : '';
+                var domain = options.domain ? '; domain=' + options.domain : '';
+                var secure = options.secure ? '; secure' : '';
+                // Set the cookie name=value;expires=;path=;domain=;secure-
+                document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join('');
+            } else {
+                // only name given, get cookie
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == name + '=') {
+                            // Get the cookie value
+                            try {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            } catch (e) {
+                                cookieValue = cookie.substring(name.length + 1);
+                            }
+                            break;
+                        }
+                    }
+                }
+                // Parse JSON from the cookie into an object
+                if (jQuery.evalJSON && cookieValue && cookieValue.match(/^\s*\{/)) {
+                    try {
+                        cookieValue = jQuery.evalJSON(cookieValue);
+                    } catch (e) {}
+                }
+                return cookieValue;
+            }
+        }
+    };
+    var srvFn = function srvFn(url) {
+        //this.url = url.replace(/^['/']/, '');
+        if (!app.global.debug) {
+            this.url = app.global.remoteBaseUri + url;
+        } else {
+            this.url = app.global.debugBaseUri + url;
+        }
+    };
+    function makeParam(postType, option) {
+        var opts = app.deepClone(option);
+        var optionDefault = {
+            befoureFn: function befoureFn(xhr, data2) {
+                var authorization = "Basic " + encodeURI(app.Cookie("Authorization"));
+                xhr.setRequestHeader("Authorization", authorization);
+                option.beforeSend ? option.beforeSend() : '';
+            },
+            completeFn: function completeFn() {
+                option.complete ? option.complete() : '';
+            },
+            errorFn: function errorFn() {
+                option.error ? option.error() : '';
+            },
+            successFn: function successFn(json) {
+                if (opts.forceSuccess) {
+                    //是否强制回调
+                    option.success ? option.success(json) : '';
+                } else {
+                    if (json.Status) {
+                        option.success ? option.success(json.Data) : '';
+                    } else {
+                        msgShowInfo(json.Message ? json.Message : getLan(json.ErrorCode));
+                    }
+                }
+            }
+        };
+        opts.url = option.url ? option.url : this.url;
+        opts.beforeSend = optionDefault.befoureFn;
+        opts.type = postType;
+        opts.complete = optionDefault.completeFn;
+        opts.success = optionDefault.successFn;
+        opts.error = optionDefault.errorFn;
+        opts.dataType = option.dataType ? option.dataType : 'json';
+
+        if (postType == "DELETE" || postType == 'PUT') {
+
+            //临时解决
+            opts.url += "?";
+            opts.contentType = option.contentType ? option.contentType : 'application/json';
+            for (var a in option.data) {
+                opts.url += a + '=' + option.data[a] + "&";
+            }
+            opts.url = opts.url.substring(0, opts.url.length - 1);
+            //opts.data = JSON.stringify(option.data);
+        }
+        return opts;
+    }
+
+    srvFn.prototype = {
+        toString: function toString() {
+            return this.url;
+        },
+        post: function post(option) {
+            $.ajax(makeParam.call(this, 'POST', option));
+        },
+        get: function get(option) {
+            $.ajax(makeParam.call(this, 'GET', option));
+        },
+        del: function del(option) {
+            $.ajax(makeParam.call(this, 'DELETE', option));
+        },
+        put: function put(option) {
+            $.ajax(makeParam.call(this, 'PUT', option));
+        }
+    };
+    app.basepage = {
+        server: function server(uriList) {
+            var srv = {
+                add: function add(uriHashSet) {
+                    var key;
+                    for (key in uriHashSet) {
+                        if (uriHashSet[key]) {
+                            this[key] = new srvFn(uriHashSet[key]);
+                        }
+                    }
+                }
+            };
+            srv.add(uriList);
+            app.server = srv;
+            return srv;
+        }
+    };
+    window.app = app;
+})();
+exports.app = app;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Text = undefined;
+
+var _CustomFrom = __webpack_require__(0);
+
+(function () {
+    var Text = function Text(options) {
+        var defaults = {
+            Form: {},
+            value: "" //双向数据绑定字段
+        };
+        this.opts = $.extend({}, defaults, options);
+        this.init();
+        return this;
+    };
+    Text.prototype = {
+        init: function init() {
+            var _this = this,
+                opts = this.opts,
+                form = opts.Form;
+            _this.createComponent();
+            _this.Events();
+            //调用自定义事件
+            if (opts.customEvent) {
+                opts.customEvent.oninitialize ? opts.customEvent.oninitialize(_this.input, _this) : '';
+            }
+        },
+        Events: function Events() {
+            var _this = this,
+                opts = this.opts;
+            Object.defineProperty(opts, 'des', {
+                get: function get() {
+                    //获取数据
+                    return this.value;
+                },
+                set: function set(val) {
+                    //设置值
+                    _this.input.val(val);
+                    this.value = val;
+                }
+            });
+            _this.input.on('keyup', function () {
+                opts.des = this.value;
+            });
+        },
+        //创建Component表
+        createComponent: function createComponent() {
+            var _this = this,
+                opts = this.opts,
+                form = opts.Form;
+            form.content = $('<div class = "ui-field-contain"></div>');
+            form.lable = $('<label for="fname">' + opts.lable + '</label>');
+            form.content.append(form.lable);
+            //必选lable上给星号
+            if (opts.regexp && opts.regexp.require) form.content.append($('<i style ="color: red"> * </i>'));
+            _this.input = $(opts.input);
+            _this.input.attr('placeholder', opts.placeholder);
+            form.content.append(_this.input);
+            _CustomFrom._selfFrom.append(form.content);
+        },
+        getValue: function getValue() {
+            return this.opts.value;
+        },
+        setValue: function setValue(val) {
+            this.opts.des = val;
+        },
+        valid: function valid() {
+            var _this = this,
+                opts = this.opts;
+            if (opts.regexp && opts.regexp.test) {
+                return new RegExp(opts.regexp.test).test(opts.value);
+            } else {
+                return true;
+            }
+        }
+    };
+    window.Text = Text;
+})();
+exports.Text = Text;
+
+/***/ })
+/******/ ]);

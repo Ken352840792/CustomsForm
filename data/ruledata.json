@@ -2,11 +2,27 @@
     "Status": 1,
     "ErrorCode": null,
     "Data": [{
-            "name": "UserName",
+            "name": "username",
             "roleGuids": ["1111", "2222", "3333"]
         },
         {
-            "name": "UserName11",
+            "name": "age",
+            "roleGuids": ["1111", "2222", "3333"]
+        },
+        {
+            "name": "gebder",
+            "roleGuids": ["1111", "2222", "3333"]
+        },
+        {
+            "name": "textarea",
+            "roleGuids": ["1111", "2222", "3333"]
+        },
+        {
+            "name": "time",
+            "roleGuids": ["1111", "2222", "3333"]
+        },
+        {
+            "name": "remark",
             "roleGuids": ["1111", "2222", "3333"]
         }
     ]

@@ -1,16 +1,14 @@
 import {
     app
 } from '../../Comment/basepage';
-import {
-    aa
-} from './Text/aa';
+import { Text } from './Text/index';
 let _selfFrom;
 export {
     _selfFrom
 }
-(function(){
+(function () {
     var componentMapping = {
-        Text: aa
+        text: Text
     };
     var customFrom = function (_self, options) {
         var defaults = {
@@ -30,7 +28,7 @@ export {
         this.server.add({
             ruleUrl: this.opts.ruleUrl,
             sourceUrl: this.opts.sourceUrl,
-            saveUrl:this.opts.saveUrl
+            saveUrl: this.opts.saveUrl
         });
         this.init();
     };
@@ -41,22 +39,18 @@ export {
                 opts = this.opts;
             //初始化数据源配置数据
             _this.setSourceData(function () {
-                 //初始化表单角色数据
+                //初始化表单角色数据
                 _this.setRuleData();
                 opts.sourceData.forEach(function (item) {
-                    if (opts.myRuleData.indexOf(item.name) !== -1) {
-                        var componentName=item.type + '_' + item.name;
+                    if (opts.myRuleData.indexOf(item.name) !== -1 && componentMapping.hasOwnProperty(item.type)) {
+                        var componentName = item.type + '_' + item.name;
                         opts.components[componentName] = new componentMapping[item.type](item);
                         //绑定事件
-                        for(var e in item.events){
-                            if(e in opts.components[componentName]){
-                                opts.components[componentName][e]=new Function("return "+item.events[e])();
-                            }else{
-                                $('#dom_core_'+item.name).on(e,Function("return "+item.events[e])());
+                        for (var e in item.events) {
+                            if (e in opts.components[componentName]) {} else {
+                                opts.components[componentName].input.on(e, typeof item.events[e] === "string" ? Function("return " + item.events[e])() : item.events[e]);
                             }
-                            
                         }
-                        
                     }
                 });
             });
@@ -94,7 +88,7 @@ export {
                         opts.myRuleData.push(item.name);
                     }
                 });
-    
+
             });
         },
         getValue: function () {
@@ -109,10 +103,10 @@ export {
         ///[{'name':'UserName','value':'123'}]
         setValue: function (values) {
             var _this = this,
-            opts = this.opts;
+                opts = this.opts;
             for (var itemAttr in opts.components) {
-                values.forEach(function(item){
-                    if(item.name===itemAttr.split('_')[1]){
+                values.forEach(function (item) {
+                    if (item.name === itemAttr.split('_')[1]) {
                         opts.components[itemAttr].setValue(item.value);
                     }
                 });
@@ -120,25 +114,26 @@ export {
         },
         valid: function () {
             var _this = this,
-            opts = this.opts,v=true;
+                opts = this.opts,
+                v = true;
             for (var itemAttr in opts.components) {
-               if(!opts.components[itemAttr].valid()){
-                    v=false;
-               }
+                if (!opts.components[itemAttr].valid()) {
+                    v = false;
+                }
             }
             return v;
         },
         save: function () {
             var _this = this,
-            opts = this.opts;
-            if(_this.valid()){
+                opts = this.opts;
+            if (_this.valid()) {
                 _this.server.saveUrl.post({
                     data: _this.getValue(),
                     success: function (obj) {
                         alert('提交成功');
                     }
                 });
-            }else{
+            } else {
                 alert('验证失败咯');
             }
         }
