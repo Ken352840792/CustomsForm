@@ -188,11 +188,77 @@ exports._selfFrom = _selfFrom;
             var _this = this,
                 opts = this.opts,
                 v = true;
+            //必须验证
             for (var itemAttr in opts.components) {
-                if (!opts.components[itemAttr].valid()) {
-                    v = false;
+                if (v) {
+                    opts.sourceData.forEach(function (item) {
+                        if (v) {
+                            if (item.name === itemAttr.split('_')[1]) {
+                                if (item.regexp && item.regexp.require) {
+                                    if (opts.components[itemAttr].getValue().trim() === "") {
+                                        v = false;
+                                        alert(item.placeholder ? item.placeholder : item.lable + "必须输入");
+                                        return;
+                                    }
+                                }
+                                if (item.regexp && item.regexp.test) {
+                                    v = new RegExp(item.regexp.test).test(opts.components[itemAttr].getValue());
+                                    if (!v) {
+                                        alert(item.regexp && item.regexp.msg ? item.regexp.msg : "正则验证无提示信息");
+                                        return;
+                                    }
+                                }
+                                if (item.regexp && item.regexp.customMethod) {
+                                    var fun = typeof item.regexp.customMethod === "string" ? Function("return " + item.regexp.customMethod)() : item.regexp.customMethod;
+                                    if (!fun(opts.components[itemAttr].getValue(), opts.components[itemAttr])) {
+                                        v = false;
+                                        alert(item.regexp && item.regexp.customMethodMsg ? item.regexp.customMethodMsg : "自定义验证无提示信息");
+                                        return;
+                                    };
+                                }
+                            }
+                        }
+                    });
                 }
             }
+            // if (v) {
+            //     //正则验证
+            //     for (var itemAttr in opts.components) {
+            //         if (v) {
+            //             opts.sourceData.forEach(function (item) {
+            //                 if (v) {
+            //                     if (item.name === itemAttr.split('_')[1]) {
+            //                         if (item.regexp && item.regexp.test) {
+            //                             v = new RegExp(item.regexp.test).test(opts.components[itemAttr].getValue());
+            //                             if(!v)
+            //                             alert(item.regexp && item.regexp.msg ? item.regexp.msg : "正则验证无提示信息");
+            //                         }
+            //                     }
+            //                 }
+            //             });
+            //         }
+            //     }
+            // }
+            // if (v) {
+            //     for (var itemAttr in opts.components) {
+            //         if (v) {
+            //             //自定义验证
+            //             opts.sourceData.forEach(function (item) {
+            //                 if (v) {
+            //                     if (item.name === itemAttr.split('_')[1]) {
+            //                         if (item.regexp && item.regexp.customMethod) {
+            //                             var fun = typeof item.regexp.customMethod === "string" ? Function("return " + item.regexp.customMethod)() : item.regexp.customMethod;
+            //                             if (!fun(opts.components[itemAttr].getValue(), opts.components[itemAttr])) {
+            //                                 v = false;
+            //                                 alert(item.regexp && item.regexp.customMethodMsg ? item.regexp.customMethodMsg : "自定义验证无提示信息");
+            //                             };
+            //                         }
+            //                     }
+            //                 }
+            //             });
+            //         };
+            //     }
+            // }
             return v;
         },
         save: function save() {
@@ -480,8 +546,7 @@ var _CustomFrom = __webpack_require__(0);
             this.opts.des = val;
         },
         valid: function valid() {
-            var _this = this,
-                opts = this.opts;
+            var opts = this.opts;
             if (opts.regexp && opts.regexp.test) {
                 return new RegExp(opts.regexp.test).test(opts.value);
             } else {

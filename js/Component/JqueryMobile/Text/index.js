@@ -59,14 +59,6 @@ import {
         },
         setValue: function (val) {
             this.opts.des = val;
-        },
-        valid: function () {
-            var  opts = this.opts;
-            if (opts.regexp && opts.regexp.test) {
-                return new RegExp(opts.regexp.test).test(opts.value);
-            } else {
-                return true;
-            }
         }
     };
     window.Text = Text;

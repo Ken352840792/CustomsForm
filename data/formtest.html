@@ -89,8 +89,8 @@
 	 var validaterules = {
 		 username : {
 			"rules" : {required:true,maxlength:16},
-			"definedMethod" : function (value, element, params){
-					if(value.length > 10){
+			"definedMethod" : function (value, eleObj){
+					if(value.length > 20){
 						console.log('验证失败'); 
 						return false;
 					}else{
@@ -101,15 +101,15 @@
 		},
 		 age : {
 			"rules" : { required: true, min: 0, max: 100},
-			"definedMethod" : function (value, element, params){
-					if(value > 100){
+			"definedMethod" : function (value, eleObj){
+					if(value.length > 100){
 						console.log('验证失败'); 
 						return false;
 					}else{
 						return true;
 					}
 				},
-			"regexp" : '^(0|[1-9]\d?|100)$'
+			"regexp" : '0?(13|14|15|17|18|19)[0-9]{9}'
 		},
 		 gender : {
 			"rules" : {required:true}
@@ -139,5 +139,5 @@
 			"rules" : {required:true}
 		}
 	}
-	 var validateMsg={"username":{"definedMethod":"字符长度不能大于10","regexp":"输入浮点数"},"age":{"definedMethod":"","regexp":""},"gender":{},"textarea":{},"picture":{},"files":{},"nationality":{},"hobby":{},"birthday":{},"time":{},"remark":{}}
+	 var validateMsg={"username":{"definedMethod":"字符长度不能大于10","regexp":"输入浮点数"},"age":{"definedMethod":"age自定验证失败","regexp":"输入age"},"gender":{},"textarea":{},"picture":{},"files":{},"nationality":{},"hobby":{},"birthday":{},"time":{},"remark":{}}
 </script>

@@ -1,7 +1,9 @@
 import {
     app
 } from '../../Comment/basepage';
-import { Text } from './Text/index';
+import {
+    Text
+} from './Text/index';
 let _selfFrom;
 export {
     _selfFrom
@@ -117,8 +119,38 @@ export {
                 opts = this.opts,
                 v = true;
             for (var itemAttr in opts.components) {
-                if (!opts.components[itemAttr].valid()) {
-                    v = false;
+                if(v){
+                    opts.sourceData.forEach(function (item) {
+                        if (v) {
+                            if (item.name === itemAttr.split('_')[1]) {
+                                //必须输入
+                                if (item.regexp && item.regexp.require) {
+                                    if (opts.components[itemAttr].getValue().trim() === "") {
+                                        v = false;
+                                        alert(item.placeholder ? item.placeholder : item.lable + "必须输入");
+                                        return;
+                                    }
+                                }
+                                //正则验证
+                                if (item.regexp && item.regexp.test) {
+                                    v = new RegExp(item.regexp.test).test(opts.components[itemAttr].getValue());
+                                    if(!v){
+                                        alert(item.regexp && item.regexp.msg ? item.regexp.msg : "正则验证无提示信息");
+                                        return;
+                                    }
+                                }
+                                //自定义验证
+                                if (item.regexp && item.regexp.customMethod) {
+                                    var fun = typeof item.regexp.customMethod === "string" ? Function("return " + item.regexp.customMethod)() : item.regexp.customMethod;
+                                    if (!fun(opts.components[itemAttr].getValue(), opts.components[itemAttr])) {
+                                        v = false;
+                                        alert(item.regexp && item.regexp.customMethodMsg ? item.regexp.customMethodMsg : "自定义验证无提示信息");
+                                        return;
+                                    };
+                                }
+                            }
+                        }
+                    });
                 }
             }
             return v;
