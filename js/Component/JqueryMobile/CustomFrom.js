@@ -44,7 +44,8 @@ export {
                 //初始化表单角色数据
                 _this.setRuleData();
                 opts.sourceData.forEach(function (item) {
-                    if (opts.myRuleData.indexOf(item.name) !== -1 && componentMapping.hasOwnProperty(item.type)) {
+                    //Debug状态不需要验证
+                    if ((app.global.debug && componentMapping.hasOwnProperty(item.type))||(opts.myRuleData.indexOf(item.name) !== -1 && componentMapping.hasOwnProperty(item.type))) {
                         var componentName = item.type + '_' + item.name;
                         opts.components[componentName] = new componentMapping[item.type](item);
                         //绑定事件
@@ -75,7 +76,10 @@ export {
         setRuleData: function (url) {
             var _this = this,
                 opts = this.opts;
-            if (opts.ruleData.length === 0) {
+            if(app.global.debug){
+
+            }
+            if (opts.ruleData.length === 0&&!app.global.debug) {
                 _this.server.ruleUrl.get({
                     data: {},
                     async: false,

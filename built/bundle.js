@@ -115,7 +115,8 @@ exports._selfFrom = _selfFrom;
                 //初始化表单角色数据
                 _this.setRuleData();
                 opts.sourceData.forEach(function (item) {
-                    if (opts.myRuleData.indexOf(item.name) !== -1 && componentMapping.hasOwnProperty(item.type)) {
+                    //Debug状态不需要验证
+                    if (_basepage.app.global.debug && componentMapping.hasOwnProperty(item.type) || opts.myRuleData.indexOf(item.name) !== -1 && componentMapping.hasOwnProperty(item.type)) {
                         var componentName = item.type + '_' + item.name;
                         opts.components[componentName] = new componentMapping[item.type](item);
                         //绑定事件
@@ -146,7 +147,8 @@ exports._selfFrom = _selfFrom;
         setRuleData: function setRuleData(url) {
             var _this = this,
                 opts = this.opts;
-            if (opts.ruleData.length === 0) {
+            if (_basepage.app.global.debug) {}
+            if (opts.ruleData.length === 0 && !_basepage.app.global.debug) {
                 _this.server.ruleUrl.get({
                     data: {},
                     async: false,
@@ -188,12 +190,12 @@ exports._selfFrom = _selfFrom;
             var _this = this,
                 opts = this.opts,
                 v = true;
-            //必须验证
             for (var itemAttr in opts.components) {
                 if (v) {
                     opts.sourceData.forEach(function (item) {
                         if (v) {
                             if (item.name === itemAttr.split('_')[1]) {
+                                //必须输入
                                 if (item.regexp && item.regexp.require) {
                                     if (opts.components[itemAttr].getValue().trim() === "") {
                                         v = false;
@@ -201,6 +203,7 @@ exports._selfFrom = _selfFrom;
                                         return;
                                     }
                                 }
+                                //正则验证
                                 if (item.regexp && item.regexp.test) {
                                     v = new RegExp(item.regexp.test).test(opts.components[itemAttr].getValue());
                                     if (!v) {
@@ -208,6 +211,7 @@ exports._selfFrom = _selfFrom;
                                         return;
                                     }
                                 }
+                                //自定义验证
                                 if (item.regexp && item.regexp.customMethod) {
                                     var fun = typeof item.regexp.customMethod === "string" ? Function("return " + item.regexp.customMethod)() : item.regexp.customMethod;
                                     if (!fun(opts.components[itemAttr].getValue(), opts.components[itemAttr])) {
@@ -221,44 +225,6 @@ exports._selfFrom = _selfFrom;
                     });
                 }
             }
-            // if (v) {
-            //     //正则验证
-            //     for (var itemAttr in opts.components) {
-            //         if (v) {
-            //             opts.sourceData.forEach(function (item) {
-            //                 if (v) {
-            //                     if (item.name === itemAttr.split('_')[1]) {
-            //                         if (item.regexp && item.regexp.test) {
-            //                             v = new RegExp(item.regexp.test).test(opts.components[itemAttr].getValue());
-            //                             if(!v)
-            //                             alert(item.regexp && item.regexp.msg ? item.regexp.msg : "正则验证无提示信息");
-            //                         }
-            //                     }
-            //                 }
-            //             });
-            //         }
-            //     }
-            // }
-            // if (v) {
-            //     for (var itemAttr in opts.components) {
-            //         if (v) {
-            //             //自定义验证
-            //             opts.sourceData.forEach(function (item) {
-            //                 if (v) {
-            //                     if (item.name === itemAttr.split('_')[1]) {
-            //                         if (item.regexp && item.regexp.customMethod) {
-            //                             var fun = typeof item.regexp.customMethod === "string" ? Function("return " + item.regexp.customMethod)() : item.regexp.customMethod;
-            //                             if (!fun(opts.components[itemAttr].getValue(), opts.components[itemAttr])) {
-            //                                 v = false;
-            //                                 alert(item.regexp && item.regexp.customMethodMsg ? item.regexp.customMethodMsg : "自定义验证无提示信息");
-            //                             };
-            //                         }
-            //                     }
-            //                 }
-            //             });
-            //         };
-            //     }
-            // }
             return v;
         },
         save: function save() {
@@ -544,14 +510,6 @@ var _CustomFrom = __webpack_require__(0);
         },
         setValue: function setValue(val) {
             this.opts.des = val;
-        },
-        valid: function valid() {
-            var opts = this.opts;
-            if (opts.regexp && opts.regexp.test) {
-                return new RegExp(opts.regexp.test).test(opts.value);
-            } else {
-                return true;
-            }
         }
     };
     window.Text = Text;
