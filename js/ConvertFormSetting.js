@@ -16,21 +16,21 @@
                 _validateMsg = validateMsg[name],
                 _validaterules = validaterules[name],
                 _events = events[name],
-                _customEvent = customevents[name];
+                _customEvent=customevents[name];
             if (!_defaults) return;
             var type;
-            if (_defaults.tag === 'input') {
-                type = _defaults.type ? _defaults.type : 'text';
-            } else {
-                type = _defaults.tag;
+            if(_defaults.tag==='input'){
+                type=_defaults.type?_defaults.type:'text';
+            }else{
+                type=_defaults.tag;
             }
-            var input = $('#formtest [name=' + name + "]")[0];
+            var input=$('#formtest [name='+name+"]")[0];
             var cur = {
                 type: type,
                 name: name,
                 lable: _defaults.label,
                 placeholder: _attributes ? _attributes.placeholder : '',
-                input: input ? input.outerHTML : "",
+                input:input?input.outerHTML:"",
                 regexp: {
                     require: _validaterules ? _validaterules.rules.required : false,
                     test: _validaterules ? _validaterules.regexp : '',
@@ -40,18 +40,18 @@
                     },
                     customMethodMsg: _validateMsg ? _validateMsg.definedMethod : ''
                 },
-                events: _events,
-                customEvent: _customEvent
+                events:  _events,
+                customEvent:_customEvent
             };
             array.push(cur);
         };
-        $('#formtest').remove();
-        window.ff = $('#form').customFrom({
-            myRuleGuid: '',
-            sourceData: array,
-            ruleUrl: "",
-            sourceUrl: "../data/datasource.json",
-            saveUrl: "../data/save.json"
-        });
+        $('#formtest').html('');
+       window.ff = $('#form').customFrom({
+        myRuleGuid:'1111',
+        sourceData:array,
+        ruleUrl:"../data/ruledata.json",
+        sourceUrl:"../data/datasource.json",
+        saveUrl:"../data/save.json"
+    });
     });
 })();

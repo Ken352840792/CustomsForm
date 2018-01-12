@@ -79,12 +79,18 @@ var _basepage = __webpack_require__(1);
 
 var _index = __webpack_require__(2);
 
+var _index2 = __webpack_require__(3);
+
+var _index3 = __webpack_require__(4);
+
 var _selfFrom = void 0;
 exports._selfFrom = _selfFrom;
 
 (function () {
     var componentMapping = {
-        text: _index.Text
+        text: _index.Text,
+        number: _index2.TextNumber,
+        data: _index3.TextData
     };
     var _customFrom = function _customFrom(_self, options) {
         var defaults = {
@@ -115,8 +121,7 @@ exports._selfFrom = _selfFrom;
                 //初始化表单角色数据
                 _this.setRuleData();
                 opts.sourceData.forEach(function (item) {
-                    //Debug状态不需要验证
-                    if (_basepage.app.global.debug && componentMapping.hasOwnProperty(item.type) || opts.myRuleData.indexOf(item.name) !== -1 && componentMapping.hasOwnProperty(item.type)) {
+                    if (opts.myRuleData.indexOf(item.name) !== -1 && componentMapping.hasOwnProperty(item.type)) {
                         var componentName = item.type + '_' + item.name;
                         opts.components[componentName] = new componentMapping[item.type](item);
                         //绑定事件
@@ -147,8 +152,7 @@ exports._selfFrom = _selfFrom;
         setRuleData: function setRuleData(url) {
             var _this = this,
                 opts = this.opts;
-            if (_basepage.app.global.debug) {}
-            if (opts.ruleData.length === 0 && !_basepage.app.global.debug) {
+            if (opts.ruleData.length === 0) {
                 _this.server.ruleUrl.get({
                     data: {},
                     async: false,
@@ -486,7 +490,7 @@ var _CustomFrom = __webpack_require__(0);
                     this.value = val;
                 }
             });
-            _this.input.on('keyup', function () {
+            _this.input.on('change', function () {
                 opts.des = this.value;
             });
         },
@@ -499,11 +503,12 @@ var _CustomFrom = __webpack_require__(0);
             form.lable = $('<label for="fname">' + opts.lable + '</label>');
             form.content.append(form.lable);
             //必选lable上给星号
-            if (opts.regexp && opts.regexp.require) form.content.append($('<i style ="color: red"> * </i>'));
+            if (opts.regexp && opts.regexp.require) form.lable.append($('<i style ="color: red"> * </i>'));
             _this.input = $(opts.input);
             _this.input.attr('placeholder', opts.placeholder);
             form.content.append(_this.input);
             _CustomFrom._selfFrom.append(form.content);
+            _this.input.textinput();
         },
         getValue: function getValue() {
             return this.opts.value;
@@ -515,6 +520,213 @@ var _CustomFrom = __webpack_require__(0);
     window.Text = Text;
 })();
 exports.Text = Text;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.TextNumber = undefined;
+
+var _CustomFrom = __webpack_require__(0);
+
+(function () {
+    var TextNumber = function TextNumber(options) {
+        var defaults = {
+            Form: {},
+            value: "" //双向数据绑定字段
+        };
+        this.opts = $.extend({}, defaults, options);
+        this.init();
+        return this;
+    };
+    TextNumber.prototype = {
+        init: function init() {
+            var _this = this,
+                opts = this.opts,
+                form = opts.Form;
+            _this.createComponent();
+            _this.Events();
+            _this.keyboard();
+            //调用自定义事件
+            if (opts.customEvent) {
+                opts.customEvent.oninitialize ? opts.customEvent.oninitialize(_this.input, _this) : '';
+            }
+        },
+        Events: function Events() {
+            var _this = this,
+                opts = this.opts;
+            Object.defineProperty(opts, 'des', {
+                get: function get() {
+                    //获取数据
+                    return this.value;
+                },
+                set: function set(val) {
+                    //设置值
+                    _this.input.val(val);
+                    this.value = val;
+                }
+            });
+            _this.input[0].onchange = function () {
+                opts.des = this.value;
+            };
+        },
+        //创建Component表
+        createComponent: function createComponent() {
+            var _this = this,
+                opts = this.opts,
+                form = opts.Form;
+            form.content = $('<div class = "ui-field-contain"></div>');
+            form.lable = $('<label for="fname">' + opts.lable + '</label>');
+            form.content.append(form.lable);
+            //必选lable上给星号
+            if (opts.regexp && opts.regexp.require) form.lable.append($('<i style ="color: red"> * </i>'));
+            _this.input = $(opts.input);
+            _this.input.attr('placeholder', opts.placeholder);
+            form.content.append(_this.input);
+            _this.input.textinput();
+            _CustomFrom._selfFrom.append(form.content);
+        },
+        // 插件 初始化
+        keyboard: function keyboard() {
+            var _this = this;
+            _this.input.focus(function () {
+                new KeyBoard(this, {
+                    zIndex: 7000,
+                    width: 274,
+                    height: 375,
+                    fontSize: "1.375em",
+                    length: 1000
+                });
+            });
+        },
+        getValue: function getValue() {
+            return this.opts.value;
+        },
+        setValue: function setValue(val) {
+            this.opts.des = val;
+        }
+    };
+    window.TextNumber = TextNumber;
+})();
+exports.TextNumber = TextNumber;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.TextData = undefined;
+
+var _CustomFrom = __webpack_require__(0);
+
+(function () {
+    var TextData = function TextData(options) {
+        var defaults = {
+            Form: {},
+            value: "" //双向数据绑定字段
+        };
+        this.opts = $.extend({}, defaults, options);
+        this.init();
+        return this;
+    };
+    TextData.prototype = {
+        init: function init() {
+            var _this = this,
+                opts = this.opts,
+                form = opts.Form;
+            _this.createComponent();
+            _this.Events();
+            _this.mobiscroll();
+            //调用自定义事件
+            if (opts.customEvent) {
+                opts.customEvent.oninitialize ? opts.customEvent.oninitialize(_this.input, _this) : '';
+            }
+        },
+        Events: function Events() {
+            var _this = this,
+                opts = this.opts;
+            Object.defineProperty(opts, 'des', {
+                get: function get() {
+                    //获取数据
+                    return this.value;
+                },
+                set: function set(val) {
+                    //设置值
+                    _this.input.val(val);
+                    this.value = val;
+                }
+            });
+            _this.input[0].onchange = function () {
+                opts.des = this.value;
+            };
+        },
+        //创建Component表
+        createComponent: function createComponent() {
+            var _this = this,
+                opts = this.opts,
+                form = opts.Form;
+            form.content = $('<div class = "ui-field-contain"></div>');
+            form.lable = $('<label for="fname">' + opts.lable + '</label>');
+            form.content.append(form.lable);
+            //必选lable上给星号
+            if (opts.regexp && opts.regexp.require) form.lable.append($('<i style ="color: red"> * </i>'));
+            _this.input = $(opts.input);
+            _this.input.attr('placeholder', opts.placeholder);
+            form.content.append(_this.input);
+            _this.input.textinput();
+            _CustomFrom._selfFrom.append(form.content);
+        },
+        // 插件 初始化
+        mobiscroll: function (_mobiscroll) {
+            function mobiscroll() {
+                return _mobiscroll.apply(this, arguments);
+            }
+
+            mobiscroll.toString = function () {
+                return _mobiscroll.toString();
+            };
+
+            return mobiscroll;
+        }(function () {
+            var _this = this;
+            var currYear = new Date().getFullYear();
+            mobiscroll.date(_this.input, {
+                lang: "zh",
+                theme: 'android-holo-light',
+                display: 'center',
+                layout: 'fixed',
+                startYear: currYear - 10,
+                endYear: currYear + 10,
+                dateFormat: "yy-mm-dd",
+                onInit: function onInit(event, inst) {
+                    var setBtn = inst.buttons.set;
+                    var setCancel = inst.buttons.cancel;
+                    inst.buttons.set = setCancel;
+                    inst.buttons.cancel = setBtn;
+                }
+            });
+        }),
+        getValue: function getValue() {
+            return this.opts.value;
+        },
+        setValue: function setValue(val) {
+            this.opts.des = val;
+        }
+    };
+    window.TextData = TextData;
+})();
+exports.TextData = TextData;
 
 /***/ })
 /******/ ]);

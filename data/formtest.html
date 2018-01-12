@@ -1,143 +1,356 @@
 ﻿<form id="formtest">
-  <input type="text" name="username" id="dom_core_username" />
-  <input name="age" id="dom_core_age" />
-  <select name="gender" id="dom_core_gender" ></select>
-  <textarea name="textarea" id="dom_core_textarea" ></textarea>
-  <input type="hidden" name="picture" id="dom_core_picture" />
-  <input type="hidden" name="files" id="dom_core_files" />
-  <div id="dom_core_nationality" ></div>
-  <div id="dom_core_hobby" ></div>
-  <input name="birthday" id="dom_core_birthday" />
-  <input name="time" id="dom_core_time" />
-  <div id="dom_core_history" ></div>
-  <textarea name="remark" id="dom_core_remark" ></textarea>
-  <p name="text" id="dom_core_text" ></p>
-  <input type="checkbox" name="" id="">
-<div id="form_tools">
+    <input type="text" name="username" id="dom_core_username" />
+    <input name="age" id="dom_core_age" />
+    <select name="gender" id="dom_core_gender"></select>
+    <textarea name="textarea" id="dom_core_textarea"></textarea>
+    <input type="hidden" name="picture" id="dom_core_picture" />
+    <input type="hidden" name="files" id="dom_core_files" />
+    <div id="dom_core_nationality"></div>
+    <div id="dom_core_hobby"></div>
+    <input name="birthday" id="dom_core_birthday" />
+    <input name="time" id="dom_core_time" />
+    <div id="dom_core_history"></div>
+    <textarea name="remark" id="dom_core_remark"></textarea>
+    <p name="text" id="dom_core_text"></p>
+    <input type="checkbox" name="" id="">
+    <div id="form_tools">
         <h4 class="block"></h4>
-        <input type = "hidden" name="Approval" value="" />
-        <button type = "button" id="Approval">同意</button>
+        <input type="hidden" name="Approval" value="" />
+        <button type="button" id="Approval">同意</button>
         <input type="hidden" name="Reject" value="" />
-        <button type = "button" id="Reject">拒绝</button>
+        <button type="button" id="Reject">拒绝</button>
         <input type="hidden" name="Goback" value="" />
-         <button type = "button" id="Goback">退回重填</button>
+        <button type="button" id="Goback">退回重填</button>
         <input type="hidden" name="Withdrew" value="" />
-        <button type = "button" id="Withdrew">取回</button>
-        <input type="hidden" name="Cancel" value=""/>
-        <button type = "button" id="Cancel">撤销</button>
-        <input type="hidden" name="Notify" value=""/>
-         <button type = "button" id="Notify">知会</button>
-        <input type="hidden" name="Read" value=""/>
-        <button type = "button" id="Read">阅示</button>
-        <input type="hidden" name="Publish" value=""/>
-        <button type = "button" id="Publish">公开</button>
-        <input type="hidden" name="Jointsign" value=""/>
-        <button type = "button" id="Jointsign">会签</button>
-        <input type="hidden" name="Countersign" value=""/>
-        <input type="hidden" name="isBeforeCountersign" value=""/>
-        <button type = "button" id="Countersign">加签</button>
-        <input type="hidden" name="Consignation" value=""/>
-        <button type = "button" id="Consignation" >委托</button>
-        </div>
+        <button type="button" id="Withdrew">取回</button>
+        <input type="hidden" name="Cancel" value="" />
+        <button type="button" id="Cancel">撤销</button>
+        <input type="hidden" name="Notify" value="" />
+        <button type="button" id="Notify">知会</button>
+        <input type="hidden" name="Read" value="" />
+        <button type="button" id="Read">阅示</button>
+        <input type="hidden" name="Publish" value="" />
+        <button type="button" id="Publish">公开</button>
+        <input type="hidden" name="Jointsign" value="" />
+        <button type="button" id="Jointsign">会签</button>
+        <input type="hidden" name="Countersign" value="" />
+        <input type="hidden" name="isBeforeCountersign" value="" />
+        <button type="button" id="Countersign">加签</button>
+        <input type="hidden" name="Consignation" value="" />
+        <button type="button" id="Consignation">委托</button>
+    </div>
 </form>
 <script>
-	 var defaults={"username":{"tag":"input","widget-type":"input","type":"text","name":"username","value":"['张三']","label":"姓名","title":"tips","require":"true","comparecontrol":"","compareoperator":"","comparemessage":"","comparevalue":"","hidden":"false","keepvalue":"true","workshop":"","sheet":"","params":"{}","data":"[0,1,0,1]","text":"","sourcedata":"{}","remark":""},"age":{"tag":"input","widget-type":"number","name":"age","label":"年龄","min":"0","max":"100","step":"1","remark":"数值字段"},"gender":{"tag":"select","widget-type":"dropdown","value":"[1]","name":"gender","label":"性别","title":"","comparecontrol":"","compareoperator":"","comparemessage":"","comparevalue":"","hidden":"false","keepvalue":"false","workshop":"","sheet":"","params":"{}","data":"[0,1,0,1]","text":"","sourcedata":"{1:'男',2:'女'}","remark":""},"textarea":{"tag":"textarea","name":"textarea","comparecontrol":"username","compareoperator":"1","comparemessage":"必填","comparevalue":"2.1","label":"座右铭","widget-type":"textarea"},"picture":{"tag":"input","type":"hidden","name":"picture","widget-type":"images","label":"头像","filesize":"2048【图片大小,单位k】","filetotal":"5【最多上传图片个数】"},"files":{"tag":"input","type":"hidden","name":"files","widget-type":"files","label":"档案材料","filesize":"2048【文件大小,单位k】","filetotal":"5【最多上传文件个数】"},"nationality":{"tag":"div","widget-type":"radios","sourcedata":"{1:'内宾',2:'外宾'}","name":"nationality","label":"国别","remark":"单选框"},"hobby":{"tag":"div","widget-type":"checkboxs","name":"hobby","sourcedata":"{1:'球类',2:'田径',3:'户外',4:'无氧',5:'休闲',6:'花鸟',7:'宠物'}","label":"爱好","minchecked":"2","maxchecked":"5","remark":"多选框"},"birthday":{"tag":"input","name":"birthday","widget-type":"datetime","startdatetime":"","label":"出生年月日","enddatetime":"","formatstr":"yyyy-mm-dd hh:ii:ss","remark":"日期"},"time":{"tag":"input","name":"time","widget-type":"time","starttime":"","endtime":"","label":"出生时间","showSeconds":"true","remark":"时间"},"history":{"tag":"div","name":"history","widget-type":"history","label":"审批历史","remark":"审批历史"},"remark":{"tag":"textarea","name":"remark","widget-type":"remark","label":"备注","remark":"多行文本，每个表单只能有一个widget-remark，作用是记录审批备注，这个审批备注会在审批历史Widget中展现"},"text":{"tag":"p","name":"text","widget-type":"label","text":"文本内容","label":"注意事项","remark":"显示文本"}}
-	 var attributes={"username":{"value":"张三","placeholder":"请输入姓名","data-listdata":"['张三']"},"age":{"value":"0","placeholder":"请输入年龄"},"gender":{"value":"2","placeholder":"请选择性别"},"files":{"multiple":"true"}}
-	 var events = {
-		 username : {
-			"click" : function(){console.log("你好啊啊 啊啊啊啊 ");},
-			"focus" : function(){
-					console.log("焦点来了");
-					//alert("焦点来了");
-				}
-		},
-		 age : {
-			"click" : function(){console.log(1);},
-			"focus" : function(){console.log(1);}
-		},
-		 gender : {
-			"change" : function(){console.log( $(this).val())}
-		},
-		 hobby : {
-			"change" : function(){
-					console.log( $(this).val())
-				}
-		}
-	}
-	 var customevents = {
-		 username : {
-			"oninitialize" : function(context,widget){
-					console.log("user name 初始化完成");
-				},
-			"onvalidate" : function(element){
-					console.log("验证通过");
-				}
-		},
-		 age : {
-			"oninitialize" : function(context,widget){
-				console.log(" age 初始化完成");
-				},
-			"onvalidate" : ""
-		},
-		 gender : {
-			"oninitialize" : function(context,widget){
-					
-				},
-			"onvalidate" : ""
-		}
-	}
-	 var validaterules = {
-		 username : {
-			"rules" : {required:true,maxlength:16},
-			"definedMethod" : function (value, eleObj){
-					if(value.length > 20){
-						console.log('验证失败'); 
-						return false;
-					}else{
-						return true;
-					}
-				},
-			"regexp" : '0?(13|14|15|17|18|19)[0-9]{9}'
-		},
-		 age : {
-			"rules" : { required: true, min: 0, max: 100},
-			"definedMethod" : function (value, eleObj){
-					if(value.length > 100){
-						console.log('验证失败'); 
-						return false;
-					}else{
-						return true;
-					}
-				},
-			"regexp" : '0?(13|14|15|17|18|19)[0-9]{9}'
-		},
-		 gender : {
-			"rules" : {required:true}
-		},
-		 textarea : {
-			"rules" : {required:true}
-		},
-		 picture : {
-			"rules" : {required:true}
-		},
-		 files : {
-			"rules" : {required:true}
-		},
-		 nationality : {
-			"rules" : {required:true}
-		},
-		 hobby : {
-			"rules" : {required:true}
-		},
-		 birthday : {
-			"rules" : {required:true}
-		},
-		 time : {
-			"rules" : {required:true}
-		},
-		 remark : {
-			"rules" : {required:true}
-		}
-	}
-	 var validateMsg={"username":{"definedMethod":"字符长度不能大于10","regexp":"输入浮点数"},"age":{"definedMethod":"age自定验证失败","regexp":"输入age"},"gender":{},"textarea":{},"picture":{},"files":{},"nationality":{},"hobby":{},"birthday":{},"time":{},"remark":{}}
+    var defaults = {
+        "username": {
+            "tag": "input",
+            "widget-type": "input",
+            "type": "text",
+            "name": "username",
+            "value": "['张三']",
+            "label": "姓名",
+            "title": "tips",
+            "require": "true",
+            "comparecontrol": "",
+            "compareoperator": "",
+            "comparemessage": "",
+            "comparevalue": "",
+            "hidden": "false",
+            "keepvalue": "true",
+            "workshop": "",
+            "sheet": "",
+            "params": "{}",
+            "data": "[0,1,0,1]",
+            "text": "",
+            "sourcedata": "{}",
+            "remark": ""
+        },
+        "age": {
+            "tag": "input",
+            "widget-type": "number",
+            "type": "number",
+            "name": "age",
+            "label": "年龄",
+            "min": "0",
+            "max": "100",
+            "step": "1",
+            "remark": "数值字段"
+        },
+        "gender": {
+            "tag": "select",
+            "widget-type": "dropdown",
+            "value": "[1]",
+            "name": "gender",
+            "label": "性别",
+            "title": "",
+            "comparecontrol": "",
+            "compareoperator": "",
+            "comparemessage": "",
+            "comparevalue": "",
+            "hidden": "false",
+            "keepvalue": "false",
+            "workshop": "",
+            "sheet": "",
+            "params": "{}",
+            "data": "[0,1,0,1]",
+            "text": "",
+            "sourcedata": "{1:'男',2:'女'}",
+            "remark": ""
+        },
+        "textarea": {
+            "tag": "textarea",
+            "name": "textarea",
+            "comparecontrol": "username",
+            "compareoperator": "1",
+            "comparemessage": "必填",
+            "comparevalue": "2.1",
+            "label": "座右铭",
+            "widget-type": "textarea"
+        },
+        "picture": {
+            "tag": "input",
+            "type": "hidden",
+            "name": "picture",
+            "widget-type": "images",
+            "label": "头像",
+            "filesize": "2048【图片大小,单位k】",
+            "filetotal": "5【最多上传图片个数】"
+        },
+        "files": {
+            "tag": "input",
+            "type": "hidden",
+            "name": "files",
+            "widget-type": "files",
+            "label": "档案材料",
+            "filesize": "2048【文件大小,单位k】",
+            "filetotal": "5【最多上传文件个数】"
+        },
+        "nationality": {
+            "tag": "div",
+            "widget-type": "radios",
+            "sourcedata": "{1:'内宾',2:'外宾'}",
+            "name": "nationality",
+            "label": "国别",
+            "remark": "单选框"
+        },
+        "hobby": {
+            "tag": "div",
+            "widget-type": "checkboxs",
+            "name": "hobby",
+            "sourcedata": "{1:'球类',2:'田径',3:'户外',4:'无氧',5:'休闲',6:'花鸟',7:'宠物'}",
+            "label": "爱好",
+            "minchecked": "2",
+            "maxchecked": "5",
+            "remark": "多选框"
+        },
+        "birthday": {
+            "tag": "input",
+            "name": "birthday",
+            "widget-type": "datetime",
+            "startdatetime": "",
+            "label": "出生年月日",
+            "enddatetime": "",
+            "formatstr": "yyyy-mm-dd hh:ii:ss",
+            "remark": "日期"
+        },
+        "time": {
+            "tag": "input",
+            "name": "time",
+            "type": "data",
+            "widget-type": "time",
+            "starttime": "",
+            "endtime": "",
+            "label": "日期",
+            "showSeconds": "true",
+            "remark": "时间"
+        },
+        "history": {
+            "tag": "div",
+            "name": "history",
+            "widget-type": "history",
+            "label": "审批历史",
+            "remark": "审批历史"
+        },
+        "remark": {
+            "tag": "textarea",
+            "name": "remark",
+            "widget-type": "remark",
+            "label": "备注",
+            "remark": "多行文本，每个表单只能有一个widget-remark，作用是记录审批备注，这个审批备注会在审批历史Widget中展现"
+        },
+        "text": {
+            "tag": "p",
+            "name": "text",
+            "widget-type": "label",
+            "text": "文本内容",
+            "label": "注意事项",
+            "remark": "显示文本"
+        }
+    }
+    var attributes = {
+        "username": {
+            "value": "张三",
+            "placeholder": "请输入姓名",
+            "data-listdata": "['张三']"
+        },
+        "age": {
+            "value": "0",
+            "placeholder": "请输入年龄"
+        },
+        "gender": {
+            "value": "2",
+            "placeholder": "请选择性别"
+        },
+        "files": {
+            "multiple": "true"
+        }
+    }
+    var events = {
+        username: {
+            "click": function() {
+                console.log("你好啊啊 啊啊啊啊 ");
+            },
+            "focus": function() {
+                console.log("焦点来了");
+                //alert("焦点来了");
+            }
+        },
+        age: {
+            "click": function() {
+                console.log(1);
+            },
+            "focus": function() {
+                console.log(1);
+            }
+        },
+        gender: {
+            "change": function() {
+                console.log($(this).val())
+            }
+        },
+        hobby: {
+            "change": function() {
+                console.log($(this).val())
+            }
+        }
+    }
+    var customevents = {
+        username: {
+            "oninitialize": function(context, widget) {
+                console.log("user name 初始化完成");
+            },
+            "onvalidate": function(element) {
+                console.log("验证通过");
+            }
+        },
+        age: {
+            "oninitialize": function(context, widget) {
+                console.log(" age 初始化完成");
+            },
+            "onvalidate": ""
+        },
+        gender: {
+            "oninitialize": function(context, widget) {
+
+            },
+            "onvalidate": ""
+        }
+    }
+    var validaterules = {
+        username: {
+            "rules": {
+                required: true,
+                maxlength: 16
+            },
+            "definedMethod": function(value, eleObj) {
+                if (value.length > 20) {
+                    console.log('验证失败');
+                    return false;
+                } else {
+                    return true;
+                }
+            },
+            "regexp": '0?(13|14|15|17|18|19)[0-9]{9}'
+        },
+        age: {
+            "rules": {
+                required: true,
+                min: 0,
+                max: 100
+            },
+            "definedMethod": function(value, eleObj) {
+                if (value.length > 100) {
+                    console.log('验证失败');
+                    return false;
+                } else {
+                    return true;
+                }
+            },
+            "regexp": '0?(13|14|15|17|18|19)[0-9]{9}'
+        },
+        gender: {
+            "rules": {
+                required: true
+            }
+        },
+        textarea: {
+            "rules": {
+                required: true
+            }
+        },
+        picture: {
+            "rules": {
+                required: true
+            }
+        },
+        files: {
+            "rules": {
+                required: true
+            }
+        },
+        nationality: {
+            "rules": {
+                required: true
+            }
+        },
+        hobby: {
+            "rules": {
+                required: true
+            }
+        },
+        birthday: {
+            "rules": {
+                required: true
+            }
+        },
+        time: {
+            "rules": {
+                required: true
+            }
+        },
+        remark: {
+            "rules": {
+                required: true
+            }
+        }
+    }
+    var validateMsg = {
+        "username": {
+            "definedMethod": "字符长度不能大于10",
+            "regexp": "输入浮点数"
+        },
+        "age": {
+            "definedMethod": "age自定验证失败",
+            "regexp": "输入age"
+        },
+        "gender": {},
+        "textarea": {},
+        "picture": {},
+        "files": {},
+        "nationality": {},
+        "hobby": {},
+        "birthday": {},
+        "time": {},
+        "remark": {}
+    }
 </script>
