@@ -60,213 +60,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports._selfFrom = undefined;
-
-var _basepage = __webpack_require__(1);
-
-var _index = __webpack_require__(2);
-
-var _index2 = __webpack_require__(3);
-
-var _index3 = __webpack_require__(4);
-
-var _index4 = __webpack_require__(5);
-
-var _selfFrom = void 0;
-exports._selfFrom = _selfFrom;
-
-(function () {
-    var componentMapping = {
-        text: _index.Text,
-        number: _index2.TextNumber,
-        data: _index3.TextData,
-        button: _index4.Buttons
-    };
-    var _customFrom = function _customFrom(_self, options) {
-        var defaults = {
-            saveUrl: '',
-            ruleUrl: '',
-            ruleData: [],
-            myRuleData: [],
-            myRuleGuid: '',
-            sourceUrl: '',
-            sourceData: [],
-            components: {} //组件集合
-        };
-        exports._selfFrom = _selfFrom = _self, this._self_ = _self, this.opts = $.extend({}, defaults, options), this.server = _basepage.app.server;
-        if (this.opts.sourceData.length === 0 && !this.opts.sourceUrl) return;
-        this.server.add({
-            ruleUrl: this.opts.ruleUrl,
-            sourceUrl: this.opts.sourceUrl,
-            saveUrl: this.opts.saveUrl
-        });
-        this.init();
-    };
-    _customFrom.prototype = {
-        init: function init() {
-            //创建循环创建组件
-            var _this = this,
-                opts = this.opts;
-            //初始化数据源配置数据
-            _this.setSourceData(function () {
-                //初始化表单角色数据
-                _this.setRuleData();
-                opts.sourceData.forEach(function (item) {
-                    if (opts.myRuleData.indexOf(item.name) !== -1 && componentMapping.hasOwnProperty(item.type)) {
-                        var componentName = item.type + '_' + item.name;
-                        opts.components[componentName] = new componentMapping[item.type](item);
-                        //绑定事件
-                        for (var e in item.events) {
-                            if (e in opts.components[componentName]) {} else {
-                                opts.components[componentName].input.on(e, typeof item.events[e] === "string" ? Function("return " + item.events[e])() : item.events[e]);
-                            }
-                        }
-                    }
-                });
-            });
-        },
-        setSourceData: function setSourceData(callback) {
-            var _this = this,
-                opts = this.opts;
-            if (opts.sourceData.length === 0) {
-                _this.server.sourceUrl.get({
-                    data: {},
-                    success: function success(obj) {
-                        opts.sourceData = obj;
-                        callback();
-                    }
-                });
-            } else {
-                callback();
-            }
-        },
-        setRuleData: function setRuleData(url) {
-            var _this = this,
-                opts = this.opts;
-            if (opts.ruleData.length === 0) {
-                _this.server.ruleUrl.get({
-                    data: {},
-                    async: false,
-                    success: function success(obj) {
-                        opts.ruleData = obj;
-                    }
-                });
-            }
-            opts.sourceData.forEach(function (item) {
-                opts.ruleData.forEach(function (ruleItem) {
-                    if (ruleItem.name === item.name && ruleItem.roleGuids.indexOf(opts.myRuleGuid) !== -1) {
-                        opts.myRuleData.push(item.name);
-                    }
-                });
-            });
-        },
-        getValue: function getValue() {
-            var _this = this,
-                opts = this.opts;
-            var retrunObj = {};
-            for (var itemAttr in opts.components) {
-                retrunObj[itemAttr.split('_')[1]] = opts.components[itemAttr].getValue();
-            }
-            return retrunObj;
-        },
-        ///[{'name':'UserName','value':'123'}]
-        setValue: function setValue(values) {
-            var _this = this,
-                opts = this.opts;
-            for (var itemAttr in opts.components) {
-                values.forEach(function (item) {
-                    if (item.name === itemAttr.split('_')[1]) {
-                        opts.components[itemAttr].setValue(item.value);
-                    }
-                });
-            }
-        },
-        valid: function valid() {
-            var _this = this,
-                opts = this.opts,
-                v = true;
-            for (var itemAttr in opts.components) {
-                if (v) {
-                    opts.sourceData.forEach(function (item) {
-                        if (v) {
-                            if (item.name === itemAttr.split('_')[1]) {
-                                //必须输入
-                                if (item.regexp && item.regexp.require) {
-                                    if (opts.components[itemAttr].getValue().trim() === "") {
-                                        v = false;
-                                        alert(item.placeholder ? item.placeholder : item.lable + "必须输入");
-                                        return;
-                                    }
-                                }
-                                //正则验证
-                                if (item.regexp && item.regexp.test) {
-                                    v = new RegExp(item.regexp.test).test(opts.components[itemAttr].getValue());
-                                    if (!v) {
-                                        alert(item.regexp && item.regexp.msg ? item.regexp.msg : "正则验证无提示信息");
-                                        return;
-                                    }
-                                }
-                                //自定义验证
-                                if (item.regexp && item.regexp.customMethod) {
-                                    var fun = typeof item.regexp.customMethod === "string" ? Function("return " + item.regexp.customMethod)() : item.regexp.customMethod;
-                                    if (!fun(opts.components[itemAttr].getValue(), opts.components[itemAttr])) {
-                                        v = false;
-                                        alert(item.regexp && item.regexp.customMethodMsg ? item.regexp.customMethodMsg : "自定义验证无提示信息");
-                                        return;
-                                    };
-                                }
-                            }
-                        }
-                    });
-                }
-            }
-            return v;
-        },
-        save: function save() {
-            var _this = this,
-                opts = this.opts;
-            if (_this.valid()) {
-                _this.server.saveUrl.post({
-                    data: _this.getValue(),
-                    success: function success(obj) {
-                        alert('提交成功');
-                    }
-                });
-            } else {
-                alert('验证失败咯');
-            }
-        }
-    };
-    $.fn.extend({
-        customFrom: function customFrom(options) {
-            _basepage.app.basepage.server();
-            if (typeof options === 'string') {
-                var data = $(this).data('customFrom');
-                data[options].apply(data, Array.prototype.slice.call(arguments, 1));
-            } else {
-                var modal = new _customFrom($(this), options);
-                $(this).data('customFrom', modal);
-                return modal;
-            }
-        }
-    });
-})();
-
-/***/ }),
-/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -423,26 +221,217 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             $.ajax(makeParam.call(this, 'PUT', option));
         }
     };
-    app.basepage = {
-        server: function server(uriList) {
-            var srv = {
-                add: function add(uriHashSet) {
-                    var key;
-                    for (key in uriHashSet) {
-                        if (uriHashSet[key]) {
-                            this[key] = new srvFn(uriHashSet[key]);
-                        }
+    app.basepage = function () {
+        var srv = {
+            add: function add(uriHashSet) {
+                var key;
+                for (key in uriHashSet) {
+                    if (uriHashSet[key]) {
+                        this[key] = new srvFn(uriHashSet[key]);
                     }
                 }
-            };
-            srv.add(uriList);
-            app.server = srv;
-            return srv;
-        }
+            }
+        };
+        app.server = srv;
+        return app;
     };
-    window.app = app;
+    window.app = new app.basepage();
 })();
 exports.app = app;
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _basepage = __webpack_require__(0);
+
+var _index = __webpack_require__(2);
+
+var _index2 = __webpack_require__(3);
+
+var _index3 = __webpack_require__(4);
+
+var _index4 = __webpack_require__(5);
+
+(function () {
+    var componentMapping = {
+        text: _index.Text,
+        number: _index2.TextNumber,
+        data: _index3.TextData,
+        button: _index4.Buttons
+    };
+    var _customFrom = function _customFrom(_self, options) {
+        var defaults = {
+            saveUrl: '',
+            ruleUrl: '',
+            ruleData: [],
+            myRuleData: [],
+            myRuleGuid: '',
+            sourceUrl: '',
+            sourceData: [],
+            components: {} //组件集合
+        };
+        this._self_ = _self, this.opts = $.extend({}, defaults, options), this.server = _basepage.app.server;
+        if (this.opts.sourceData.length === 0 && !this.opts.sourceUrl) return;
+        this.server.add({
+            ruleUrl: this.opts.ruleUrl,
+            sourceUrl: this.opts.sourceUrl,
+            saveUrl: this.opts.saveUrl
+        });
+        this.init();
+    };
+    _customFrom.prototype = {
+        init: function init() {
+            //创建循环创建组件
+            var _this = this,
+                opts = this.opts;
+            //初始化数据源配置数据
+            _this.setSourceData(function () {
+                //初始化表单角色数据
+                _this.setRuleData();
+                opts.sourceData.forEach(function (item) {
+                    if (opts.myRuleData.indexOf(item.name) !== -1 && componentMapping.hasOwnProperty(item.type)) {
+                        var componentName = item.type + '_' + item.name;
+                        item._selfFrom = _this._self_;
+                        opts.components[componentName] = new componentMapping[item.type](item);
+                        //绑定事件
+                        for (var e in item.events) {
+                            if (e in opts.components[componentName]) {} else {
+                                opts.components[componentName].input.on(e, typeof item.events[e] === "string" ? Function("return " + item.events[e])() : item.events[e]);
+                            }
+                        }
+                    }
+                });
+            });
+        },
+        setSourceData: function setSourceData(callback) {
+            var _this = this,
+                opts = this.opts;
+            if (opts.sourceData.length === 0) {
+                _this.server.sourceUrl.get({
+                    data: {},
+                    success: function success(obj) {
+                        opts.sourceData = obj;
+                        callback();
+                    }
+                });
+            } else {
+                callback();
+            }
+        },
+        setRuleData: function setRuleData(url) {
+            var _this = this,
+                opts = this.opts;
+            if (opts.ruleData.length === 0) {
+                _this.server.ruleUrl.get({
+                    data: {},
+                    async: false,
+                    success: function success(obj) {
+                        opts.ruleData = obj;
+                    }
+                });
+            }
+            opts.sourceData.forEach(function (item) {
+                opts.ruleData.forEach(function (ruleItem) {
+                    if (ruleItem.name === item.name && ruleItem.roleGuids.indexOf(opts.myRuleGuid) !== -1) {
+                        opts.myRuleData.push(item.name);
+                    }
+                });
+            });
+        },
+        getValue: function getValue() {
+            var _this = this,
+                opts = this.opts;
+            var retrunObj = {};
+            for (var itemAttr in opts.components) {
+                retrunObj[itemAttr.split('_')[1]] = opts.components[itemAttr].getValue();
+            }
+            return retrunObj;
+        },
+        ///[{'name':'UserName','value':'123'}]
+        setValue: function setValue(values) {
+            var _this = this,
+                opts = this.opts;
+            for (var itemAttr in opts.components) {
+                values.forEach(function (item) {
+                    if (item.name === itemAttr.split('_')[1]) {
+                        opts.components[itemAttr].setValue(item.value);
+                    }
+                });
+            }
+        },
+        valid: function valid() {
+            var _this = this,
+                opts = this.opts,
+                v = true;
+            for (var itemAttr in opts.components) {
+                if (v) {
+                    opts.sourceData.forEach(function (item) {
+                        if (v) {
+                            if (item.name === itemAttr.split('_')[1]) {
+                                //必须输入
+                                if (item.regexp && item.regexp.require) {
+                                    if (opts.components[itemAttr].getValue().trim() === "") {
+                                        v = false;
+                                        alert(item.placeholder ? item.placeholder : item.lable + "必须输入");
+                                        return;
+                                    }
+                                }
+                                //正则验证
+                                if (item.regexp && item.regexp.test) {
+                                    v = new RegExp(item.regexp.test).test(opts.components[itemAttr].getValue());
+                                    if (!v) {
+                                        alert(item.regexp && item.regexp.msg ? item.regexp.msg : "正则验证无提示信息");
+                                        return;
+                                    }
+                                }
+                                //自定义验证
+                                if (item.regexp && item.regexp.customMethod) {
+                                    var fun = typeof item.regexp.customMethod === "string" ? Function("return " + item.regexp.customMethod)() : item.regexp.customMethod;
+                                    if (!fun(opts.components[itemAttr].getValue(), opts.components[itemAttr])) {
+                                        v = false;
+                                        alert(item.regexp && item.regexp.customMethodMsg ? item.regexp.customMethodMsg : "自定义验证无提示信息");
+                                        return;
+                                    };
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+            return v;
+        },
+        save: function save() {
+            var _this = this,
+                opts = this.opts;
+            if (_this.valid()) {
+                _this.server.saveUrl.post({
+                    data: _this.getValue(),
+                    success: function success(obj) {
+                        alert('提交成功');
+                    }
+                });
+            } else {
+                alert('验证失败咯');
+            }
+        }
+    };
+    $.fn.extend({
+        customFrom: function customFrom(options) {
+            if (typeof options === 'string') {
+                var data = $(this).data('customFrom');
+                data[options].apply(data, Array.prototype.slice.call(arguments, 1));
+            } else {
+                var modal = new _customFrom($(this), options);
+                $(this).data('customFrom', modal);
+                return modal;
+            }
+        }
+    });
+})();
 
 /***/ }),
 /* 2 */
@@ -454,10 +443,6 @@ exports.app = app;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.Text = undefined;
-
-var _CustomFrom = __webpack_require__(0);
-
 (function () {
     var Text = function Text(options) {
         var defaults = {
@@ -511,7 +496,7 @@ var _CustomFrom = __webpack_require__(0);
             _this.input = $(opts.input);
             _this.input.attr('placeholder', opts.placeholder);
             form.content.append(_this.input);
-            _CustomFrom._selfFrom.append(form.content);
+            opts._selfFrom.append(form.content);
             _this.input.textinput();
         },
         getValue: function getValue() {
@@ -535,10 +520,6 @@ exports.Text = Text;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.TextNumber = undefined;
-
-var _CustomFrom = __webpack_require__(0);
-
 (function () {
     var TextNumber = function TextNumber(options) {
         var defaults = {
@@ -594,7 +575,7 @@ var _CustomFrom = __webpack_require__(0);
             _this.input.attr('placeholder', opts.placeholder);
             form.content.append(_this.input);
             _this.input.textinput();
-            _CustomFrom._selfFrom.append(form.content);
+            opts._selfFrom.append(form.content);
         },
         // 插件 初始化
         keyboard: function keyboard() {
@@ -630,10 +611,6 @@ exports.TextNumber = TextNumber;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.TextData = undefined;
-
-var _CustomFrom = __webpack_require__(0);
-
 (function () {
     var TextData = function TextData(options) {
         var defaults = {
@@ -689,7 +666,7 @@ var _CustomFrom = __webpack_require__(0);
             _this.input.attr('placeholder', opts.placeholder);
             form.content.append(_this.input);
             _this.input.textinput();
-            _CustomFrom._selfFrom.append(form.content);
+            opts._selfFrom.append(form.content);
         },
         // 插件 初始化
         mobiscroll: function (_mobiscroll) {
@@ -744,9 +721,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Buttons = undefined;
 
-var _CustomFrom = __webpack_require__(0);
-
-var _basepage = __webpack_require__(1);
+var _basepage = __webpack_require__(0);
 
 (function () {
     var Buttons = function Buttons(options) {
@@ -759,11 +734,11 @@ var _basepage = __webpack_require__(1);
             value: [] //双向数据绑定字段
         };
         this.opts = $.extend({}, defaults, options);
-        this.init();
         this.server = _basepage.app.server;
         this.server.add({
             ruleUrl: options.sourceUrl
         });
+        this.init();
         return this;
     };
     Buttons.prototype = {
@@ -813,7 +788,6 @@ var _basepage = __webpack_require__(1);
             }
         },
         setValue: function setValue(arr) {
-
             this.opts.des = arr;
         },
         // 创建菜单
@@ -824,7 +798,6 @@ var _basepage = __webpack_require__(1);
             form.content = $('<div id="OperatorWorkShopContentId" class="overflow-auto clearfix">');
             form.lable = $(' <div class="grid-div-label">' + opts.lable + '</div>');
             form.content.append(form.lable);
-
             var Data = opts.sourceData.data ? opts.sourceData.data : null;
             if (Data) {
                 Component(Data);
@@ -877,8 +850,8 @@ var _basepage = __webpack_require__(1);
                 form.content.append(form.Now);
                 form.hr = $('<hr class="hr-line">');
                 form.content.append(form.tool);
-                _CustomFrom._selfFrom.append(form.content);
-                _CustomFrom._selfFrom.append(form.hr);
+                opts._selfFrom.append(form.content);
+                opts._selfFrom.append(form.hr);
             }
         },
         // 按钮的行为变化

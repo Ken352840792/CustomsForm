@@ -1,6 +1,3 @@
-import {
-    _selfFrom
-} from "../CustomFrom";
 (function() {
     let Text = function(options) {
         let defaults = {
@@ -52,7 +49,7 @@ import {
             _this.input = $(opts.input)
             _this.input.attr('placeholder', opts.placeholder);
             form.content.append(_this.input);
-            _selfFrom.append(form.content);
+            opts._selfFrom.append(form.content);
             _this.input.textinput();
         },
         getValue: function() {

@@ -1,7 +1,4 @@
 import {
-    _selfFrom
-} from "../CustomFrom";
-import {
     app
 } from "../../../Comment/basepage";
 (function () {
@@ -15,11 +12,11 @@ import {
             value: [] //双向数据绑定字段
         };
         this.opts = $.extend({}, defaults, options);
-        this.init();
         this.server = app.server;
         this.server.add({
             ruleUrl: options.sourceUrl
         })
+        this.init();
         return this;
     };
     Buttons.prototype = {
@@ -78,7 +75,6 @@ import {
             form.content = $('<div id="OperatorWorkShopContentId" class="overflow-auto clearfix">');
             form.lable = $(' <div class="grid-div-label">' + opts.lable + '</div>');
             form.content.append(form.lable)
-
             let Data = opts.sourceData.data ? opts.sourceData.data : null;
             if (Data) {
                 Component(Data)
@@ -109,8 +105,8 @@ import {
                 form.content.append(form.Now)
                 form.hr = $('<hr class="hr-line">')
                 form.content.append(form.tool)
-                _selfFrom.append(form.content);
-                _selfFrom.append(form.hr);
+                opts._selfFrom.append(form.content);
+                opts._selfFrom.append(form.hr);
             }
         },
         // 按钮的行为变化

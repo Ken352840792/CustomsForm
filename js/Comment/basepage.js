@@ -143,23 +143,20 @@
             $.ajax(makeParam.call(this, 'PUT', option));
         }
     };
-    app.basepage = {
-        server: function (uriList) {
-            var srv = {
-                add: function (uriHashSet) {
-                    var key;
-                    for (key in uriHashSet) {
-                        if(uriHashSet[key]){
-                            this[key] = new srvFn(uriHashSet[key]);
-                        }
+    app.basepage=function(){
+        var srv = {
+            add: function (uriHashSet) {
+                var key;
+                for (key in uriHashSet) {
+                    if(uriHashSet[key]){
+                        this[key] = new srvFn(uriHashSet[key]);
                     }
                 }
-            };
-            srv.add(uriList);
-            app.server = srv;
-            return srv;
-        } 
-    };
-    window.app=app;
+            }
+        };
+        app.server = srv;
+        return app;
+    }
+    window.app=new app.basepage();
 })();
 export {app}

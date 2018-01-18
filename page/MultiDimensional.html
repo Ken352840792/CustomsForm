@@ -62,10 +62,11 @@
     </script>
     <script>
         var form = function () {
-            $('#form').customFrom({});
+            // $('#form').customFrom({});
             var objs = {};
             $.get('/data/buttons.json', function (obj) {
                 obj.forEach(function (item) {
+                    item._selfFrom=$('#form');
                     objs[item.name] = new Buttons(item);
                 });
             });

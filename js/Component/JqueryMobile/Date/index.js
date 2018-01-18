@@ -1,6 +1,3 @@
-import {
-    _selfFrom
-} from "../CustomFrom";
 (function() {
     let TextData = function(options) {
         let defaults = {
@@ -54,7 +51,7 @@ import {
             _this.input.attr('placeholder', opts.placeholder);
             form.content.append(_this.input);
             _this.input.textinput();
-            _selfFrom.append(form.content);
+            opts._selfFrom.append(form.content);
         },
         // 插件 初始化
         mobiscroll: function() {

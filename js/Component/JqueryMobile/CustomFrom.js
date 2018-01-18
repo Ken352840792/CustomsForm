@@ -9,14 +9,10 @@ import {
 } from './Number/index';
 import {
     TextData
-} from './Data/index';
+} from './Date/index';
 import {
     Buttons
 } from './Button/index';
-let _selfFrom;
-export {
-    _selfFrom
-}
 (function () {
     var componentMapping = {
         text: Text,
@@ -35,7 +31,6 @@ export {
             sourceData: [],
             components: {} //组件集合
         };
-        _selfFrom = _self,
             this._self_ = _self,
             this.opts = $.extend({}, defaults, options),
             this.server = app.server;
@@ -59,6 +54,7 @@ export {
                 opts.sourceData.forEach(function (item) {
                     if (opts.myRuleData.indexOf(item.name) !== -1 && componentMapping.hasOwnProperty(item.type)) {
                         var componentName = item.type + '_' + item.name;
+                        item._selfFrom=_this._self_;
                         opts.components[componentName] = new componentMapping[item.type](item);
                         //绑定事件
                         for (var e in item.events) {
@@ -185,7 +181,6 @@ export {
     };
     $.fn.extend({
         customFrom: function (options) {
-            app.basepage.server();
             if (typeof options === 'string') {
                 var data = $(this).data('customFrom');
                 data[options].apply(data, Array.prototype.slice.call(arguments, 1));
