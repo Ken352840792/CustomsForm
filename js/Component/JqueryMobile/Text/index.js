@@ -58,8 +58,8 @@ import {
         getValue: function() {
             return this.opts.value;
         },
-        setValue: function(val) {
-            this.opts.des = val;
+        setValue: function(arr) {
+            this.opts.des = arr;
         }
     };
     window.Text = Text;

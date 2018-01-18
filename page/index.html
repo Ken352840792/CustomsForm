@@ -14,8 +14,54 @@
     <script src="/Component/keyboard/keyboard.js"></script>
     <!-- mobiscroll 日期组件 -->
     <link rel="stylesheet" href="/Component/Mobiscroll/css/mobiscroll.custom-3.0.0-beta6.min.css">
+    <link rel="stylesheet" href="/Component/Mobiscroll/css/theme.self.css">
     <script src="/Component/Mobiscroll/js/mobiscroll.custom-3.0.0-beta6.min.js"></script>
-
+    <style>
+        .ui-btn.ui-btn-inline {
+            min-width: 100px;
+        }
+        
+        .grid-div-label {
+            width: 10%;
+            float: left;
+            position: relative;
+            line-height: 48px;
+        }
+        
+        .overflow-auto .grid-div-content {
+            width: 84%;
+            display: inline-block;
+            height: 48px;
+            overflow: hidden;
+            float: left;
+        }
+        
+        .grid-div-tool {
+            width: 0px;
+            float: right;
+            left: -35px;
+            position: relative;
+        }
+        
+        .hr-line {
+            border: 1px dashed #dcdcdc;
+        }
+        
+        .clearfix:before,
+        .clearfix:after {
+            content: "";
+            display: table;
+        }
+        
+        .clearfix:after {
+            clear: both;
+        }
+        
+        .clearfix {
+            *zoom: 1;
+            /*IE/7/6*/
+        }
+    </style>
 
 </head>
 

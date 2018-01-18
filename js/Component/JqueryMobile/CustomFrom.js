@@ -10,6 +10,9 @@ import {
 import {
     TextData
 } from './Data/index';
+import {
+    Buttons
+} from './Button/index';
 let _selfFrom;
 export {
     _selfFrom
@@ -19,6 +22,7 @@ export {
         text: Text,
         number: TextNumber,
         data: TextData,
+        button: Buttons
     };
     var customFrom = function(_self, options) {
         var defaults = {
@@ -53,6 +57,7 @@ export {
                 _this.setRuleData();
                 opts.sourceData.forEach(function(item) {
                     if (opts.myRuleData.indexOf(item.name) !== -1 && componentMapping.hasOwnProperty(item.type)) {
+
                         var componentName = item.type + '_' + item.name;
                         opts.components[componentName] = new componentMapping[item.type](item);
                         //绑定事件
