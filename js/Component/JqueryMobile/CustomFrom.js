@@ -17,14 +17,14 @@ let _selfFrom;
 export {
     _selfFrom
 }
-(function() {
+(function () {
     var componentMapping = {
         text: Text,
         number: TextNumber,
         data: TextData,
         button: Buttons
     };
-    var customFrom = function(_self, options) {
+    var customFrom = function (_self, options) {
         var defaults = {
             saveUrl: '',
             ruleUrl: '',
@@ -39,6 +39,7 @@ export {
             this._self_ = _self,
             this.opts = $.extend({}, defaults, options),
             this.server = app.server;
+        if (this.opts.sourceData.length === 0 && !this.opts.sourceUrl) return;
         this.server.add({
             ruleUrl: this.opts.ruleUrl,
             sourceUrl: this.opts.sourceUrl,
@@ -47,17 +48,16 @@ export {
         this.init();
     };
     customFrom.prototype = {
-        init: function() {
+        init: function () {
             //创建循环创建组件
             var _this = this,
                 opts = this.opts;
             //初始化数据源配置数据
-            _this.setSourceData(function() {
+            _this.setSourceData(function () {
                 //初始化表单角色数据
                 _this.setRuleData();
-                opts.sourceData.forEach(function(item) {
+                opts.sourceData.forEach(function (item) {
                     if (opts.myRuleData.indexOf(item.name) !== -1 && componentMapping.hasOwnProperty(item.type)) {
-
                         var componentName = item.type + '_' + item.name;
                         opts.components[componentName] = new componentMapping[item.type](item);
                         //绑定事件
@@ -70,13 +70,13 @@ export {
                 });
             });
         },
-        setSourceData: function(callback) {
+        setSourceData: function (callback) {
             var _this = this,
                 opts = this.opts;
             if (opts.sourceData.length === 0) {
                 _this.server.sourceUrl.get({
                     data: {},
-                    success: function(obj) {
+                    success: function (obj) {
                         opts.sourceData = obj;
                         callback();
                     }
@@ -85,20 +85,20 @@ export {
                 callback();
             }
         },
-        setRuleData: function(url) {
+        setRuleData: function (url) {
             var _this = this,
                 opts = this.opts;
             if (opts.ruleData.length === 0) {
                 _this.server.ruleUrl.get({
                     data: {},
                     async: false,
-                    success: function(obj) {
+                    success: function (obj) {
                         opts.ruleData = obj;
                     }
                 });
             }
-            opts.sourceData.forEach(function(item) {
-                opts.ruleData.forEach(function(ruleItem) {
+            opts.sourceData.forEach(function (item) {
+                opts.ruleData.forEach(function (ruleItem) {
                     if (ruleItem.name === item.name && ruleItem.roleGuids.indexOf(opts.myRuleGuid) !== -1) {
                         opts.myRuleData.push(item.name);
                     }
@@ -106,7 +106,7 @@ export {
 
             });
         },
-        getValue: function() {
+        getValue: function () {
             var _this = this,
                 opts = this.opts;
             var retrunObj = {};
@@ -116,24 +116,24 @@ export {
             return retrunObj;
         },
         ///[{'name':'UserName','value':'123'}]
-        setValue: function(values) {
+        setValue: function (values) {
             var _this = this,
                 opts = this.opts;
             for (var itemAttr in opts.components) {
-                values.forEach(function(item) {
+                values.forEach(function (item) {
                     if (item.name === itemAttr.split('_')[1]) {
                         opts.components[itemAttr].setValue(item.value);
                     }
                 });
             }
         },
-        valid: function() {
+        valid: function () {
             var _this = this,
                 opts = this.opts,
                 v = true;
             for (var itemAttr in opts.components) {
                 if (v) {
-                    opts.sourceData.forEach(function(item) {
+                    opts.sourceData.forEach(function (item) {
                         if (v) {
                             if (item.name === itemAttr.split('_')[1]) {
                                 //必须输入
@@ -168,13 +168,13 @@ export {
             }
             return v;
         },
-        save: function() {
+        save: function () {
             var _this = this,
                 opts = this.opts;
             if (_this.valid()) {
                 _this.server.saveUrl.post({
                     data: _this.getValue(),
-                    success: function(obj) {
+                    success: function (obj) {
                         alert('提交成功');
                     }
                 });
@@ -184,7 +184,7 @@ export {
         }
     };
     $.fn.extend({
-        customFrom: function(options) {
+        customFrom: function (options) {
             app.basepage.server();
             if (typeof options === 'string') {
                 var data = $(this).data('customFrom');

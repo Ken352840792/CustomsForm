@@ -107,6 +107,7 @@ exports._selfFrom = _selfFrom;
             components: {} //组件集合
         };
         exports._selfFrom = _selfFrom = _self, this._self_ = _self, this.opts = $.extend({}, defaults, options), this.server = _basepage.app.server;
+        if (this.opts.sourceData.length === 0 && !this.opts.sourceUrl) return;
         this.server.add({
             ruleUrl: this.opts.ruleUrl,
             sourceUrl: this.opts.sourceUrl,
@@ -125,7 +126,6 @@ exports._selfFrom = _selfFrom;
                 _this.setRuleData();
                 opts.sourceData.forEach(function (item) {
                     if (opts.myRuleData.indexOf(item.name) !== -1 && componentMapping.hasOwnProperty(item.type)) {
-
                         var componentName = item.type + '_' + item.name;
                         opts.components[componentName] = new componentMapping[item.type](item);
                         //绑定事件
@@ -754,7 +754,8 @@ var _basepage = __webpack_require__(1);
             Form: {},
             buttons: {},
             key: "id", //唯一键
-            Name: 'name', //显示的名称
+            keyName: 'name', //显示的名称
+            singleSelect: true, //单选多选
             value: [] //双向数据绑定字段
         };
         this.opts = $.extend({}, defaults, options);
@@ -787,15 +788,33 @@ var _basepage = __webpack_require__(1);
                     for (var a in opts.buttons) {
                         opts.buttons[a].removeClass('ui-btn-active');
                     }
-                    arr.forEach(function (item) {
-                        opts.buttons[item.id].addClass('ui-btn-active');
+                    opts.sourceData.data.forEach(function (item) {
+                        item.isTrue = false;
+                    });
+                    arr.forEach(function (it) {
+                        opts.sourceData.data.forEach(function (item) {
+                            if (item[opts.key] === it) {
+                                item.isTrue = true;
+                            }
+                        });
+
+                        opts.buttons[it].addClass('ui-btn-active');
                     });
                     this.value = arr;
                 }
             });
         },
         getValue: function getValue() {
-            return this.opts.value;
+            if (this.opts.singleSelect) {
+                return this.opts.value[0];
+            } else {
+
+                return this.opts.value;
+            }
+        },
+        setValue: function setValue(arr) {
+
+            this.opts.des = arr;
         },
         // 创建菜单
         createComponent: function createComponent() {
@@ -832,15 +851,10 @@ var _basepage = __webpack_require__(1);
                     for (var _iterator = arr[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                         var value = _step.value;
 
-                        if (value.isTrue) {
-                            form.a = $('<a class="ui-btn ui-mini ui-corner-all ui-btn-inline ui-btn-active" >' + value[opts.Name] + '</a>');
-                        } else {
-                            //value[opts.Name]
-                            form.a = $('<a class="ui-btn ui-mini ui-corner-all ui-btn-inline" >' + value[opts.Name] + '</a>');
-                        }
-                        form.a.data('a', value);
+                        form.a = $('<a class="ui-btn ui-mini ui-corner-all ui-btn-inline" >' + value[opts.keyName] + '</a>');
+                        form.a.data('model', value);
                         form.Now.append(form.a);
-                        opts.buttons[value.id] = form.a;
+                        opts.buttons[value[opts.key]] = form.a;
                     }
                 } catch (err) {
                     _didIteratorError = true;
@@ -874,89 +888,54 @@ var _basepage = __webpack_require__(1);
                 form = opts.Form;
             // 实现按钮的展开或者关闭
             form.arrow.on('click', function () {
-                _this.CollapseClick(form.arrow);
+                _this.CollapseClick();
             });
             this.Multiple(opts.sourceData.data);
         },
 
         // 展开关闭操作
-        CollapseClick: function CollapseClick(obj) {
-            var div = $(obj).parent().prev(".grid-div-content");
+        CollapseClick: function CollapseClick() {
+            var _this = this,
+                opts = this.opts,
+                form = opts.Form;
+            var div = $(form.arrow).parent().prev(".grid-div-content");
             var isOpen = div.attr("ref-open");
             if (isOpen == "false") {
-                $(obj).removeClass("ui-icon-carat-d").addClass("ui-icon-carat-u");
-                div.attr("ref-open", "true");
-                div.css("height", "auto");
+                $(form.arrow).removeClass("ui-icon-carat-d").addClass("ui-icon-carat-u");
+                div.attr("ref-open", "true").css("height", "auto");
             } else {
                 div.attr("ref-open", "false");
-                $(obj).removeClass("ui-icon-carat-u").addClass("ui-icon-carat-d");
+                $(form.arrow).removeClass("ui-icon-carat-u").addClass("ui-icon-carat-d");
                 div.css("overflow", "hidden").css("height", "48px");
             }
         },
-        // 按钮多选操作
+        // 按钮单多选操作
         Multiple: function Multiple(data) {
             var _this = this,
                 opts = this.opts,
                 arr = data;
             opts.Form.Now.delegate('a', 'click', function (ev) {
+                if (opts.singleSelect) {
+                    arr.forEach(function (item) {
+                        item.isTrue = false;
+                    });
+                }
+                var model = $(this).data('model');
                 var arrData = [];
-                var _iteratorNormalCompletion2 = true;
-                var _didIteratorError2 = false;
-                var _iteratorError2 = undefined;
-
-                try {
-                    for (var _iterator2 = arr[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                        var i = _step2.value;
-
-                        if ($(this).data('a') == i) {
-                            i.isTrue = !i.isTrue;
-                        }
+                arr.forEach(function (item) {
+                    if (model === item) {
+                        item.isTrue = !item.isTrue;
                     }
-                } catch (err) {
-                    _didIteratorError2 = true;
-                    _iteratorError2 = err;
-                } finally {
-                    try {
-                        if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                            _iterator2.return();
-                        }
-                    } finally {
-                        if (_didIteratorError2) {
-                            throw _iteratorError2;
-                        }
+                });
+                arr.forEach(function (item) {
+                    if (item.isTrue) {
+                        arrData.push(item[opts.key]);
                     }
-                }
+                });
 
-                var _iteratorNormalCompletion3 = true;
-                var _didIteratorError3 = false;
-                var _iteratorError3 = undefined;
-
-                try {
-                    for (var _iterator3 = arr[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                        var _i = _step3.value;
-
-                        if (_i.isTrue) {
-                            arrData.push(_i);
-                        }
-                    }
-                    // 点击的时候如果有回调函数执行回调函数
-                } catch (err) {
-                    _didIteratorError3 = true;
-                    _iteratorError3 = err;
-                } finally {
-                    try {
-                        if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                            _iterator3.return();
-                        }
-                    } finally {
-                        if (_didIteratorError3) {
-                            throw _iteratorError3;
-                        }
-                    }
-                }
-
-                var callback = $(this).data('a').callback ? $(this).data('a').callback : null;
-                if (callback && $(this).data('a').isTrue) {
+                // 点击的时候如果有回调函数执行回调函数
+                var callback = model.callback ? model.callback : null;
+                if (callback && model.isTrue) {
                     callback();
                 }
                 opts.des = arrData;

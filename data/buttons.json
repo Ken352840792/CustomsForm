@@ -1,0 +1,271 @@
+[{
+        "tag": "button",
+        "name": "xx1",
+        "type": "button",
+        "sourceUrl": "ghj",
+        "lable": "工厂",
+        "singleSelect":false,
+        "sourceData": {
+            
+            "data": [{
+                "name": "唐僧",
+                "callback": null,
+                "id": "a1"
+                
+            }, {
+                "name": "悟空",
+                "callback": null,
+                "id": "a2"
+
+            }, {
+                "name": "八戒1",
+                "callback": null,
+                "id": "a3"
+
+            }, {
+                "name": "八戒2",
+                "callback": null,
+                "id": "a4"
+
+            }, {
+                "name": "八戒3",
+                "id": "a5"
+
+            }, {
+                "name": "八戒4",
+                "id": "a6"
+
+            }, {
+                "name": "老沙",
+                "id": "a7"
+
+            }]
+        }
+
+    },
+    {
+        "tag": "button",
+        "name": "xx2",
+        "type": "button",
+        "sourceUrl": "ghj",
+        "lable": "车间",
+        "singleSelect":false,
+        "sourceData": {
+           
+            "data": [{
+                "name": "唐僧",
+                "callback": null,
+                "id": "a1"
+
+            }, {
+                "name": "悟空",
+                "callback": null,
+                "id": "a2"
+
+            }, {
+                "name": "八戒1",
+                "callback": null,
+                "id": "a3"
+
+            }, {
+                "name": "八戒2",
+                "callback": null,
+                "id": "a4"
+
+            }, {
+                "name": "八戒3",
+                "id": "a5"
+
+            }, {
+                "name": "八戒4",
+                "id": "a6"
+
+            }, {
+                "name": "老沙",
+                "id": "a7"
+
+            }]
+        }
+
+    },
+    {
+        "tag": "button",
+        "name": "xx3",
+        "type": "button",
+        "sourceUrl": "ghj",
+        "lable": "产线",
+        "singleSelect":false,
+        "sourceData": {
+           
+            "data": [{
+                "name": "唐僧",
+                "callback": null,
+                "id": "a1"
+
+            }, {
+                "name": "悟空",
+                "callback": null,
+                "id": "a2"
+
+            }, {
+                "name": "八戒1",
+                "callback": null,
+                "id": "a3"
+
+            }, {
+                "name": "八戒2",
+                "callback": null,
+                "id": "a4"
+
+            }, {
+                "name": "八戒3",
+                "id": "a5"
+
+            }, {
+                "name": "八戒4",
+                "id": "a6"
+
+            }, {
+                "name": "老沙",
+                "id": "a7"
+
+            }]
+        }
+
+    },
+    {
+        "tag": "button",
+        "name": "xx4",
+        "type": "button",
+        "sourceUrl": "ghj",
+        "lable": "设备",
+        "singleSelect":false,
+        "sourceData": {
+            
+            "data": [{
+                "name": "唐僧",
+                "callback": null,
+                "id": "a1"
+
+            }, {
+                "name": "悟空",
+                "callback": null,
+                "id": "a2"
+
+            }, {
+                "name": "八戒1",
+                "callback": null,
+                "id": "a3"
+
+            }, {
+                "name": "八戒2",
+                "callback": null,
+                "id": "a4"
+
+            }, {
+                "name": "八戒3",
+                "id": "a5"
+
+            }, {
+                "name": "八戒4",
+                "id": "a6"
+
+            }, {
+                "name": "老沙",
+                "id": "a7"
+
+            }]
+        }
+
+    },
+    {
+        "tag": "button",
+        "name": "xx5",
+        "type": "button",
+        "sourceUrl": "",
+        "lable": "班组",
+        "singleSelect":false,
+        "sourceData": {
+           
+            "data": [{
+                "name": "唐僧",
+                "callback": null,
+                "id": "a1"
+
+            }, {
+                "name": "悟空",
+                "callback": null,
+                "id": "a2"
+
+            }, {
+                "name": "八戒1",
+                "callback": null,
+                "id": "a3"
+
+            }, {
+                "name": "八戒2",
+                "callback": null,
+                "id": "a4"
+
+            }, {
+                "name": "八戒3",
+                "id": "a5"
+
+            }, {
+                "name": "八戒4",
+                "id": "a6"
+
+            }, {
+                "name": "老沙",
+                "id": "a7"
+
+            }]
+        }
+
+    },
+    {
+        "tag": "button",
+        "name": "xx6",
+        "type": "button",
+        "sourceUrl": "ghj",
+        "lable": "工序",
+        "singleSelect":false,
+        "sourceData": {
+            
+            "data": [{
+                "name": "唐僧",
+                "callback": null,
+                "id": "a1"
+
+            }, {
+                "name": "悟空",
+                "callback": null,
+                "id": "a2"
+
+            }, {
+                "name": "八戒1",
+                "callback": null,
+                "id": "a3"
+
+            }, {
+                "name": "八戒2",
+                "callback": null,
+                "id": "a4"
+
+            }, {
+                "name": "八戒3",
+                "id": "a5"
+
+            }, {
+                "name": "八戒4",
+                "id": "a6"
+
+            }, {
+                "name": "老沙",
+                "id": "a7"
+
+            }]
+        }
+
+    }
+]

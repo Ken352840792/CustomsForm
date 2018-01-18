@@ -19,16 +19,20 @@
        
     </form>
     <script>
-        var aaa = function () {
-            this.input = $('<input type="text" name="lname"  />');
-            var div = $('<div class="aaaa"></div>').append(this.input);
-            $('#forms').append(div);
-        };
-        aaa.prototype.getEle = function () {
-           console.log(this.input);
-        };
-        var fff = new aaa();
-        var fff2 = new aaa();
+        var a=['aa','bb'];
+        a.forEach(function(aa){
+            console.log(aa);
+        });
+        // var aaa = function () {
+        //     this.input = $('<input type="text" name="lname"  />');
+        //     var div = $('<div class="aaaa"></div>').append(this.input);
+        //     $('#forms').append(div);
+        // };
+        // aaa.prototype.getEle = function () {
+        //    console.log(this.input);
+        // };
+        // var fff = new aaa();
+        // var fff2 = new aaa();
          
     </script>
 </body>

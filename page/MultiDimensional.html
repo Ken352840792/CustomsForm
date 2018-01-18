@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- jquery mobile 插件 -->
+    <link rel="stylesheet" href='/Component/JqueryMoblie/css/jquery.mobile-1.4.5.min.css'>
+    <link rel="stylesheet" href="/Component/Mobiscroll/css/theme.self.css">
+    <script src="/Component/JqueryMoblie/js/jquery-1.11.2.min.js"></script>
+    <script src="/Component/JqueryMoblie/js/jquery.mobile-1.4.5.min.js"></script>
+    <script src="/built/bundle.js"></script>
+    <style>
+        .ui-btn.ui-btn-inline {
+            min-width: 100px;
+        }
+
+        .grid-div-label {
+            width: 10%;
+            float: left;
+            position: relative;
+            line-height: 48px;
+        }
+
+        .overflow-auto .grid-div-content {
+            width: 84%;
+            display: inline-block;
+            height: 48px;
+            overflow: hidden;
+            float: left;
+        }
+
+        .grid-div-tool {
+            width: 0px;
+            float: right;
+            left: -35px;
+            position: relative;
+        }
+
+        .hr-line {
+            border: 1px dashed #dcdcdc;
+        }
+
+        .clearfix:before,
+        .clearfix:after {
+            content: "";
+            display: table;
+        }
+
+        .clearfix:after {
+            clear: both;
+        }
+
+        .clearfix {
+            *zoom: 1;
+            /*IE/7/6*/
+        }
+    </style>
+    <script>
+    </script>
+    <script>
+        var form = function () {
+            $('#form').customFrom({});
+            var objs = {};
+            $.get('/data/buttons.json', function (obj) {
+                obj.forEach(function (item) {
+                    objs[item.name] = new Buttons(item);
+                });
+            });
+            this.Buttons = objs;
+        };
+        form.prototype = {
+            getValue: function () {
+                var obj = {};
+                for (const key in this.Buttons) {
+                    var val=this.Buttons[key].getValue();
+                    if(val.length!=0){
+                        obj[key] = val;
+                    }
+                   
+                }
+                return obj;
+            },
+            ///[{'name':'UserName','value':'1'}]
+            ///['name':'userName','value':['1','2']]
+            setValue: function (values) {
+                for (const key in this.Buttons) {
+                    var button = this.Buttons[key],
+                        buttonOpts = button.opts;
+                    values.forEach(function (item) {
+                        if (item.name === key) {
+                            if (item.value instanceof Array) {
+                                button.setValue(item.value);
+                            } else {
+                                var array = [];
+                                array.push(item.value);
+                                button.setValue(array);
+                            }
+                        }
+                    });
+                }
+            }
+        };
+        $(function () {
+            window.ff = new form();
+        });
+    </script>
+</head>
+<body>
+    <form action="" id="form"></form>
+</body>
+</html>
