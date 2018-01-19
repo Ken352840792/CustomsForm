@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/m_base.css">
+    <link rel="stylesheet" href='/Component/JqueryMoblie/css/jquery.mobile-1.4.5.min.css'>
+    <link rel="stylesheet" href="/Component/Mobiscroll/css/theme.self.css">
+    <script src="/Component/JqueryMoblie/js/jquery-1.11.2.min.js"></script>
+    <script src="/Component/JqueryMoblie/js/jquery.mobile-1.4.5.min.js"></script>
+    <script src="/js/plugins/paging.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        /*
+          * 外面盒子样式---自己定义
+          */
+
+        .page_div {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 15px;
+            font-family: "microsoft yahei";
+            color: #666666;
+            margin-right: 10px;
+            padding-left: 20px;
+            float: right;
+            box-sizing: border-box;
+        }
+        /*
+         * 页数按钮样式
+         */
+
+        .page_div a {
+            min-width: 30px;
+            height: 33px;
+            border: 1px solid #dce0e0!important;
+            text-align: center;
+            margin: 0 4px;
+            cursor: pointer;
+            border-radius: 20px;
+            line-height: 33px;
+            color: #666666;
+            font-size: 13px;
+            display: inline-block;
+            width: 70px !important;
+        }
+
+        #firstPage,
+        #lastPage {
+            width: 50px;
+            color: #0073A9;
+            border: 1px solid #0073A9!important;
+        }
+
+        #prePage,
+        #nextPage {
+            width: 70px;
+            color: #0073A9;
+            border: 1px solid #0073A9!important;
+        }
+
+        .page_div .current {
+            background-color: #0073A9;
+            border-color: #0073A9;
+            color: #FFFFFF;
+        }
+
+        .totalPages {
+            margin: 0 10px;
+        }
+
+        .totalPages span,
+        .totalSize span {
+            color: #0073A9;
+            margin: 0 5px;
+        }
+    </style>
+    <style>
+        table thead th {
+            background: #e6e6e6;
+            border: 1px solid #d3d3d3;
+            text-align: center !important;
+        }
+
+        table input[type=checkbox] {
+            -webkit-appearance: checkbox;
+            margin-top: -5px;
+        }
+
+        table td {
+            text-align: center !important;
+        }
+
+        table thead .ui-checkbox {
+            width: 1em;
+        }
+    </style>
+    <script>
+        $(function () {
+
+            $.get('/data/customTable.json', function (obj) {
+                var Data = obj.Data.data,
+                    header = obj.Data.header;
+                var self = $('#myTable');
+                var thead = $('<thead></thead>');
+                var allCheck=$('<input type="checkbox" >');
+                var th=$('<th></th>').append(allCheck);
+                thead.append(th);
+                header.forEach(function (item, index) {
+                    thead.append('<th data-priority="' + index + '">' + item + '</th>');
+                });
+                var tBody = $('<tbody></tbody>');
+                Data.forEach(function (item, index) {
+                    var tr = $('<tr></tr>');
+                    tr.append('<td><input type="checkbox" ></td>');
+                    for (var key in item) {
+                        tr.append('<td>' + item[key] + '</td>');
+                    }
+                    tr.data('model',item);
+                    tBody.append(tr);
+                });
+                self.html('');
+                self.append(thead).append(tBody).trigger("create");
+
+
+                 
+            });
+
+            //分页
+            $("#page").paging({
+                pageNo: 5,
+                totalPage: 9,
+                totalSize: 300,
+                callback: function (num) {
+                    alert(num)
+                }
+            })
+        });
+    </script>
+</head>
+
+<body>
+
+    <div data-role="main" class="ui-content">
+        <span style="float: right;" class="ui-table-columntoggle-btn ui-btn ui-btn-a ui-corner-all ui-shadow ui-mini" id='table_Del'>删 除</span>
+        <table data-role="table" class="ui-responsive" id='myTable'>
+            <thead>
+                <th>
+                    <input type="checkbox" name="checkbox-0 ">
+                </th>
+                <th data-priority="1">ContactName</th>
+                <th data-priority="2">Address</th>
+                <th data-priority="3">City</th>
+                <th data-priority="4">PostalCode</th>
+                <th data-priority="5">Country</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input type="checkbox" name="checkbox-0 ">
+                    </td>
+                    <td>123</td>
+                    <td>Obere Str. 57</td>
+                    <td>Berlin</td>
+                    <td>12209</td>
+                    <td>Germany</td>
+                </tr>
+                <tr>
+                    <th>
+                        <input type="checkbox" name="checkbox-0 ">
+                    </th>
+                    <td>Antonio Moreno</td>
+                    <td>Mataderos 2312</td>
+                    <td>Mico D.F.</td>
+                    <td>05023</td>
+                    <td>Mexico</td>
+                </tr>
+                <tr>
+                    <th>
+                        <input type="checkbox" name="checkbox-0 ">
+                    </th>
+                    <td>Thomas Hardy</td>
+                    <td>120 Hanover Sq.</td>
+                    <td>London</td>
+                    <td>WA1 1DP</td>
+                    <td>UK</td>
+                </tr>
+                <tr>
+                    <th>
+                        <input type="checkbox" name="checkbox-0 ">
+                    </th>
+                    <td>Christina Berglund</td>
+                    <td>Berguvsven 8</td>
+                    <td>Lule</td>
+                    <td>S-958 22</td>
+                    <td>Sweden</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div id="page" class="page_div"></div>
+
+</body>
+
+</html>

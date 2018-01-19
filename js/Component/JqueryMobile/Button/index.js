@@ -14,7 +14,7 @@ import {
         this.opts = $.extend({}, defaults, options);
         this.server = app.server;
         this.server.add({
-            ruleUrl: options.sourceUrl
+            ButtonsSourceUrl: options.sourceUrl
         })
         this.init();
         return this;
@@ -79,7 +79,7 @@ import {
             if (Data) {
                 Component(Data)
             } else {
-                _this.server.ruleUrl.get({
+                _this.server.ButtonsSourceUrl.get({
                     data: {},
                     async: false,
                     success: function (data) {

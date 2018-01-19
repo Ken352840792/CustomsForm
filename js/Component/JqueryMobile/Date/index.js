@@ -2,6 +2,7 @@
     let TextData = function(options) {
         let defaults = {
             Form: {},
+            _selfFrom:'',//要添加到的位置
             value: "" //双向数据绑定字段
         };
         this.opts = $.extend({}, defaults, options);

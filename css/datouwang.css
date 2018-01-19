@@ -21,7 +21,7 @@
 .wrapper03 .scroller li a{color:#333;display:block;margin:0 .3rem;padding:0 .1rem}
 .wrapper03 .scroller li.cur a{color:#38c;height:.9rem;border-bottom:.1rem solid #38c}
 
-.wrapper04 {position:relative;height: 1rem;overflow: hidden;margin:0 auto;}
+.wrapper04 {position:relative;height: 1rem;margin:0 auto;}
 .wrapper04 .scroller {position:absolute}
 .wrapper04 .scroller li {height: 1rem;color:#333;float: left;line-height: 1rem;font-size: .4rem;text-align: center}
 .wrapper04 .scroller li a{color:#333;display:block;margin:0 .3rem}

@@ -91,23 +91,73 @@
         .tab_content {
             position: absolute;
             width: 100%;
+            top:60px;
+            display: none;
         }
     </style>
     <!-- <script src="/built/bundle.js"></script> -->
     <script type="text/javascript">
         $(function () {
             var data = [{
-                'Name': 'ceshi1',
-                'TableName': 'ceshi'
-            }, {
-                'Name': 'ceshi2',
-                'TableName': 'ceshi1'
-            }];
+                    'Name': 'ceshi1',
+                    'TableName': 'ceshi'
+                }, {
+                    'Name': 'ceshi2',
+                    'TableName': 'ceshi1'
+                },
+                {
+                    'Name': 'ceshi2',
+                    'TableName': 'ceshi1'
+                },
+                {
+                    'Name': 'ceshi2',
+                    'TableName': 'ceshi1'
+                },
+                {
+                    'Name': 'ceshi2',
+                    'TableName': 'ceshi1'
+                },
+                {
+                    'Name': 'ceshi2',
+                    'TableName': 'ceshi1'
+                },
+                {
+                    'Name': 'ceshi2',
+                    'TableName': 'ceshi1'
+                },
+                {
+                    'Name': 'ceshi2',
+                    'TableName': 'ceshi1'
+                }, {
+                    'Name': 'ceshi2',
+                    'TableName': 'ceshi1'
+                },
+                {
+                    'Name': 'ceshi2',
+                    'TableName': 'ceshi1'
+                },
+                {
+                    'Name': 'ceshi2',
+                    'TableName': 'ceshi1'
+                },
+                {
+                    'Name': 'ceshi2',
+                    'TableName': 'ceshi1'
+                },
+                {
+                    'Name': 'ceshi2',
+                    'TableName': 'ceshi1'
+                },
+                {
+                    'Name': 'ceshi2',
+                    'TableName': 'ceshi1'
+                }
+
+            ];
             var ul = $('#ul');
             data.forEach(function (item) {
                 ul.append('<li><a to="#' + item.TableName + '">' + item.Name + '</a></li>');
             });
-           
             $('.wrapper').navbarscroll({
                 defaultSelect: 0,
                 endClickScroll: function (obj) {
@@ -115,6 +165,11 @@
                     $(obj.find('a').attr('to')).show();
                 }
             });
+            $('.mytabs').on('click', 'a', function () {
+                $('.aa').hide();
+                $($(this).attr('to')).show();
+            });
+            $('.mytabs a:first').click();
         });
     </script>
 </head>
@@ -124,7 +179,7 @@
         <div data-role="navbar">
             <ul class="mytabs">
                 <li>
-                    <a to="#customForm" >维度选择</a>
+                    <a to="#customForm">维度选择</a>
                 </li>
                 <li>
                     <a to="#wrapper">自定义表单</a>
@@ -132,20 +187,21 @@
             </ul>
         </div>
     </div>
-    <div class="wrapper wrapper04" id="wrapper" >
-        <div class="scroller">
-            <ul class="clearfix" id="ul">
-
-            </ul>
-
-        </div>
-     
+    <div>
+            <div class="wrapper wrapper04 aa" id="wrapper">
+                    <div class="scroller">
+                        <ul class="clearfix" id="ul">
+            
+                        </ul>
+                    </div>
+                    <div id="ceshi" class="tab_content">12312312312312<input type="button" value=""></div>
+                    <div id="ceshi1" class="tab_content">2</div>
+                    <div id="ceshi2" class="tab_content">3</div>
+                    <div id="ceshi3" class="tab_content">4</div>
+                </div>
     </div>
-    <div id="ceshi" class="tab_content">1</div>
-    <div id="ceshi1" class="tab_content">2</div>
-    <div id="ceshi2" class="tab_content">3</div>
-    <div id="ceshi3" class="tab_content">4</div>
-    <div id="customForm" style="display: none" class="wrapper">
+ 
+    <div id="customForm" style="display: none" class="aa" >
         123
     </div>
 
