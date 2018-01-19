@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/m_base.css">
+    <link rel="stylesheet" href='/Component/JqueryMoblie/css/jquery.mobile-1.4.5.min.css'>
+    <link rel="stylesheet" href="/Component/Mobiscroll/css/theme.self.css">
+    <script src="/Component/JqueryMoblie/js/jquery-1.11.2.min.js"></script>
+    <script src="/Component/JqueryMoblie/js/jquery.mobile-1.4.5.min.js"></script>
+
+
+    <script src="/js/plugins/flexible.js"></script>
+    <script src="/js/plugins/iscroll.js"></script>
+    <script src="/js/plugins/navbarscroll.js"></script>
+    <link rel="stylesheet" href="/css/datouwang.css">
+    <style>
+        a {
+            font-size: 21px !important;
+            font-weight: 400 !important;
+        }
+
+        @media screen and (max-width: 1025px) {
+            .ui-navbar .mytabs {
+                width: 80%;
+            }
+        }
+
+        @media screen and (max-width: 960px) {
+            .ui-navbar .mytabs {
+                width: 100%;
+            }
+        }
+
+        @media screen and (min-width: 1025px) {
+            .ui-navbar .mytabs {
+                width: 80%;
+            }
+        }
+
+        .ui-navbar .mytabs {
+            margin: 0 auto;
+        }
+
+        .ui-navbar .mytabs .ui-btn {
+            border: none;
+            text-shadow: none;
+            background: none;
+            font-size: 1.3em;
+        }
+        /* app小屏幕样式修改 */
+
+        @media screen and (max-width: 810px) {
+            .ui-navbar .mytabs .ui-btn {
+                font-size: 1em !important;
+            }
+
+            #operator-content .factory-name {
+                font-size: 0.7em;
+            }
+        }
+
+        .ui-navbar .mytabs .ui-btn-active {
+            color: #38c;
+            border-bottom: 3px solid #38c;
+        }
+
+        .mytabs a {
+            font-size: 23px !important;
+        }
+
+        .wrapper li {
+            height: 60px !important;
+        }
+
+        .wrapper {
+            height: 60px !important;
+        }
+
+        .wrapper a {
+            line-height: 60px;
+        }
+
+        .ui-page-theme-a .mytabs .ui-btn:focus {
+            box-shadow: none;
+        }
+
+        .tab_content {
+            position: absolute;
+            width: 100%;
+        }
+    </style>
+    <!-- <script src="/built/bundle.js"></script> -->
+    <script type="text/javascript">
+        $(function () {
+            var data = [{
+                'Name': 'ceshi1',
+                'TableName': 'ceshi'
+            }, {
+                'Name': 'ceshi2',
+                'TableName': 'ceshi1'
+            }];
+            var ul = $('#ul');
+            data.forEach(function (item) {
+                ul.append('<li><a to="#' + item.TableName + '">' + item.Name + '</a></li>');
+            });
+           
+            $('.wrapper').navbarscroll({
+                defaultSelect: 0,
+                endClickScroll: function (obj) {
+                    $('.tab_content').hide();
+                    $(obj.find('a').attr('to')).show();
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div style="padding: 20px ">
+        <div data-role="navbar">
+            <ul class="mytabs">
+                <li>
+                    <a to="#customForm" >维度选择</a>
+                </li>
+                <li>
+                    <a to="#wrapper">自定义表单</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="wrapper wrapper04" id="wrapper" >
+        <div class="scroller">
+            <ul class="clearfix" id="ul">
+
+            </ul>
+
+        </div>
+     
+    </div>
+    <div id="ceshi" class="tab_content">1</div>
+    <div id="ceshi1" class="tab_content">2</div>
+    <div id="ceshi2" class="tab_content">3</div>
+    <div id="ceshi3" class="tab_content">4</div>
+    <div id="customForm" style="display: none" class="wrapper">
+        123
+    </div>
+
+</body>
+
+</html>

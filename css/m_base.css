@@ -1,0 +1,142 @@
+/*css初始化*/
+
+*,
+::before,
+::after {
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+}
+
+body {
+    font-size: 16px;
+    color: #272727;
+    font-family: "MicroSoft YaHei", "sans-serif";
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+a {
+    color: #272727;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #272727;
+    text-decoration: none;
+}
+
+input,
+textarea,
+button {
+    border: none;
+    outline: none;
+    resize: none;
+    -webkit-appearance: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-weight: normal;
+    font-size: inherit;
+}
+
+
+/*字体引入*/
+
+@font-face {
+    font-family: 'iconfont';
+    /* project id 234040 */
+    src: url('//at.alicdn.com/t/font_1wi9mxyetmtmlsor.eot');
+    src: url('//at.alicdn.com/t/font_1wi9mxyetmtmlsor.eot?#iefix') format('embedded-opentype'), url('//at.alicdn.com/t/font_1wi9mxyetmtmlsor.woff') format('woff'), url('//at.alicdn.com/t/font_1wi9mxyetmtmlsor.ttf') format('truetype'), url('//at.alicdn.com/t/font_1wi9mxyetmtmlsor.svg#iconfont') format('svg');
+}
+
+.iconfont {
+    font-family: "iconfont" !important;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon_select:before {
+    content: "\e6dd";
+}
+
+.icon_continue:before {
+    content: "\e69c";
+}
+
+
+/*公共css样式*/
+
+.f_left {
+    float: left;
+}
+
+.f_right {
+    float: right;
+}
+
+
+/*清除浮动*/
+
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.clearfix {
+    *zoom: 1;
+    /*IE/7/6*/
+}
+
+.green_color {
+    color: #4990e2;
+}
+
+.hui_color {
+    color: rgba(39, 39, 39, 0.54);
+}
+
+.huibai_color {
+    color: rgba(39, 39, 39, 0.38);
+}
+
+.yellow_color {
+    color: #ffc107;
+}
+
+.yellow_bgc {
+    background-color: #ffc107;
+    color: #fff;
+}
+
+.show {
+    display: block;
+}
+
+.hide {
+    -webkit-transition: all 1.3s;
+    transition: all 1.3s;
+    display: none;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
