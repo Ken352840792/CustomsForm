@@ -110,7 +110,7 @@
         BOXheight: function() {
             var _this = this;
             var height = $(window).height() - ($('.ui-content').innerHeight() - $('.ui-content').height()) - $('.ui-navbar').height() - $('#lable').height() - 20;
-            var height_table = $(window).height() - ($('.ui-content').innerHeight() - $('.ui-content').height()) - $('.ui-navbar').height() - 50;
+            var height_table = $(window).height() - ($('.ui-content').innerHeight() - $('.ui-content').height()) - $('.ui-navbar').height() - 20;
             $('.swiper-no-swiping').height(height);
             $('#form').height(height_table);
         },
