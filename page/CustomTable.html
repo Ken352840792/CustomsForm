@@ -12,6 +12,58 @@
     <script src="/Component/JqueryMoblie/js/jquery-1.11.2.min.js"></script>
     <script src="/Component/JqueryMoblie/js/jquery.mobile-1.4.5.min.js"></script>
     <script src="/js/plugins/paging.js"></script>
+    <!-- keyboard 数字键盘组件 -->
+    <script src="/Component/keyboard/keyboard.js"></script>
+    <!-- mobiscroll 日期组件 -->
+    <link rel="stylesheet" href="/Component/Mobiscroll/css/mobiscroll.custom-3.0.0-beta6.min.css">
+    <link rel="stylesheet" href="/Component/Mobiscroll/css/theme.self.css">
+    <script src="/Component/Mobiscroll/js/mobiscroll.custom-3.0.0-beta6.min.js"></script>
+    <style>
+        .ui-btn.ui-btn-inline {
+            min-width: 100px;
+        }
+
+        .grid-div-label {
+            width: 20%;
+            float: left;
+            position: relative;
+            line-height: 48px;
+        }
+
+        .overflow-auto .grid-div-content {
+            width: 80%;
+            display: inline-block;
+            height: 48px;
+            overflow: hidden;
+            float: left;
+        }
+
+        .grid-div-tool {
+            width: 0px;
+            float: right;
+            left: -35px;
+            position: relative;
+        }
+
+        .hr-line {
+            border: 1px dashed #dcdcdc;
+        }
+
+        .clearfix:before,
+        .clearfix:after {
+            content: "";
+            display: table;
+        }
+
+        .clearfix:after {
+            clear: both;
+        }
+
+        .clearfix {
+            *zoom: 1;
+            /*IE/7/6*/
+        }
+    </style>
     <style>
         * {
             padding: 0;
@@ -80,6 +132,20 @@
             color: #0073A9;
             margin: 0 5px;
         }
+
+        .ui-field-contain label {
+            float: left !important;
+            width: 20% !important;
+            margin: .5em 2% 0 0 !important;
+        }
+
+        .ui-field-contain .ui-body-inherit {
+            float: left !important;
+            width: 78% !important;
+            -webkit-box-sizing: border-box !important;
+            -moz-box-sizing: border-box !important;
+            box-sizing: border-box !important;
+        }
     </style>
     <style>
         table thead th {
@@ -100,112 +166,62 @@
         table thead .ui-checkbox {
             width: 1em;
         }
+
+        .tableOp {
+            margin-left: 38%;
+        }
+
+        table tbody a {
+            float: left;
+            border-radius: 20px;
+            margin-left: 5% !important;
+        }
     </style>
+    <script src="/built/bundle.js"></script>
     <script>
         $(function () {
-
-            $.get('/data/customTable.json', function (obj) {
-                var Data = obj.Data.data,
-                    header = obj.Data.header;
-                var self = $('#myTable');
-                var thead = $('<thead></thead>');
-                var allCheck=$('<input type="checkbox" >');
-                var th=$('<th></th>').append(allCheck);
-                thead.append(th);
-                header.forEach(function (item, index) {
-                    thead.append('<th data-priority="' + index + '">' + item + '</th>');
-                });
-                var tBody = $('<tbody></tbody>');
-                Data.forEach(function (item, index) {
-                    var tr = $('<tr></tr>');
-                    tr.append('<td><input type="checkbox" ></td>');
-                    for (var key in item) {
-                        tr.append('<td>' + item[key] + '</td>');
-                    }
-                    tr.data('model',item);
-                    tBody.append(tr);
-                });
-                self.html('');
-                self.append(thead).append(tBody).trigger("create");
-
-
-                 
+            console.log(new Date());
+            var a = new CustomTable({
+                _selfFrom: $('#myContent'),
+                sourceUrl: '/data/customTable.json',
+                headHandle: {
+                    'username': '用户名',
+                    'age': '年龄'
+                },
+                delUrl: '/data/del.json',
+                delParams: {
+                    'tableName': 'ceshi'
+                },
+                saveParams: {
+                    'tableName': 'saveceshi'
+                },
+                sourceParams: {
+                    'tableName': 'selectceshi'
+                },
+                customFormSetting: {
+                    myRuleGuid: '1111',
+                    sourceData: [],
+                    ruleUrl: "/data/ruledata.json",
+                    sourceUrl: "/data/ceshi.json",
+                    completeCallback: function () {
+                        console.log('我是全部加载完了!');
+                        console.log(new Date());
+                    },
+                    saveUrl: "/data/save.json"
+                }
             });
 
-            //分页
-            $("#page").paging({
-                pageNo: 5,
-                totalPage: 9,
-                totalSize: 300,
-                callback: function (num) {
-                    alert(num)
-                }
-            })
         });
     </script>
 </head>
 
 <body>
+    <div class="ui-content">
+        <table data-role="table" class="ui-responsive" id='myContent'>
 
-    <div data-role="main" class="ui-content">
-        <span style="float: right;" class="ui-table-columntoggle-btn ui-btn ui-btn-a ui-corner-all ui-shadow ui-mini" id='table_Del'>删 除</span>
-        <table data-role="table" class="ui-responsive" id='myTable'>
-            <thead>
-                <th>
-                    <input type="checkbox" name="checkbox-0 ">
-                </th>
-                <th data-priority="1">ContactName</th>
-                <th data-priority="2">Address</th>
-                <th data-priority="3">City</th>
-                <th data-priority="4">PostalCode</th>
-                <th data-priority="5">Country</th>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <input type="checkbox" name="checkbox-0 ">
-                    </td>
-                    <td>123</td>
-                    <td>Obere Str. 57</td>
-                    <td>Berlin</td>
-                    <td>12209</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <th>
-                        <input type="checkbox" name="checkbox-0 ">
-                    </th>
-                    <td>Antonio Moreno</td>
-                    <td>Mataderos 2312</td>
-                    <td>Mico D.F.</td>
-                    <td>05023</td>
-                    <td>Mexico</td>
-                </tr>
-                <tr>
-                    <th>
-                        <input type="checkbox" name="checkbox-0 ">
-                    </th>
-                    <td>Thomas Hardy</td>
-                    <td>120 Hanover Sq.</td>
-                    <td>London</td>
-                    <td>WA1 1DP</td>
-                    <td>UK</td>
-                </tr>
-                <tr>
-                    <th>
-                        <input type="checkbox" name="checkbox-0 ">
-                    </th>
-                    <td>Christina Berglund</td>
-                    <td>Berguvsven 8</td>
-                    <td>Lule</td>
-                    <td>S-958 22</td>
-                    <td>Sweden</td>
-                </tr>
-            </tbody>
         </table>
 
     </div>
-    <div id="page" class="page_div"></div>
 
 </body>
 

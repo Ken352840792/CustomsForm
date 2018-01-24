@@ -9,6 +9,8 @@ import {
             key: "id", //唯一键
             keyName: 'name', //显示的名称
             singleSelect: true, //单选多选
+            initCallback:function(){},//加载前
+            completeCallback:function(){},//加载完成后
             value: [] //双向数据绑定字段
         };
         this.opts = $.extend({}, defaults, options);
@@ -22,6 +24,7 @@ import {
     Buttons.prototype = {
         init: function () {
             let _this = this;
+            _this.opts.initCallback(this.opts);
             _this.createComponent()
             _this.Events()
             _this.behavior()
@@ -107,6 +110,10 @@ import {
                 form.content.append(form.tool)
                 opts._selfFrom.append(form.content);
                 opts._selfFrom.append(form.hr);
+                setTimeout(() => {
+                    opts.completeCallback(opts,_this);
+                }, 5000);
+              
             }
         },
         // 按钮的行为变化

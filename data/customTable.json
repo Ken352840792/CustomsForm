@@ -2,7 +2,8 @@
     "Status": 1,
     "ErrorCode": null,
     "Data": {
-        "header": ["username","age","gender"],
+        "header": ["username","age"],
+        "totalCount":100,
         "data": [{
             "username": "第一个名称",
             "age": "10",
