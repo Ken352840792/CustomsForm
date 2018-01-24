@@ -39,7 +39,7 @@
                 }
             });
 
-            _this.BOXheight();
+
             _this.buttonStart()
         },
         // 数据初始化:
@@ -110,9 +110,9 @@
         BOXheight: function() {
             var _this = this;
             var height = $(window).height() - ($('.ui-content').innerHeight() - $('.ui-content').height()) - $('.ui-navbar').height() - $('#lable').height() - 20;
+            var height_table = $(window).height() - ($('.ui-content').innerHeight() - $('.ui-content').height()) - $('.ui-navbar').height() - 50;
             $('.swiper-no-swiping').height(height);
-            $('#form').height(height + 50);
-
+            $('#form').height(height_table);
         },
         // div 组件运行
         formdata: function(data) {
@@ -173,6 +173,7 @@
                     obj.forEach(function(item) {
                         item._selfFrom = $('#form');
                         objs[item.name] = new Buttons(item);
+                        _this.BOXheight();
                     });
                 });
                 this.Buttons = objs;
