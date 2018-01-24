@@ -14,11 +14,6 @@ import {
     Buttons
 } from './Button/index';
 import {
-    CustomTable
-} from './CustomTable/index';
-import {
-    Popup
-} from './Popup/index';
 (function () {
     var componentMapping = {
         text: Text,
@@ -29,21 +24,15 @@ import {
     var customFrom = function (_self, options) {
         var defaults = {
             saveUrl: '',
-            saveParams: {},
             ruleUrl: '',
-            ruleParams: {},
             ruleData: [],
             myRuleData: [],
             myRuleGuid: '',
             sourceUrl: '',
-            sourceParams: {},
             sourceData: [],
-            componentsInitCount: 0,
-            componentsFactCompleteCount: 0,
-            completeCallback: function () {},
             components: {} //组件集合
         };
-        this._self_ = _self,
+            this._self_ = _self,
             this.opts = $.extend({}, defaults, options),
             this.server = app.server;
         if (this.opts.sourceData.length === 0 && !this.opts.sourceUrl) return;
@@ -65,19 +54,8 @@ import {
                 _this.setRuleData();
                 opts.sourceData.forEach(function (item) {
                     if (opts.myRuleData.indexOf(item.name) !== -1 && componentMapping.hasOwnProperty(item.type)) {
-                        opts.componentsInitCount += 1;
-                    }
-                });
-                opts.sourceData.forEach(function (item) {
-                    if (opts.myRuleData.indexOf(item.name) !== -1 && componentMapping.hasOwnProperty(item.type)) {
                         var componentName = item.type + '_' + item.name;
-                        item._selfFrom = _this._self_;
-                        item.completeCallback = function () {
-                            opts.componentsFactCompleteCount += 1;
-                            if (opts.componentsFactCompleteCount === opts.componentsInitCount) {
-                                opts.completeCallback(opts);
-                            }
-                        };
+                        item._selfFrom=_this._self_;
                         opts.components[componentName] = new componentMapping[item.type](item);
                         //绑定事件
                         for (var e in item.events) {
@@ -85,7 +63,6 @@ import {
                                 opts.components[componentName].input.on(e, typeof item.events[e] === "string" ? Function("return " + item.events[e])() : item.events[e]);
                             }
                         }
-
                     }
                 });
             });
@@ -95,7 +72,7 @@ import {
                 opts = this.opts;
             if (opts.sourceData.length === 0) {
                 _this.server.sourceUrl.get({
-                    data: opts.sourceParams,
+                    data: {},
                     success: function (obj) {
                         opts.sourceData = obj;
                         callback();
@@ -110,7 +87,7 @@ import {
                 opts = this.opts;
             if (opts.ruleData.length === 0) {
                 _this.server.ruleUrl.get({
-                    data: opts.ruleParams,
+                    data: {},
                     async: false,
                     success: function (obj) {
                         opts.ruleData = obj;
@@ -192,9 +169,8 @@ import {
             var _this = this,
                 opts = this.opts;
             if (_this.valid()) {
-                var params = $.extend({}, opts.saveParams, _this.getValue());
                 _this.server.saveUrl.post({
-                    data: params,
+                    data: _this.getValue(),
                     success: function (obj) {
                         alert('提交成功');
                     }

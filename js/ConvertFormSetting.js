@@ -47,7 +47,6 @@
             };
             array.push(cur);
         };
-        console.log(JSON.stringify(array));
         $('#formtest').html('');
         window.ff = $('#form').customFrom({
             myRuleGuid: '1111',

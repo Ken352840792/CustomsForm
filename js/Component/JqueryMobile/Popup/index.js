@@ -41,31 +41,3 @@
             form.body = opts.content instanceof jQuery ? opts.content : opts.content;
             form.popupBody.append(form.title).append(form.close).append(form.body);
 
-            var group = $(' <div data-role="footer"></div>');
-            var h1 = $('<h1></h1>');
-
-            opts.buttons.forEach(function (item, index) {
-                var but = $('<span class="ui-table-columntoggle-btn ui-btn ui-btn-a ui-corner-all ui-shadow ui-mini">' + item + '</span>');
-                but.data('index',index);
-                but.click(function(){
-                   opts.callback($(this).data('index'));
-                });
-                h1.append(but);
-
-            });
-            form.popupBody.append(group.append(h1));
-            opts._selfFrom.after(form.popupBody);
-            $('body').trigger('create');
-        },
-        getValue: function () {
-            return undefined;
-        },
-        setValue: function (arr) {
-            return undefined;
-        }
-    };
-    window.Popup = Popup;
-})();
-export {
-    Popup
-}

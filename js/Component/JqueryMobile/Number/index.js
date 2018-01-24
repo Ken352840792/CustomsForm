@@ -2,8 +2,6 @@
     let TextNumber = function(options) {
         let defaults = {
             Form: {},
-            initCallback: function () {}, //加载前
-            completeCallback: function () {}, //加载完成后
             value: "" //双向数据绑定字段
         };
         this.opts = $.extend({}, defaults, options);
@@ -15,11 +13,13 @@
             var _this = this,
                 opts = this.opts,
                 form = opts.Form;
-                opts.initCallback(this.opts);
             _this.createComponent();
             _this.Events();
             _this.keyboard()
-            opts.completeCallback();
+                //调用自定义事件
+            if (opts.customEvent) {
+                opts.customEvent.oninitialize ? opts.customEvent.oninitialize(_this.input, _this) : '';
+            }
         },
         Events: function() {
             var _this = this,
