@@ -1,0 +1,176 @@
+ .box {
+     width: 100%;
+     margin-top: 10px;
+ }
+ 
+ .menu {
+     width: 150px;
+     position: fixed;
+     height: 100%;
+     top: 0;
+     left: 0;
+     background-color: #000;
+ }
+ 
+ .center {
+     width: 100%;
+     float: left;
+ }
+ 
+ .ui-btn.ui-btn-inline {
+     min-width: 100px;
+ }
+ 
+ .grid-div-label {
+     width: 10%;
+     float: left;
+     position: relative;
+     line-height: 48px;
+ }
+ 
+ .overflow-auto .grid-div-content {
+     width: 77%;
+     display: inline-block;
+     height: 48px;
+     overflow: hidden;
+     float: left;
+ }
+ 
+ .grid-div-tool {
+     width: 0px;
+     float: right;
+     left: -35px;
+     position: relative;
+ }
+ 
+ .hr-line {
+     border: 1px dashed #dcdcdc;
+ }
+ 
+ @media screen and (max-width: 1025px) {
+     .ui-navbar .mytabs {
+         width: 80%;
+     }
+ }
+ 
+ @media screen and (max-width: 960px) {
+     .ui-navbar .mytabs {
+         width: 100%;
+     }
+ }
+ 
+ @media screen and (min-width: 1025px) {
+     .ui-navbar .mytabs {
+         width: 80%;
+     }
+ }
+ 
+ .ui-navbar .mytabs {
+     margin: 0 auto;
+ }
+ 
+ .ui-navbar .mytabs .ui-btn {
+     border: none;
+     text-shadow: none;
+     background: none;
+     font-size: 1.3em;
+ }
+ 
+ @media screen and (max-width: 810px) {
+     .ui-navbar .mytabs .ui-btn {
+         font-size: 1em !important;
+     }
+     #operator-content .factory-name {
+         font-size: 0.7em;
+     }
+ }
+ 
+ .ui-navbar .mytabs .ui-btn-active {
+     color: #38c;
+     border-bottom: 3px solid #38c;
+ }
+ 
+ .swiper-no-swiping {
+     position: relative;
+ }
+ 
+ .ui-page-theme-a .mytabs .ui-btn:focus {
+     box-shadow: none;
+ }
+ 
+ .wd_box,
+ .zdy_box {
+     width: 100%;
+     display: none;
+     position: relative;
+ }
+ 
+ .ui-btn-color {
+     background-color: #38c !important;
+     color: #FFF !important;
+     position: absolute;
+     bottom: 20px;
+     right: 20px;
+ }
+ 
+ .ul_selected {
+     display: block;
+ }
+ 
+ .container {
+     width: 100%;
+     /*height: 670px;*/
+ }
+ 
+ .swiper1 {
+     width: 100%;
+ }
+ 
+ .swiper1 .selected {
+     color: #fff;
+     /*border-bottom: 2px solid #38c;
+            */
+     background-color: #38c;
+     box-sizing: border-box;
+ }
+ 
+ .swiper1 .swiper-slide {
+     text-align: center;
+     font-size: 16px;
+     height: 50px;
+     /* Center slide text vertically */
+     display: -webkit-box;
+     display: -ms-flexbox;
+     display: -webkit-flex;
+     display: flex;
+     -webkit-box-pack: center;
+     -ms-flex-pack: center;
+     -webkit-justify-content: center;
+     justify-content: center;
+     -webkit-box-align: center;
+     -ms-flex-align: center;
+     -webkit-align-items: center;
+     align-items: center;
+     cursor: pointer;
+ }
+ 
+ .swiper2 {
+     width: 100%;
+ }
+ 
+ .swiper2 .swiper-slide {
+     /*background-color: red;*/
+     color: #fff;
+     text-align: center;
+     box-sizing: border-box !important;
+     overflow-x: hidden !important;
+ }
+ 
+ .lable {
+     color: #333333;
+ }
+ 
+ .grid-div-label {
+     color: #333;
+     width: 20%;
+ }
