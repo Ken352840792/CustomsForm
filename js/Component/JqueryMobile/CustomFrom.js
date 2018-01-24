@@ -13,14 +13,17 @@ import {
 import {
     Buttons
 } from './Button/index';
-(function () {
+import {
+    Nav
+} from './Navigation/index';
+(function() {
     var componentMapping = {
         text: Text,
         number: TextNumber,
         data: TextData,
         button: Buttons
     };
-    var customFrom = function (_self, options) {
+    var customFrom = function(_self, options) {
         var defaults = {
             saveUrl: '',
             ruleUrl: '',
@@ -31,7 +34,7 @@ import {
             sourceData: [],
             components: {} //组件集合
         };
-            this._self_ = _self,
+        this._self_ = _self,
             this.opts = $.extend({}, defaults, options),
             this.server = app.server;
         if (this.opts.sourceData.length === 0 && !this.opts.sourceUrl) return;
@@ -43,18 +46,18 @@ import {
         this.init();
     };
     customFrom.prototype = {
-        init: function () {
+        init: function() {
             //创建循环创建组件
             var _this = this,
                 opts = this.opts;
             //初始化数据源配置数据
-            _this.setSourceData(function () {
+            _this.setSourceData(function() {
                 //初始化表单角色数据
                 _this.setRuleData();
-                opts.sourceData.forEach(function (item) {
+                opts.sourceData.forEach(function(item) {
                     if (opts.myRuleData.indexOf(item.name) !== -1 && componentMapping.hasOwnProperty(item.type)) {
                         var componentName = item.type + '_' + item.name;
-                        item._selfFrom=_this._self_;
+                        item._selfFrom = _this._self_;
                         opts.components[componentName] = new componentMapping[item.type](item);
                         //绑定事件
                         for (var e in item.events) {
@@ -66,13 +69,13 @@ import {
                 });
             });
         },
-        setSourceData: function (callback) {
+        setSourceData: function(callback) {
             var _this = this,
                 opts = this.opts;
             if (opts.sourceData.length === 0) {
                 _this.server.sourceUrl.get({
                     data: {},
-                    success: function (obj) {
+                    success: function(obj) {
                         opts.sourceData = obj;
                         callback();
                     }
@@ -81,20 +84,20 @@ import {
                 callback();
             }
         },
-        setRuleData: function (url) {
+        setRuleData: function(url) {
             var _this = this,
                 opts = this.opts;
             if (opts.ruleData.length === 0) {
                 _this.server.ruleUrl.get({
                     data: {},
                     async: false,
-                    success: function (obj) {
+                    success: function(obj) {
                         opts.ruleData = obj;
                     }
                 });
             }
-            opts.sourceData.forEach(function (item) {
-                opts.ruleData.forEach(function (ruleItem) {
+            opts.sourceData.forEach(function(item) {
+                opts.ruleData.forEach(function(ruleItem) {
                     if (ruleItem.name === item.name && ruleItem.roleGuids.indexOf(opts.myRuleGuid) !== -1) {
                         opts.myRuleData.push(item.name);
                     }
@@ -102,7 +105,7 @@ import {
 
             });
         },
-        getValue: function () {
+        getValue: function() {
             var _this = this,
                 opts = this.opts;
             var retrunObj = {};
@@ -112,24 +115,24 @@ import {
             return retrunObj;
         },
         ///[{'name':'UserName','value':'123'}]
-        setValue: function (values) {
+        setValue: function(values) {
             var _this = this,
                 opts = this.opts;
             for (var itemAttr in opts.components) {
-                values.forEach(function (item) {
+                values.forEach(function(item) {
                     if (item.name === itemAttr.split('_')[1]) {
                         opts.components[itemAttr].setValue(item.value);
                     }
                 });
             }
         },
-        valid: function () {
+        valid: function() {
             var _this = this,
                 opts = this.opts,
                 v = true;
             for (var itemAttr in opts.components) {
                 if (v) {
-                    opts.sourceData.forEach(function (item) {
+                    opts.sourceData.forEach(function(item) {
                         if (v) {
                             if (item.name === itemAttr.split('_')[1]) {
                                 //必须输入
@@ -164,13 +167,13 @@ import {
             }
             return v;
         },
-        save: function () {
+        save: function() {
             var _this = this,
                 opts = this.opts;
             if (_this.valid()) {
                 _this.server.saveUrl.post({
                     data: _this.getValue(),
-                    success: function (obj) {
+                    success: function(obj) {
                         alert('提交成功');
                     }
                 });
@@ -180,7 +183,7 @@ import {
         }
     };
     $.fn.extend({
-        customFrom: function (options) {
+        customFrom: function(options) {
             if (typeof options === 'string') {
                 var data = $(this).data('customFrom');
                 data[options].apply(data, Array.prototype.slice.call(arguments, 1));

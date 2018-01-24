@@ -42,7 +42,7 @@
                 opts = this.opts,
                 form = opts.Form;
             form.content = $('<div class = "ui-field-contain"></div>');
-            form.lable = $('<label for="fname">' + opts.lable + '</label>');
+            form.lable = $('<label for="fname" class="lable">' + opts.lable + '</label>');
             form.content.append(form.lable);
             //必选lable上给星号
             if (opts.regexp && opts.regexp.require) form.lable.append($('<i style ="color: red"> * </i>'));
