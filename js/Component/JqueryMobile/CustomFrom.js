@@ -13,7 +13,6 @@ import {
 import {
     Buttons
 } from './Button/index';
-import {
 (function () {
     var componentMapping = {
         text: Text,
