@@ -1,35 +1,27 @@
-(function () {
-    let Nav = function (options) {
+(function() {
+    let Nav = function(options) {
         let defaults = {
             form: {},
             arr: [],
-            initData: [{
-                'TableName': 'ceshi1',
-                'customForm': [{
-                    'name': 'username',
-                    'value': '123'
-                }]
-            }],
+            initData: [{ 'TableName': 'ceshi2', 'customForm': [{ 'name': 'username', 'value': '123' }] }],
             value: "" //双向数据绑定字段
-
         };
         this.opts = $.extend({}, defaults, options);
         this.init();
-        console.log(this)
         return this;
     };
     Nav.prototype = {
-        init: function () {
+        init: function() {
             this.begin();
             this.tableSwitch();
         },
         // 切换 和切换时的数据交换
-        tableSwitch: function () {
+        tableSwitch: function() {
             var _this = this,
                 opts = _this.opts,
                 form = opts.form;
             form.flag = true;
-            $('#ul_label').on('click', 'li', function () {
+            $('#ul_label').on('click', 'li', function() {
                 var index = $(this).index();
                 $("#ul_box > div")
                     .eq(index)
@@ -49,20 +41,20 @@
             _this.buttonStart()
         },
         // 数据初始化:
-        begin: function () {
+        begin: function() {
             var _this = this,
                 opts = _this.opts,
                 form = opts.form;
             var url = '../data/tab.json',
                 data = {},
                 type = 'get',
-                callback = function (data) {
+                callback = function(data) {
                     form.arr = data;
                 };
             this.Interaction(url, type, data, callback);
         },
         // 数据渲染
-        createComponent: function (data, callback) {
+        createComponent: function(data, callback) {
             var _this = this,
                 opts = _this.opts,
                 form = opts.form;
@@ -71,13 +63,11 @@
             form.array = [];
 
             form.lable_div = $('#lable_div');
-            data.forEach(function (item, index) {
+            data.forEach(function(item, index) {
+
                 form.table_s = $('<div class = "swiper-slide selected"> ' + item.Name + ' </div>')
                 form.table = $('<div class = "swiper-slide "> ' + item.Name + ' </div>')
                 form.swiper = $('<div class="swiper-slide swiper-no-swiping"></div>')
-                form.save = $('<a class="ui-btn ui-mini ui-corner-all ui-btn-inline ui-btn-color save">保存</a>');
-                if (Object.is(index, 0)) {
-                    form.lable.append(form.table_s);
 
                 if (item.type === 0) {
                     form.save = $('<a class="ui-btn ui-mini ui-corner-all ui-btn-inline ui-btn-color save"> 确定</a>');
@@ -99,9 +89,8 @@
                     });
 
 
-
                 } else if (item.type === 1) {
-                    form.type = $(' <table data-role="table" class="ui-responsive" id="myContent"></table>')
+                    form.type = $(' <table data-role="table" class="ui-responsive" ></table>')
                     if (Object.is(index, 0)) {
                         form.lable.append(form.table_s);
 
@@ -111,7 +100,7 @@
 
                     form.swiper.append(form.type);
                     new CustomTable({
-                        _selfFrom: $('#myContent'),
+                        _selfFrom: form.type,
                         sourceUrl: '/data/customTable.json',
                         headHandle: {
                             'username': '用户名',
@@ -139,33 +128,31 @@
                             saveUrl: "/data/save.json"
                         }
                     })
-                } else {
-                    form.lable.append(form.table);
                 }
-                form.swiper.append(form.save);
+
                 form.lable_div.append(form.swiper);
+
 
                 form.save.data('customForm', customForm);
             });
-            // console.log(_this.arr)
             _this.btnData();
-            _this.transfer()
+            _this.transfer();
             _this.BOXheight();
         },
         // ajax请求
-        Interaction: function (url, type, data, callback) {
+        Interaction: function(url, type, data, callback) {
             $.ajax({
                 url: url,
                 type: type,
                 data: data,
                 async: true,
-                success: function (data) {
+                success: function(data) {
                     callback(data);
                 }
             })
         },
         // 高度计算
-        BOXheight: function () {
+        BOXheight: function() {
             var _this = this;
             var height = $(window).height() - ($('.ui-content').innerHeight() - $('.ui-content').height()) - $('.ui-navbar').height() - $('#lable').height() - 20;
             var height_table = $(window).height() - ($('.ui-content').innerHeight() - $('.ui-content').height()) - $('.ui-navbar').height() - 20;
@@ -184,7 +171,7 @@
             });
         },
         // 插件执行
-        transfer: function () {
+        transfer: function() {
             function setCurrentSlide(ele, index) {
                 $(".swiper1 .swiper-slide").removeClass("selected");
                 ele.addClass("selected");
@@ -199,13 +186,13 @@
                 spaceBetween: 10, //slide之间的距离（单位px）。
                 freeMode: true, //默认为false，普通模式：slide滑动时只滑动一格，并自动贴合wrapper，设置为true则变为free模式，slide会根据惯性滑动且不会贴合。
                 loop: false, //是否可循环
-                onTab: function (swiper) {
+                onTab: function(swiper) {
                     var n = swiper1.clickedIndex;
                 }
             });
-            swiper1.slides.each(function (index, val) {
+            swiper1.slides.each(function(index, val) {
                 var ele = $(this);
-                ele.on("click", function () {
+                ele.on("click", function() {
                     setCurrentSlide(ele, index);
                     swiper2.slideTo(index, 0, false);
                 });
@@ -216,7 +203,7 @@
                 direction: 'horizontal', //Slides的滑动方向，可设置水平(horizontal)或垂直(vertical)。
                 loop: false,
                 autoHeight: false, //自动高度。设置为true时，wrapper和container会随着当前slide的高度而发生变化。
-                onSlideChangeEnd: function (swiper) { //回调函数，swiper从一个slide过渡到另一个slide结束时执行。
+                onSlideChangeEnd: function(swiper) { //回调函数，swiper从一个slide过渡到另一个slide结束时执行。
                     var n = swiper.activeIndex;
                     setCurrentSlide($(".swiper1 .swiper-slide").eq(n), n);
                     swiper1.slideTo(n, 0, false);
@@ -224,12 +211,12 @@
             });
         },
         // button 数据调用
-        buttonStart: function () {
+        buttonStart: function() {
             var _this = this;
-            var formData = function () {
+            var formData = function() {
                 var objs = {};
-                $.get('/data/buttons.json', function (obj) {
-                    obj.forEach(function (item) {
+                $.get('/data/buttons.json', function(obj) {
+                    obj.forEach(function(item) {
                         item._selfFrom = $('#form');
                         objs[item.name] = new Buttons(item);
                         _this.BOXheight();
@@ -238,7 +225,7 @@
                 this.Buttons = objs;
             };
             formData.prototype = {
-                getValue: function () {
+                getValue: function() {
                     var obj = {};
                     for (const key in this.Buttons) {
                         var val = this.Buttons[key].getValue();
@@ -249,11 +236,11 @@
                     }
                     return obj;
                 },
-                setValue: function (values) {
+                setValue: function(values) {
                     for (const key in this.Buttons) {
                         var button = this.Buttons[key],
                             buttonOpts = button.opts;
-                        values.forEach(function (item) {
+                        values.forEach(function(item) {
                             if (item.name === key) {
                                 if (item.value instanceof Array) {
                                     button.setValue(item.value);
@@ -267,18 +254,18 @@
                     }
                 }
             };
-            $(function () {
+            $(function() {
                 window.ff = new formData();
             });
             var event = $('#btn');
-            event.on('click', function () {
-                console.log(ff.getValue());
-            });
-            // _this.btnData(event)
+            event.on('click', function() {
+                    console.log(ff.getValue());
+                })
+                // _this.btnData(event)
         },
         // btn 获取数据
-        btnData: function (eve) {
-            $('.save').click(function () {
+        btnData: function(eve) {
+            $('.save').click(function() {
                 console.log($(this).data('customForm').getValue());
             });
         }
