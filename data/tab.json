@@ -1,45 +1,56 @@
 [{
         "Name": "测试1",
-        "TableName": "ceshi"
+        "TableName": "ceshi",
+        "type": 0
     },
     {
         "Name": "测试2",
-        "TableName": "ceshi1"
+        "TableName": "ceshi1",
+        "type": 1
     },
     {
         "Name": "测试3",
-        "TableName": "ceshi2"
+        "TableName": "ceshi2",
+        "type": 0
     },
     {
         "Name": "测试4",
-        "TableName": "ceshi3"
+        "TableName": "ceshi3",
+        "type": 0
     },
     {
         "Name": "测试5",
-        "TableName": "ceshi4"
+        "TableName": "ceshi4",
+        "type": 0
     },
     {
         "Name": "测试6",
-        "TableName": "ceshi5"
+        "TableName": "ceshi5",
+        "type": 0
     },
     {
         "Name": "测试7",
-        "TableName": "ceshi6"
+        "TableName": "ceshi6",
+        "type": 0
     },
     {
         "Name": "测试8",
-        "TableName": "ceshi7"
+        "TableName": "ceshi7",
+        "type": 0
     },
     {
         "Name": "测试9",
-        "TableName": "ceshi8"
+        "TableName": "ceshi8",
+        "type": 0
     },
     {
         "Name": "测试40",
-        "TableName": "ceshi9"
+        "TableName": "ceshi9",
+        "type": 0
     },
     {
         "Name": "测试41",
-        "TableName": "ceshi11"
+        "TableName": "ceshi11",
+        "type": 0
     }
 ]
