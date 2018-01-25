@@ -79,7 +79,6 @@
                 if (Object.is(index, 0)) {
                     form.lable.append(form.table_s);
 
-<<<<<<< HEAD
                 if (item.type === 0) {
                     form.save = $('<a class="ui-btn ui-mini ui-corner-all ui-btn-inline ui-btn-color save"> 确定</a>');
                     if (Object.is(index, 0)) {
@@ -140,21 +139,11 @@
                             saveUrl: "/data/save.json"
                         }
                     })
-=======
                 } else {
                     form.lable.append(form.table);
->>>>>>> 5fd0a707851dbc427713638bd22c752d0378d907
                 }
                 form.swiper.append(form.save);
                 form.lable_div.append(form.swiper);
-                var customForm = _this.formdata(form.swiper);
-                setTimeout(function () {
-                    opts.initData.forEach(function (it) {
-                        if (item.TableName === it.TableName) {
-                            customForm.setValue(it.customForm);
-                        }
-                    });
-                }, 0);
 
                 form.save.data('customForm', customForm);
             });
@@ -184,12 +173,14 @@
             $('#form').height(height_table);
         },
         // div 组件运行
-        formdata: function (data) {
+        formdata: function(data, callback) {
             return data.customFrom({
                 myRuleGuid: '1111',
                 sourceData: [],
                 ruleUrl: "/data/ruledata.json",
                 sourceUrl: "/data/nav.json",
+                saveUrl: "/data/save.json",
+                completeCallback: callback
                 saveUrl: "/data/save.json"
             });
         },
