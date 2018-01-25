@@ -59,7 +59,8 @@
         },
         getValue: function () {
             return undefined;
-        },
+            
+        }, 
         setValue: function (arr) {
             return undefined;
         }
