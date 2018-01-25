@@ -1,0 +1,62 @@
+{
+    "Status": 1,
+    "ErrorCode": null,
+    "Data": {
+        "Factory": [{
+            "Id": "b5281fe2-e503-4dfd-b90b-a66600a1682e",
+            "Name": "中山达能"
+        }],
+        "Workshop": [{
+            "Id": "204a63ab-aba9-4339-aade-a66600a1685c",
+            "Name": "车间一"
+        },{
+            "Id": "204a63ab-aba9-4339-aade-a66600a1685c",
+            "Name": "车间二"
+        }],
+        "ProductionLine": [{
+            "Id": "3d3a517b-e2d6-4a18-87b6-a854010d341d",
+            "Name": "生产线1"
+        },
+        {
+            "Id": "3d3a517b-e2d6-4a18-87b6-a854010d341d",
+            "Name": "生产线2"
+        }],
+        "Equipment": [{
+            "Id": "47b0f04e-0823-4605-b77b-e39f9f223da2",
+            "Name": "前处理设备3#"
+        },{
+            "Id": "47b0f04e-0823-4605-b77b-e39f9f223da1",
+            "Name": "前处理设备4#"
+        }],
+        "Process": [{
+            "Id": "a4e91336-16e3-4364-bd9c-bedd3242d88e",
+            "Name": "包装"
+        }],
+        "Product": [{
+            "Id": "1c47726b-47f4-4af8-98e2-fa56d3730e28"
+        }],
+        "Team": [{
+            "Id": "ead5a28b-e3e4-4674-b9cc-a66600a17471",
+            "Name": "D班-廖理光"
+        }],
+        "FormTemplete": [{
+            "Id": "f7262a59-ec93-4f06-8413-a86900f2cd31",
+            "Name": "测试名称1"
+        }, {
+            "Id": "df076c8f-f2ca-4a3c-8240-a86900ff3c09",
+            "Name": "3453"
+        }, {
+            "Id": "363d989b-15c8-40cf-8656-a86900ff4caa",
+            "Name": "34532"
+        }, {
+            "Id": "d484bb34-8b9e-4056-a43d-a8690100b591",
+            "Name": "123213"
+        }, {
+            "Id": "1ddbd7ef-f16d-4905-91e7-a8690100be18",
+            "Name": "32432"
+        }],
+        "FormList": null,
+        "DimensionInformationModel": null,
+        "FormTempleteId": null
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "Status": 1,
+    "ErrorCode": null,
+    "Data": [
+      {
+        "FormTempleteId": "13a247c1-62f2-40fc-9f26-a86c009dffb3",
+        "ConfigFileName": "formtest",
+        "FormName": "我是表单模版",
+        "FormListName": "我是Tab名称",
+        "InputFrequency": 0
+      },
+      {
+        "FormTempleteId": "13a247c1-62f2-40fc-9f26-a86c009dffb3",
+        "ConfigFileName": "formtest",
+        "FormName": "我是表单模版",
+        "FormListName": "我是Tab名称",
+        "InputFrequency": 0
+      }
+    ]
+  }

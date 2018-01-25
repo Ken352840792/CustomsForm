@@ -181,7 +181,6 @@
                 sourceUrl: "/data/nav.json",
                 saveUrl: "/data/save.json",
                 completeCallback: callback
-                saveUrl: "/data/save.json"
             });
         },
         // 插件执行
