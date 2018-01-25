@@ -90,6 +90,7 @@
                     });
 
 
+
                 } else if (item.type === 1) {
                     form.type = $(' <table data-role="table" class="ui-responsive" id="myContent"></table>')
                     if (Object.is(index, 0)) {
