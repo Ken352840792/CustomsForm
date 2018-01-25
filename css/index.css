@@ -174,3 +174,7 @@
      color: #333;
      width: 19%;
  }
+ 
+ #form {
+     overflow: auto;
+ }

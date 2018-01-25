@@ -16,6 +16,9 @@ import {
 import {
     Nav
 } from './Navigation/index';
+import {
+    CustomTable
+} from './CustomTable/index';
 (function() {
     var componentMapping = {
         text: Text,

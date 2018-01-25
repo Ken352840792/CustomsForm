@@ -3,13 +3,12 @@
         let defaults = {
             form: {},
             arr: [],
-            initData: [{ 'TableName': 'ceshi1', 'customForm': [{ 'name': 'username', 'value': '123' }] }],
+            initData: [{ 'TableName': 'ceshi2', 'customForm': [{ 'name': 'username', 'value': '123' }] }],
             value: "" //双向数据绑定字段
 
         };
         this.opts = $.extend({}, defaults, options);
         this.init();
-        console.log(this)
         return this;
     };
     Nav.prototype = {
@@ -66,32 +65,79 @@
 
             form.lable_div = $('#lable_div');
             data.forEach(function(item, index) {
+
                 form.table_s = $('<div class = "swiper-slide selected"> ' + item.Name + ' </div>')
                 form.table = $('<div class = "swiper-slide "> ' + item.Name + ' </div>')
                 form.swiper = $('<div class="swiper-slide swiper-no-swiping"></div>')
-                form.save = $('<a class="ui-btn ui-mini ui-corner-all ui-btn-inline ui-btn-color save">保存</a>');
-                if (Object.is(index, 0)) {
-                    form.lable.append(form.table_s);
 
-                } else {
-                    form.lable.append(form.table);
-                }
-                form.swiper.append(form.save);
-                form.lable_div.append(form.swiper);
-                var customForm = _this.formdata(form.swiper);
-                setTimeout(function() {
-                    opts.initData.forEach(function(it) {
-                        if (item.TableName === it.TableName) {
-                            customForm.setValue(it.customForm);
-                        }
+                if (item.type === 0) {
+                    form.save = $('<a class="ui-btn ui-mini ui-corner-all ui-btn-inline ui-btn-color save"> 确定</a>');
+                    if (Object.is(index, 0)) {
+                        form.lable.append(form.table_s);
+
+                    } else {
+                        form.lable.append(form.table);
+                    }
+                    form.swiper.append(form.save);
+
+
+                    var customForm = _this.formdata(form.swiper, function() {
+                        opts.initData.forEach(function(it) {
+                            if (item.TableName === it.TableName) {
+                                customForm.setValue(it.customForm);
+                            }
+                        });
                     });
-                }, 0);
+
+
+                } else if (item.type === 1) {
+                    form.type = $(' <table data-role="table" class="ui-responsive" id="myContent"></table>')
+                    if (Object.is(index, 0)) {
+                        form.lable.append(form.table_s);
+
+                    } else {
+                        form.lable.append(form.table);
+                    }
+
+                    form.swiper.append(form.type);
+                    new CustomTable({
+                        _selfFrom: $('#myContent'),
+                        sourceUrl: '/data/customTable.json',
+                        headHandle: {
+                            'username': '用户名',
+                            'age': '年龄'
+                        },
+                        delUrl: '/data/del.json',
+                        delParams: {
+                            'tableName': 'ceshi'
+                        },
+                        saveParams: {
+                            'tableName': 'saveceshi'
+                        },
+                        sourceParams: {
+                            'tableName': 'selectceshi'
+                        },
+                        customFormSetting: {
+                            myRuleGuid: '1111',
+                            sourceData: [],
+                            ruleUrl: "/data/ruledata.json",
+                            sourceUrl: "/data/ceshi.json",
+                            completeCallback: function() {
+                                console.log('我是全部加载完了!');
+                                console.log(new Date());
+                            },
+                            saveUrl: "/data/save.json"
+                        }
+                    })
+                }
+
+                form.lable_div.append(form.swiper);
+
 
                 form.save.data('customForm', customForm);
             });
-            // console.log(_this.arr)
             _this.btnData();
-            _this.transfer()
+            _this.transfer();
             _this.BOXheight();
         },
         // ajax请求
@@ -115,13 +161,14 @@
             $('#form').height(height_table);
         },
         // div 组件运行
-        formdata: function(data) {
+        formdata: function(data, callback) {
             return data.customFrom({
                 myRuleGuid: '1111',
                 sourceData: [],
                 ruleUrl: "/data/ruledata.json",
                 sourceUrl: "/data/nav.json",
-                saveUrl: "/data/save.json"
+                saveUrl: "/data/save.json",
+                completeCallback: callback
             });
         },
         // 插件执行
@@ -213,7 +260,7 @@
             });
             var event = $('#btn');
             event.on('click', function() {
-                    console.log(ff.getValue);
+                    console.log(ff.getValue());
                 })
                 // _this.btnData(event)
         },
