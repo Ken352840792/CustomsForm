@@ -1,7 +1,10 @@
-(function() {
-    let TextData = function(options) {
+(function () {
+    let TextData = function (options) {
         let defaults = {
             Form: {},
+            _selfFrom: '', //要添加到的位置
+            initCallback: function () {}, //加载前
+            completeCallback: function () {}, //加载完成后
             value: "" //双向数据绑定字段
         };
         this.opts = $.extend({}, defaults, options);
@@ -9,36 +12,34 @@
         return this;
     };
     TextData.prototype = {
-        init: function() {
+        init: function () {
             var _this = this,
                 opts = this.opts,
                 form = opts.Form;
+            opts.initCallback(this.opts);
             _this.createComponent();
             _this.Events();
             _this.mobiscroll()
-                //调用自定义事件
-            if (opts.customEvent) {
-                opts.customEvent.oninitialize ? opts.customEvent.oninitialize(_this.input, _this) : '';
-            }
+            opts.completeCallback();
         },
-        Events: function() {
+        Events: function () {
             var _this = this,
                 opts = this.opts;
             Object.defineProperty(opts, 'des', {
-                get: function() { //获取数据
+                get: function () { //获取数据
                     return this.value;
                 },
-                set: function(val) { //设置值
+                set: function (val) { //设置值
                     _this.input.val(val);
                     this.value = val;
                 }
             });
-            _this.input[0].onchange = function() {
+            _this.input[0].onchange = function () {
                 opts.des = this.value;
             }
         },
         //创建Component表
-        createComponent: function() {
+        createComponent: function () {
             var _this = this,
                 opts = this.opts,
                 form = opts.Form;
@@ -54,7 +55,7 @@
             opts._selfFrom.append(form.content);
         },
         // 插件 初始化
-        mobiscroll: function() {
+        mobiscroll: function () {
             let _this = this;
             var currYear = (new Date()).getFullYear();
             mobiscroll.date(_this.input, {
@@ -65,18 +66,18 @@
                 startYear: currYear - 10,
                 endYear: currYear + 10,
                 dateFormat: "yy-mm-dd",
-                onInit: function(event, inst) {
+                onInit: function (event, inst) {
                     var setBtn = inst.buttons.set;
                     var setCancel = inst.buttons.cancel;
                     inst.buttons.set = setCancel;
                     inst.buttons.cancel = setBtn;
-                },
+                }
             });
         },
-        getValue: function() {
+        getValue: function () {
             return this.opts.value;
         },
-        setValue: function(val) {
+        setValue: function (val) {
             this.opts.des = val;
         }
     };

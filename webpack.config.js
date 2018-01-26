@@ -1,10 +1,13 @@
 var webpack = require('webpack');
 var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 var componentType='JqueryMobile';
+var path = require('path');
+ 
 module.exports = {
     entry: __dirname+'/js/Component/'+componentType+'/CustomFrom.js',
     output: {
         path: __dirname+'/built',
+        //path:path.join(__dirname, '..', 'D:/项目/NewProject/Sy.UI/Areas/App/Scripts'),
         filename: 'bundle.js'
     }, 
     // plugins:[

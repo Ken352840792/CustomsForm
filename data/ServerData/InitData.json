@@ -1,0 +1,11 @@
+{
+    "Status": 1,
+    "ErrorCode": null,
+    "Data": [{
+        "TableName": "t_student",
+        "customForm": [{
+            "name": "username",
+            "value": "123"
+        }]
+    }]
+}

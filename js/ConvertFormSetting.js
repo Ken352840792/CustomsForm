@@ -47,13 +47,13 @@
             };
             array.push(cur);
         };
-        $('#formtest').html('');
-        window.ff = $('#form').customFrom({
-            myRuleGuid: '1111',
-            sourceData: array,
-            ruleUrl: "../data/ruledata.json",
-            sourceUrl: "../data/datasource.json",
-            saveUrl: "../data/save.json"
-        });
+        // $('#formtest').html('');
+        // window.ff = $('#form').customFrom({
+        //     myRuleGuid: '1111',
+        //     sourceData: array,
+        //     ruleUrl: "../data/ruledata.json",
+        //     sourceUrl: "../data/datasource.json",
+        //     saveUrl: "../data/save.json"
+        // });
     });
 })();

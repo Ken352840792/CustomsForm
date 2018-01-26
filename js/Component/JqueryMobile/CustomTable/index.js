@@ -117,7 +117,7 @@ import {
                                         _this.server.delUrl.del({
                                             data: params,
                                             success: function() {
-                                                alert('删除成功');
+                                                msgShowInfo('删除成功');
                                             }
                                         });
 
@@ -217,10 +217,8 @@ import {
             form.thead.append(th);
             if (opts.headSource && opts.headSource.length > 0) {
                 //新增一个编辑按钮
-
                 opts.headSource.forEach(function(item, index) {
                     if (item !== 'c') {
-
                         var str = opts.headHandle[item] ? opts.headHandle[item] : item;
                         form.thead.append('<th data-priority="' + index + '">' + str + '</th>');
                     }
@@ -239,12 +237,11 @@ import {
                     }
                     tr.append('<td><div class="tableOp"><a class="ui-btn ui-icon-edit ui-btn-icon-notext " op="edit"  ></a><a class="ui-btn ui-icon-delete ui-btn-icon-notext" op="del" ></a></div></td>');
                     tr.data('model', item);
-                    form.tBody.append(tr);
+                    form.tBody.append(tr); 
                 });
             }
             opts._selfFrom.html('');
-            opts._selfFrom.append(form.thead).append(form.tBody).trigger("create");
-
+            opts._selfFrom.append(form.thead).append(form.tBody);
         },
         createPaging: function(pageNo, totalPage, totalSize) {
             var _this = this,
@@ -261,7 +258,6 @@ import {
                         totalPage: totalPage,
                         totalSize: totalSize,
                         callback: function(num) {
-
                             opts.sources = undefined;
                             _this.createDataSource(num);
                         }
@@ -331,11 +327,11 @@ import {
                         _this.server.delUrl.del({
                             data: params,
                             success: function() {
-                                alert('删除成功');
+                                msgShowInfo('删除成功');
                             }
                         });
                     } else {
-                        alert('请选择删除的项');
+                        msgShowInfo('请选择删除的项');
                     }
                 });
                 opts._selfFrom.before(form.Del);

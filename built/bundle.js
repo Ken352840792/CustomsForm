@@ -337,11 +337,13 @@ var _index5 = __webpack_require__(7);
 
 var _index6 = __webpack_require__(1);
 
+var _index7 = __webpack_require__(8);
+
 (function () {
     var componentMapping = {
         text: _index.Text,
         number: _index2.TextNumber,
-        data: _index3.TextData,
+        datetime: _index3.TextData,
         button: _index4.Buttons
     };
     var _customFrom = function _customFrom(_self, options) {
@@ -412,13 +414,76 @@ var _index6 = __webpack_require__(1);
                 _this.server.sourceUrl.get({
                     data: opts.sourceParams,
                     success: function success(obj) {
-                        opts.sourceData = obj;
+                        //返回的是HTML
+                        var html = $('<div style="display:none;"><div>');
+                        $('body').append(html);
+                        html.html(obj);
+                        opts.sourceData = _this.convertData();
+                        html.remove();
+                        console.log(opts.sourceData);
                         callback();
                     }
                 });
             } else {
                 callback();
             }
+        },
+        convertData: function convertData() {
+            var _this = this;
+            var array = [];
+
+            var formName = _this.opts.sourceParams.formName;
+            var defaultsData = formSetting[formName].defaults;
+            var attributes = formSetting[formName].attributes;
+            var validateMsg = formSetting[formName].validateMsg;
+            var events = formSetting[formName].events;
+            var customevents = formSetting[formName].customevents;
+            var validaterules = formSetting[formName].validaterules;
+
+            for (var key in defaultsData) {
+                var _defaults = defaultsData[key],
+                    name = _defaults.name,
+                    _attributes = attributes[name],
+                    _validateMsg = validateMsg[name],
+                    _validaterules = validaterules[name],
+                    _events = events[name],
+                    _customEvent = customevents[name];
+                if (!_defaults) return;
+                var type = _defaults['widget-type'] === "input" ? 'text' : _defaults['widget-type'];
+                // if(){
+                //     type='text';
+                // }else{
+
+                // }
+                // if (_defaults.tag === 'input') {
+                //     type = ? _defaults.type : 'text';
+                // } else {
+                //     type = _defaults.tag;
+                // }
+                var input = $('#' + _this.opts.sourceParams.formName + ' [name=' + name + "]")[0];
+                var cur = {
+                    type: type,
+                    name: name,
+                    lable: _defaults.label,
+                    placeholder: _attributes ? _attributes.placeholder : '',
+                    input: input ? input.outerHTML : "",
+                    regexp: {
+                        require: _validaterules ? _validaterules.rules.required : false,
+                        test: _validaterules ? _validaterules.regexp : '',
+                        msg: _validateMsg ? _validateMsg.regexp : "",
+                        customMethod: _validaterules ? _validaterules.definedMethod : function () {
+                            return true;
+                        },
+                        customMethodMsg: _validateMsg ? _validateMsg.definedMethod : ''
+                    },
+                    sourceData: _defaults.sourceData,
+                    sourceUrl: _defaults.sourceUrl,
+                    events: _events,
+                    customEvent: _customEvent
+                };
+                array.push(cur);
+            };
+            return array;
         },
         setRuleData: function setRuleData(url) {
             var _this = this,
@@ -428,13 +493,23 @@ var _index6 = __webpack_require__(1);
                     data: opts.ruleParams,
                     async: false,
                     success: function success(obj) {
+                        // var arr=[];
+                        // for (const key in obj) {
+                        //     arr.push({'name':key,'roleGuids':obj[key]}); 
+                        // }
                         opts.ruleData = obj;
                     }
                 });
             }
             opts.sourceData.forEach(function (item) {
                 opts.ruleData.forEach(function (ruleItem) {
-                    if (ruleItem.name === item.name && ruleItem.roleGuids.indexOf(opts.myRuleGuid) !== -1) {
+                    var is = false;
+                    opts.myRuleGuid.forEach(function (myguid) {
+                        if (ruleItem.roleGuids.indexOf(myguid) !== -1) {
+                            is = true;
+                        }
+                    });
+                    if (ruleItem.name === item.name && is) {
                         opts.myRuleData.push(item.name);
                     }
                 });
@@ -474,7 +549,7 @@ var _index6 = __webpack_require__(1);
                                 if (item.regexp && item.regexp.require) {
                                     if (opts.components[itemAttr].getValue().trim() === "") {
                                         v = false;
-                                        alert(item.placeholder ? item.placeholder : item.lable + "必须输入");
+                                        msgShowInfo(item.placeholder ? item.placeholder : item.lable + "必须输入");
                                         return;
                                     }
                                 }
@@ -482,7 +557,7 @@ var _index6 = __webpack_require__(1);
                                 if (item.regexp && item.regexp.test) {
                                     v = new RegExp(item.regexp.test).test(opts.components[itemAttr].getValue());
                                     if (!v) {
-                                        alert(item.regexp && item.regexp.msg ? item.regexp.msg : "正则验证无提示信息");
+                                        msgShowInfo(item.regexp && item.regexp.msg ? item.regexp.msg : "正则验证无提示信息");
                                         return;
                                     }
                                 }
@@ -491,7 +566,7 @@ var _index6 = __webpack_require__(1);
                                     var fun = typeof item.regexp.customMethod === "string" ? Function("return " + item.regexp.customMethod)() : item.regexp.customMethod;
                                     if (!fun(opts.components[itemAttr].getValue(), opts.components[itemAttr])) {
                                         v = false;
-                                        alert(item.regexp && item.regexp.customMethodMsg ? item.regexp.customMethodMsg : "自定义验证无提示信息");
+                                        msgShowInfo(item.regexp && item.regexp.customMethodMsg ? item.regexp.customMethodMsg : "自定义验证无提示信息");
                                         return;
                                     };
                                 }
@@ -510,11 +585,9 @@ var _index6 = __webpack_require__(1);
                 _this.server.saveUrl.post({
                     data: params,
                     success: function success(obj) {
-                        alert('提交成功');
+                        msgShowInfo('提交成功');
                     }
                 });
-            } else {
-                alert('验证失败咯');
             }
         }
     };
@@ -566,7 +639,7 @@ Object.defineProperty(exports, "__esModule", {
             if (opts.customEvent) {
                 opts.customEvent.oninitialize ? opts.customEvent.oninitialize(_this.input, _this) : '';
             }
-            opts.completeCallback(opts, _this);
+            opts.completeCallback();
         },
         Events: function Events() {
             var _this = this,
@@ -592,7 +665,7 @@ Object.defineProperty(exports, "__esModule", {
                 opts = this.opts,
                 form = opts.Form;
             form.content = $('<div class = "ui-field-contain"></div>');
-            form.lable = $('<label for="fname">' + opts.lable + '</label>');
+            form.lable = $('<label for="fname" class="lable">' + opts.lable + '</label>');
             form.content.append(form.lable);
             //必选lable上给星号
             if (opts.regexp && opts.regexp.require) form.lable.append($('<i style ="color: red"> * </i>'));
@@ -670,7 +743,7 @@ Object.defineProperty(exports, "__esModule", {
                 opts = this.opts,
                 form = opts.Form;
             form.content = $('<div class = "ui-field-contain"></div>');
-            form.lable = $('<label for="fname">' + opts.lable + '</label>');
+            form.lable = $('<label for="fname" class="lable">' + opts.lable + '</label>');
             form.content.append(form.lable);
             //必选lable上给星号
             if (opts.regexp && opts.regexp.require) form.lable.append($('<i style ="color: red"> * </i>'));
@@ -722,7 +795,6 @@ Object.defineProperty(exports, "__esModule", {
             initCallback: function initCallback() {}, //加载前
             completeCallback: function completeCallback() {}, //加载完成后
             value: "" //双向数据绑定字段
-
         };
         this.opts = $.extend({}, defaults, options);
         this.init();
@@ -763,7 +835,7 @@ Object.defineProperty(exports, "__esModule", {
                 opts = this.opts,
                 form = opts.Form;
             form.content = $('<div class = "ui-field-contain"></div>');
-            form.lable = $('<label for="fname">' + opts.lable + '</label>');
+            form.lable = $('<label for="fname" class="lable">' + opts.lable + '</label>');
             form.content.append(form.lable);
             //必选lable上给星号
             if (opts.regexp && opts.regexp.require) form.lable.append($('<i style ="color: red"> * </i>'));
@@ -1158,7 +1230,7 @@ var _index = __webpack_require__(1);
                                         _this.server.delUrl.del({
                                             data: params,
                                             success: function success() {
-                                                alert('删除成功');
+                                                msgShowInfo('删除成功');
                                             }
                                         });
                                     } else {
@@ -1194,7 +1266,7 @@ var _index = __webpack_require__(1);
                 _this.server.CustomSourceUrl.get({
                     data: params,
                     success: function success(obj) {
-                        //head也需要处理
+                        //head也需要处理 
                         if (obj instanceof Array) {
                             if (obj.length > 0) {
                                 for (var key in obj[0]) {
@@ -1256,10 +1328,8 @@ var _index = __webpack_require__(1);
             form.thead.append(th);
             if (opts.headSource && opts.headSource.length > 0) {
                 //新增一个编辑按钮
-
                 opts.headSource.forEach(function (item, index) {
                     if (item !== 'c') {
-
                         var str = opts.headHandle[item] ? opts.headHandle[item] : item;
                         form.thead.append('<th data-priority="' + index + '">' + str + '</th>');
                     }
@@ -1282,7 +1352,7 @@ var _index = __webpack_require__(1);
                 });
             }
             opts._selfFrom.html('');
-            opts._selfFrom.append(form.thead).append(form.tBody).trigger("create");
+            opts._selfFrom.append(form.thead).append(form.tBody);
         },
         createPaging: function createPaging(pageNo, totalPage, totalSize) {
             var _this = this,
@@ -1299,7 +1369,6 @@ var _index = __webpack_require__(1);
                         totalPage: totalPage,
                         totalSize: totalSize,
                         callback: function callback(num) {
-
                             opts.sources = undefined;
                             _this.createDataSource(num);
                         }
@@ -1367,11 +1436,11 @@ var _index = __webpack_require__(1);
                         _this.server.delUrl.del({
                             data: params,
                             success: function success() {
-                                alert('删除成功');
+                                msgShowInfo('删除成功');
                             }
                         });
                     } else {
-                        alert('请选择删除的项');
+                        msgShowInfo('请选择删除的项');
                     }
                 });
                 opts._selfFrom.before(form.Del);
@@ -1387,6 +1456,374 @@ var _index = __webpack_require__(1);
     window.CustomTable = CustomTable;
 })();
 exports.CustomTable = CustomTable;
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Nav = undefined;
+
+var _basepage = __webpack_require__(0);
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+(function () {
+    var Nav = function Nav(options) {
+        var _defaults;
+
+        var defaults = (_defaults = {
+            form: {},
+            arr: [],
+            initData: []
+        }, _defineProperty(_defaults, 'initData', apiUrl + '/FormManager/GetFormDataList'), _defineProperty(_defaults, 'initDataParams', {
+            pageindex: 1,
+            pagesize: 1,
+            order: 'createTime desc'
+        }), _defineProperty(_defaults, 'ButtonsSelectUrl', apiUrl + '/FormList/GetFormListById/1'), _defineProperty(_defaults, 'navUrl', apiUrl + '/FormList/Select'), _defineProperty(_defaults, 'MultiData', {}), _defineProperty(_defaults, 'curMultiData', {}), _defineProperty(_defaults, 'navParams', {}), _defineProperty(_defaults, 'navSource', []), _defineProperty(_defaults, 'value', ""), _defaults);
+        this.opts = $.extend({}, defaults, options);
+        this.server = _basepage.app.server;
+        this.server.add({
+            NavUrl: this.opts.navUrl,
+            initData: this.opts.initData,
+            ButtonsSelectUrl: this.opts.ButtonsSelectUrl
+        });
+        this.init();
+        return this;
+    };
+    Nav.prototype = {
+        init: function init() {
+            this.tableSwitch();
+        },
+        // 切换 和切换时的数据交换
+        tableSwitch: function tableSwitch() {
+            var _this = this,
+                opts = _this.opts,
+                form = opts.form;
+            $('#ul_label').on('click', 'li', function () {
+                var index = $(this).index();
+                $("#ul_box > div").eq(index).addClass("ul_selected").siblings().removeClass("ul_selected");
+                if (index === 1 && opts.curMultiData !== opts.MultiData) {
+                    _this.begin();
+                }
+            });
+            _this.buttonStart();
+        },
+        // 数据初始化:
+        begin: function begin() {
+            var _this = this,
+                opts = _this.opts,
+                form = opts.form;
+            if (opts.navSource.length > 0) {
+                form.arr = opts.navSource;
+            } else {
+                _this.server.NavUrl.post({
+                    data: opts.MultiData,
+                    success: function success(data) {
+                        //数据转换
+                        var arr = [];
+                        data.forEach(function (item) {
+                            arr.push({
+                                'Name': item.FormListName,
+                                'TableName': item.ConfigFileName,
+                                'type': item.InputFrequency
+                            });
+                        });
+                        opts.curMultiData = opts.MultiData;
+                        _this.createComponent(arr);
+                    }
+                });
+            }
+        },
+        // 数据渲染
+        createComponent: function createComponent(data, callback) {
+            $('#lable').html('');
+            $('#lable_div').html('');
+            var _this = this,
+                opts = _this.opts,
+                form = opts.form;
+            form.lable = $('#lable');
+            form.num = 0;
+            form.array = [];
+            form.lable_div = $('#lable_div');
+            data.forEach(function (item, index) {
+                form.table_s = $('<div class = "swiper-slide selected"> ' + item.Name + ' </div>');
+                form.table = $('<div class = "swiper-slide "> ' + item.Name + ' </div>');
+                form.swiper = $('<div class="swiper-slide swiper-no-swiping"></div>');
+                if (item.type === 0) {
+                    form.save = $('<a class="ui-btn ui-mini ui-corner-all ui-btn-inline ui-btn-color save"> 确定</a>');
+                    if (Object.is(index, 0)) {
+                        form.lable.append(form.table_s);
+                    } else {
+                        form.lable.append(form.table);
+                    }
+                    form.swiper.append(form.save);
+                    var customForm = _this.formdata(form.swiper, item, function (callbackOpts) {
+                        _this.server.initData.get({
+                            data: $.extend({}, opts.initDataParams, callbackOpts.initParams),
+                            success: function success(obj) {
+                                console.log(obj);
+                                debugger;
+                                var data = obj.data[0];
+                                var cusArr = [];
+                                if (!data) {
+                                    return;
+                                }
+                                for (var key in data) {
+                                    var customData = {};
+                                    customData.name = key;
+                                    customData.value = data[key];
+                                    cusArr.push(customData);
+                                }
+                                customForm.setValue(cusArr);
+                            }
+                        });
+                    });
+                } else if (item.type === 1) {
+                    //     form.type = $(' <table data-role="table" class="ui-responsive" ></table>')
+                    //     if (Object.is(index, 0)) {
+                    //         form.lable.append(form.table_s);
+
+                    //     } else {
+                    //         form.lable.append(form.table);
+                    //     }
+
+                    //     form.swiper.append(form.type);
+                    //     new CustomTable({
+                    //         _selfFrom: form.type,
+                    //         sourceUrl: '/data/customTable.json',
+                    //         headHandle: {
+                    //             'username': '用户名',
+                    //             'age': '年龄'
+                    //         },
+                    //         delUrl: '/data/del.json',
+                    //         delParams: {
+                    //             'tableName': 'ceshi'
+                    //         },
+                    //         saveParams: {
+                    //             'tableName': 'saveceshi'
+                    //         },
+                    //         sourceParams: {
+                    //             'tableName': 'selectceshi'
+                    //         },
+                    //         customFormSetting: {
+                    //             myRuleGuid: '1111',
+                    //             sourceData: [],
+                    //             ruleUrl: "/data/ruledata.json",
+                    //             sourceUrl: "/data/ceshi.json",
+                    //             completeCallback: function() {
+                    //                 console.log('我是全部加载完了!');
+                    //                 console.log(new Date());
+                    //             },
+                    //             saveUrl: "/data/save.json"
+                    //         }
+                    //     })
+                }
+                form.lable_div.append(form.swiper);
+                form.save.data('customForm', customForm);
+            });
+            _this.btnData();
+            _this.transfer();
+            _this.BOXheight();
+        },
+        // ajax请求
+        // Interaction: function (url, type, data, callback) {
+        //     $.ajax({
+        //         url: url,
+        //         type: type,
+        //         data: data,
+        //         async: true,
+        //         success: function (data) {
+        //             callback(data);
+        //         }
+        //     })
+        // },
+        // 高度计算
+        BOXheight: function BOXheight() {
+            var _this = this;
+            var height = $(window).height() - ($('.ui-content').innerHeight() - $('.ui-content').height()) - $('#lable').height() - 80;
+            var height_table = $(window).height() - ($('.ui-content').innerHeight() - $('.ui-content').height()) - 80;
+            // var height = $(window).height() - ($('.ui-content').innerHeight() - $('.ui-content').height()) - $('.ui-navbar').height() - $('#lable').height() - 20;
+            // var height_table = $(window).height() - ($('.ui-content').innerHeight() - $('.ui-content').height()) - $('.ui-navbar').height() - 20;
+            $('.swiper-no-swiping').height(height);
+            $('#form').height(height_table);
+        },
+        // div 组件运行
+        formdata: function formdata(data, item, callback) {
+            return data.customFrom({
+                myRuleGuid: _basepage.app.Cookie('RoleIds') ? _basepage.app.Cookie('RoleIds').split(',') : ['1111'],
+                sourceData: [],
+                //ruleUrl: "/data/ruledata.json",
+                ruleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
+                ruleParams: {
+                    'TableName': item.TableName
+                },
+                //sourceUrl: "/data/ServerData/CustomFrom.json",
+                sourceUrl: "/FormManager/LoadFormView",
+                sourceParams: {
+                    'formName': item.TableName
+                },
+                saveUrl: apiUrl + "/FormManager/AddFormData",
+                saveParams: {
+                    'tablename': item.TableName
+                },
+                initParams: {
+                    'tablename': item.TableName
+                },
+                completeCallback: callback
+            });
+        },
+        // 插件执行
+        transfer: function transfer() {
+            function setCurrentSlide(ele, index) {
+                $(".swiper1 .swiper-slide").removeClass("selected");
+                ele.addClass("selected");
+            }
+            var swiper1 = new Swiper('.swiper1', {
+                //					设置slider容器能够同时显示的slides数量(carousel模式)。
+                //					可以设置为number或者 'auto'则自动根据slides的宽度来设定数量。
+                //					loop模式下如果设置为'auto'还需要设置另外一个参数loopedSlides。
+                slidesPerView: 8,
+                paginationClickable: true, //此参数设置为true时，点击分页器的指示点分页器会控制Swiper切换。
+                spaceBetween: 10, //slide之间的距离（单位px）。
+                freeMode: true, //默认为false，普通模式：slide滑动时只滑动一格，并自动贴合wrapper，设置为true则变为free模式，slide会根据惯性滑动且不会贴合。
+                loop: false, //是否可循环
+                onTab: function onTab(swiper) {
+                    var n = swiper1.clickedIndex;
+                }
+            });
+            swiper1.slides.each(function (index, val) {
+                var ele = $(this);
+                ele.on("click", function () {
+                    setCurrentSlide(ele, index);
+                    swiper2.slideTo(index, 0, false);
+                });
+            });
+
+            var swiper2 = new Swiper('.swiper2', {
+                //freeModeSticky  设置为true 滑动会自动贴合  
+                direction: 'horizontal', //Slides的滑动方向，可设置水平(horizontal)或垂直(vertical)。
+                loop: false,
+                autoHeight: false, //自动高度。设置为true时，wrapper和container会随着当前slide的高度而发生变化。
+                onSlideChangeEnd: function onSlideChangeEnd(swiper) {
+                    //回调函数，swiper从一个slide过渡到另一个slide结束时执行。
+                    var n = swiper.activeIndex;
+                    setCurrentSlide($(".swiper1 .swiper-slide").eq(n), n);
+                    swiper1.slideTo(n, 0, false);
+                }
+            });
+        },
+        // button 数据调用
+        buttonStart: function buttonStart() {
+            var _this = this;
+            var formData = function formData() {
+                var _FormThis = this;
+                _this.server.ButtonsSelectUrl.get({
+                    data: {},
+                    success: function success(obj) {
+                        var defaults = {
+                            "tag": "button",
+                            "type": "button",
+                            "singleSelect": true
+                        };
+                        var lable = ['工厂', '车间', '生产线', '设备', '工序', '产品', '班组'];
+                        var data = [];
+                        //转换数据
+                        var index_obj = 0;
+                        for (var key in obj) {
+                            if (obj[key] && obj[key] != null && key != 'FormTemplete') {
+                                var o = {
+                                    'data': []
+                                };
+                                obj[key].forEach(function (item, index) {
+                                    o.data.push({
+                                        'name': item.Name,
+                                        'id': item.Id
+                                    });
+                                });
+                                data.push($.extend({}, defaults, {
+                                    'sourceData': o,
+                                    'name': key,
+                                    'lable': lable[index_obj]
+                                }));
+                                index_obj++;
+                            }
+                        }
+                        var objs = {};
+                        data.forEach(function (item) {
+                            item._selfFrom = $('#form');
+                            objs[item.name] = new Buttons(item);
+                            _this.BOXheight();
+                        });
+                        _FormThis.Buttons = objs;
+                    }
+                });
+            };
+            formData.prototype = {
+                getValue: function getValue() {
+                    var obj = {};
+                    for (var key in this.Buttons) {
+                        var val = this.Buttons[key].getValue();
+                        if (val && val.length != 0) {
+                            obj[key] = val;
+                        }
+                    }
+                    return obj;
+                },
+                setValue: function setValue(values) {
+                    var _this2 = this;
+
+                    var _loop = function _loop(key) {
+                        button = _this2.Buttons[key];
+                        buttonOpts = button.opts;
+
+                        values.forEach(function (item) {
+                            if (item.name === key) {
+                                if (item.value instanceof Array) {
+                                    button.setValue(item.value);
+                                } else {
+                                    var array = [];
+                                    array.push(item.value);
+                                    button.setValue(array);
+                                }
+                            }
+                        });
+                    };
+
+                    for (var key in this.Buttons) {
+                        var button, buttonOpts;
+
+                        _loop(key);
+                    }
+                }
+            };
+            $(function () {
+                window.MultiData = new formData();
+            });
+            var event = $('#btn');
+            event.on('click', function () {
+                _this.opts.MultiData = MultiData.getValue();
+                _this.opts.navSource = [];
+                $('#ul_a').click();
+            });
+            // _this.btnData(event)
+        },
+        // btn 获取数据
+        btnData: function btnData(eve) {
+            $('.save').click(function () {
+                $(this).data('customForm').save();
+            });
+        }
+
+    };
+    window.Nav = Nav;
+})();
+exports.Nav = Nav;
 
 /***/ })
 /******/ ]);

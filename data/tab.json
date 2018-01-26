@@ -1,3 +1,5 @@
+
+
 [{
         "Name": "测试1",
         "TableName": "ceshi",
@@ -6,7 +8,7 @@
     {
         "Name": "测试2",
         "TableName": "ceshi1",
-        "type": 1
+        "type": 0
     },
     {
         "Name": "测试3",
