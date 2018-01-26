@@ -184,7 +184,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         };
         opts.url = option.url ? option.url : this.url;
         opts.beforeSend = optionDefault.befoureFn;
-        opts.type = postType;
+        opts.type = !app.global.debug ? postType : 'get';
         opts.complete = optionDefault.completeFn;
         opts.success = optionDefault.successFn;
         opts.error = optionDefault.errorFn;
@@ -1323,18 +1323,19 @@ var _index = __webpack_require__(1);
             form.thead = $('<thead></thead>');
             //加载全选按钮
             form.allCheck = $('<input type="checkbox" >');
-            var th = $('<th></th>').append(form.allCheck);
-            //加载头
-            form.thead.append(th);
+
             if (opts.headSource && opts.headSource.length > 0) {
+                var headtr = $('<tr></tr>');
+                $('<th></th>').append(form.allCheck).appendTo(headtr);
                 //新增一个编辑按钮
                 opts.headSource.forEach(function (item, index) {
                     if (item !== 'c') {
                         var str = opts.headHandle[item] ? opts.headHandle[item] : item;
-                        form.thead.append('<th data-priority="' + index + '">' + str + '</th>');
+                        headtr.append('<th data-priority="' + index + '">' + str + '</th>');
                     }
                 });
-                form.thead.append('<th>编 辑</th>');
+                headtr.append('<th>编 辑</th>');
+                form.thead.append(headtr);
             }
             //加载数据
             if (opts.sources && opts.sources.length > 0) {
@@ -1350,9 +1351,11 @@ var _index = __webpack_require__(1);
                     tr.data('model', item);
                     form.tBody.append(tr);
                 });
+                $('body').trigger('create');
             }
             opts._selfFrom.html('');
             opts._selfFrom.append(form.thead).append(form.tBody);
+            opts._selfFrom.table();
         },
         createPaging: function createPaging(pageNo, totalPage, totalSize) {
             var _this = this,
@@ -1481,11 +1484,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             form: {},
             arr: [],
             initData: []
-        }, _defineProperty(_defaults, 'initData', apiUrl + '/FormManager/GetFormDataList'), _defineProperty(_defaults, 'initDataParams', {
+        }, _defineProperty(_defaults, 'initData', '/data/Server/GetFormDataList.json'), _defineProperty(_defaults, 'initDataParams', {
             pageindex: 1,
             pagesize: 1,
             order: 'createTime desc'
-        }), _defineProperty(_defaults, 'ButtonsSelectUrl', apiUrl + '/FormList/GetFormListById/1'), _defineProperty(_defaults, 'navUrl', apiUrl + '/FormList/Select'), _defineProperty(_defaults, 'MultiData', {}), _defineProperty(_defaults, 'curMultiData', {}), _defineProperty(_defaults, 'navParams', {}), _defineProperty(_defaults, 'navSource', []), _defineProperty(_defaults, 'value', ""), _defaults);
+        }), _defineProperty(_defaults, 'ButtonsSelectUrl', '/data/Server/GetFormListById.json'), _defineProperty(_defaults, 'navUrl', '/data/Server/Select.json'), _defineProperty(_defaults, 'MultiData', {}), _defineProperty(_defaults, 'curMultiData', {}), _defineProperty(_defaults, 'navParams', {}), _defineProperty(_defaults, 'navSource', []), _defineProperty(_defaults, 'value', ""), _defaults);
         this.opts = $.extend({}, defaults, options);
         this.server = _basepage.app.server;
         this.server.add({
@@ -1567,8 +1570,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                         _this.server.initData.get({
                             data: $.extend({}, opts.initDataParams, callbackOpts.initParams),
                             success: function success(obj) {
-                                console.log(obj);
-                                debugger;
                                 var data = obj.data[0];
                                 var cusArr = [];
                                 if (!data) {
@@ -1585,44 +1586,59 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                         });
                     });
                 } else if (item.type === 1) {
-                    //     form.type = $(' <table data-role="table" class="ui-responsive" ></table>')
-                    //     if (Object.is(index, 0)) {
-                    //         form.lable.append(form.table_s);
+                    form.type = $(' <table data-role="table" class="ui-responsive" ></table>');
+                    if (Object.is(index, 0)) {
+                        form.lable.append(form.table_s);
+                    } else {
+                        form.lable.append(form.table);
+                    }
 
-                    //     } else {
-                    //         form.lable.append(form.table);
-                    //     }
+                    form.swiper.append(form.type);
+                    new CustomTable({
+                        _selfFrom: form.type,
+                        sourceUrl: '/data/customTable.json',
+                        headHandle: {
+                            'username': '用户名',
+                            'age': '年龄'
+                        },
+                        delUrl: '/data/del.json',
+                        delParams: {
+                            'tableName': 'ceshi'
+                        },
+                        saveParams: {
+                            'tableName': 'saveceshi'
+                        },
+                        sourceParams: {
+                            'tableName': 'selectceshi'
+                        },
+                        customFormSetting: {
+                            completeCallback: function completeCallback() {
 
-                    //     form.swiper.append(form.type);
-                    //     new CustomTable({
-                    //         _selfFrom: form.type,
-                    //         sourceUrl: '/data/customTable.json',
-                    //         headHandle: {
-                    //             'username': '用户名',
-                    //             'age': '年龄'
-                    //         },
-                    //         delUrl: '/data/del.json',
-                    //         delParams: {
-                    //             'tableName': 'ceshi'
-                    //         },
-                    //         saveParams: {
-                    //             'tableName': 'saveceshi'
-                    //         },
-                    //         sourceParams: {
-                    //             'tableName': 'selectceshi'
-                    //         },
-                    //         customFormSetting: {
-                    //             myRuleGuid: '1111',
-                    //             sourceData: [],
-                    //             ruleUrl: "/data/ruledata.json",
-                    //             sourceUrl: "/data/ceshi.json",
-                    //             completeCallback: function() {
-                    //                 console.log('我是全部加载完了!');
-                    //                 console.log(new Date());
-                    //             },
-                    //             saveUrl: "/data/save.json"
-                    //         }
-                    //     })
+                                console.log('我是全部加载完了!');
+                                console.log(new Date());
+                            },
+                            myRuleGuid: _basepage.app.Cookie('RoleIds') ? _basepage.app.Cookie('RoleIds').split(',') : ['cb33b16e-b088-4124-92d8-918fdd2a5922'],
+                            sourceData: [],
+                            ruleUrl: '/data/Server/GetCustomFormRoleRelation.json',
+                            //**//ruleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
+                            ruleParams: {
+                                'TableName': item.TableName
+                            },
+                            sourceUrl: "/data/Server/LoadFormView.json",
+                            //**//sourceUrl: "/FormManager/LoadFormView",
+                            sourceParams: {
+                                'formName': item.TableName
+                            },
+                            saveUrl: '/data/Server/AddFormData.json',
+                            //**//saveUrl: apiUrl + "/FormManager/AddFormData",
+                            saveParams: {
+                                'tablename': item.TableName
+                            },
+                            initParams: {
+                                'tablename': item.TableName
+                            }
+                        }
+                    });
                 }
                 form.lable_div.append(form.swiper);
                 form.save.data('customForm', customForm);
@@ -1631,18 +1647,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this.transfer();
             _this.BOXheight();
         },
-        // ajax请求
-        // Interaction: function (url, type, data, callback) {
-        //     $.ajax({
-        //         url: url,
-        //         type: type,
-        //         data: data,
-        //         async: true,
-        //         success: function (data) {
-        //             callback(data);
-        //         }
-        //     })
-        // },
         // 高度计算
         BOXheight: function BOXheight() {
             var _this = this;
@@ -1656,19 +1660,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         // div 组件运行
         formdata: function formdata(data, item, callback) {
             return data.customFrom({
-                myRuleGuid: _basepage.app.Cookie('RoleIds') ? _basepage.app.Cookie('RoleIds').split(',') : ['1111'],
+                myRuleGuid: _basepage.app.Cookie('RoleIds') ? _basepage.app.Cookie('RoleIds').split(',') : ['cb33b16e-b088-4124-92d8-918fdd2a5922'],
                 sourceData: [],
-                //ruleUrl: "/data/ruledata.json",
-                ruleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
+                ruleUrl: '/data/Server/GetCustomFormRoleRelation.json',
+                //**//ruleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
                 ruleParams: {
                     'TableName': item.TableName
                 },
-                //sourceUrl: "/data/ServerData/CustomFrom.json",
-                sourceUrl: "/FormManager/LoadFormView",
+                sourceUrl: "/data/Server/LoadFormView.json",
+                //**//sourceUrl: "/FormManager/LoadFormView",
                 sourceParams: {
                     'formName': item.TableName
                 },
-                saveUrl: apiUrl + "/FormManager/AddFormData",
+                saveUrl: '/data/Server/AddFormData.json',
+                //**//saveUrl: apiUrl + "/FormManager/AddFormData",
                 saveParams: {
                     'tablename': item.TableName
                 },

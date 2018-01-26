@@ -6,18 +6,18 @@ import {
         let defaults = {
             form: {},
             arr: [],
-            initData: [],
-            //**//initData: apiUrl + '/FormManager/GetFormDataList',
-            initData: '/data/Server/GetFormDataList.json',
+            //**//initData: [],
+            initData: apiUrl + '/FormManager/GetFormDataList',
+             //**//initData: '/data/Server/GetFormDataList.json',
             initDataParams: {
                 pageindex: 1,
                 pagesize: 1,
                 order: 'createTime desc'
             },
-            //**//ButtonsSelectUrl: apiUrl + '/FormList/GetFormListById/1',
-            ButtonsSelectUrl: '/data/Server/GetFormListById.json',
-            //**// navUrl: apiUrl + '/FormList/Select',
-            navUrl: '/data/Server/Select.json',
+            ButtonsSelectUrl: apiUrl + '/FormList/GetFormListById/1',
+            //**//ButtonsSelectUrl: '/data/Server/GetFormListById.json',
+            navUrl: apiUrl + '/FormList/Select',
+            //**//navUrl: '/data/Server/Select.json',
             MultiData: {},
             curMultiData: {}, //当前多维数据选择的项
             navParams: {},
@@ -136,41 +136,41 @@ import {
                     form.swiper.append(form.type);
                     new CustomTable({
                         _selfFrom: form.type,
-                        sourceUrl: '/data/customTable.json',
+                        //**//sourceUrl: '/data/customTable.json',
+                        sourceUrl:_this.server.initData,
+                        sourceParams:$.extend({}, opts.initDataParams,{'tablename':item.TableName,'pagesize':5} ),
                         headHandle: {
                             'username': '用户名',
-                            'age': '年龄'
+                            'age': '年龄',
+                            'birthday':'出生年月日'
                         },
-                        delUrl: '/data/del.json',
+                        //**//delUrl: '/data/del.json',
+                        delUrl: apiUrl+'/FormManager/DelFormData',
                         delParams: {
-                            'tableName': 'ceshi'
+                            'tableName': item.TableName
                         },
                         saveParams: {
                             'tableName': 'saveceshi'
                         },
-                        sourceParams: {
-                            'tableName': 'selectceshi'
-                        },
                         customFormSetting: {
                             completeCallback: function () {
-                                
                                 console.log('我是全部加载完了!');
                                 console.log(new Date());
                             },
                             myRuleGuid: app.Cookie('RoleIds') ? app.Cookie('RoleIds').split(',') : ['cb33b16e-b088-4124-92d8-918fdd2a5922'],
                             sourceData: [],
-                            ruleUrl: '/data/Server/GetCustomFormRoleRelation.json',
-                            //**//ruleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
+                            //**//ruleUrl: '/data/Server/GetCustomFormRoleRelation.json',
+                            ruleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
                             ruleParams: {
                                 'TableName': item.TableName
-                            },
-                            sourceUrl: "/data/Server/LoadFormView.json",
-                            //**//sourceUrl: "/FormManager/LoadFormView",
+                            }, 
+                            //**//sourceUrl: "/data/Server/LoadFormView.json",
+                            sourceUrl: "/FormManager/LoadFormView",
                             sourceParams: {
                                 'formName': item.TableName
                             },
-                            saveUrl: '/data/Server/AddFormData.json',
-                            //**//saveUrl: apiUrl + "/FormManager/AddFormData",
+                            //**//saveUrl: '/data/Server/AddFormData.json',
+                            saveUrl: apiUrl + "/FormManager/AddFormData",
                             saveParams: {
                                 'tablename': item.TableName
                             },
@@ -181,7 +181,9 @@ import {
                     })
                 }
                 form.lable_div.append(form.swiper);
-                form.save.data('customForm', customForm);
+                if(form.save){
+                    form.save.data('customForm', customForm);
+                }
             });
             _this.btnData();
             _this.transfer();
@@ -202,18 +204,18 @@ import {
             return data.customFrom({
                 myRuleGuid: app.Cookie('RoleIds') ? app.Cookie('RoleIds').split(',') : ['cb33b16e-b088-4124-92d8-918fdd2a5922'],
                 sourceData: [],
-                ruleUrl: '/data/Server/GetCustomFormRoleRelation.json',
-                //**//ruleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
+                //**//ruleUrl: '/data/Server/GetCustomFormRoleRelation.json',
+                ruleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
                 ruleParams: {
                     'TableName': item.TableName
                 },
-                sourceUrl: "/data/Server/LoadFormView.json",
-                //**//sourceUrl: "/FormManager/LoadFormView",
+                //**//sourceUrl: "/data/Server/LoadFormView.json",
+                sourceUrl: "/FormManager/LoadFormView",
                 sourceParams: {
                     'formName': item.TableName
                 },
-                saveUrl: '/data/Server/AddFormData.json',
-                //**//saveUrl: apiUrl + "/FormManager/AddFormData",
+                //**//saveUrl: '/data/Server/AddFormData.json',
+                saveUrl: apiUrl + "/FormManager/AddFormData",
                 saveParams: {
                     'tablename': item.TableName
                 },

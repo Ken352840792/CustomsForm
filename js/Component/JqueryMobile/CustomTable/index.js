@@ -4,13 +4,13 @@ import {
 import {
     Popup
 } from "../Popup/index";
-(function() {
+(function () {
     //数据格式为 {'total':1000,data:[{}]
-    let CustomTable = function(options) {
+    let CustomTable = function (options) {
 
         let defaults = {
-            initCallback: function() {}, //加载前
-            completeCallback: function() {}, //加载完成后
+            initCallback: function () {}, //加载前
+            completeCallback: function () {}, //加载完成后
             sources: undefined, //数据源,
             sourceUrl: '', //数据源URL
             sourcesCount: 0, //分页总条数
@@ -24,18 +24,17 @@ import {
 
             delUrl: '', //删除的URL
             delParams: {}, //删除的url附带参数
-            saveParams: {}, //保存的URL附带参数
             sourceParams: {}, //获取数据源的附带参数
             saveUrl: '', //保存数据
             customFormSetting: {},
             Events: {
                 Add: {
                     state: true,
-                    hander: function() {}
+                    hander: function () {}
                 },
                 Del: {
                     state: true,
-                    hander: function() {}
+                    hander: function () {}
                 },
             }
         };
@@ -52,28 +51,28 @@ import {
         return this;
     };
     CustomTable.prototype = {
-        init: function() {
+        init: function () {
             var _this = this,
                 opts = this.opts;
             _this.createDataSource(1);
         },
-        Events: function() {
+        Events: function () {
             var _this = this,
                 opts = this.opts,
                 form = opts.Form;
-            form.allCheck.click(function() {
+            form.allCheck.click(function () {
                 var is = $(this).is(':checked');
-                opts.sources.forEach(function(item) {
+                opts.sources.forEach(function (item) {
                     item.c = is;
                 });
-                form.tBody.find("tr").each(function() {
+                form.tBody.find("tr").each(function () {
                     var model = $(this).data('model');
                     model.c = is;
                     $(this).data('model', model);
                     $(this).find('input:checkbox:first').prop('checked', is);
                 });
             });
-            opts._selfFrom.off('click', "tBody input:checkbox").on('click', "tBody input:checkbox", function() {
+            opts._selfFrom.off('click', "tBody input:checkbox").on('click', "tBody input:checkbox", function () {
                 var tr = $(this).parents('tr:first');
                 var model = tr.data('model');
                 var index = opts.sources.indexOf(model);
@@ -82,7 +81,7 @@ import {
                 opts.sources[index] = model;
                 //是否勾上全选
                 var checkCount = 0;
-                opts.sources.forEach(function(item) {
+                opts.sources.forEach(function (item) {
                     if (item.c) {
                         checkCount++;
                     }
@@ -93,46 +92,49 @@ import {
                     form.allCheck.prop('checked', false);
                 }
             });
-            form.tBody.on('click', 'a', function() {
+            form.tBody.on('click', 'a', function () {
+                debugger;
                 var ele_this = $(this);
                 var model = $(this).parents('tr:first').data('model');
                 switch ($(this).attr('op')) {
                     case 'edit':
                         form.AddPopup.opts.Form.title.find('h1').text('编 辑');
+                        opts.customFormObj.opts.edit = true;
+                        opts.customFormObj.opts.Id = model.Id;
                         opts.customFormObj.setValue(_this.ConvertModelToArray(model));
                         form.AddPopup.open();
                         break;
                     case 'del':
-                        if (!form.DelPopup) {
-                            form.DelPopup = new Popup({
-                                _selfFrom: ele_this,
-                                title: '删除提示',
-                                content: $('<div style="margin: 15px;width:200px;height:100px;text-align: center;line-height: 100px;">确认要删除吗？</div>'),
-                                callback: function(index) {
-                                    if (index === 1) {
-                                        var params = $.extend({}, opts.delParams, {
-                                            'delItem': model.Id
-                                        });
-                                        _this.server.delUrl.del({
-                                            data: params,
-                                            success: function() {
-                                                msgShowInfo('删除成功');
-                                            }
-                                        });
+                        form.DelPopup = new Popup({
+                            _selfFrom: ele_this,
+                            title: '删除提示',
+                            content: $('<div style="margin: 15px;width:200px;height:100px;text-align: center;line-height: 100px;">确认要删除吗？</div>'),
+                            callback: function (index) {
+                                if (index === 1) {
+                                    var params = $.extend({}, opts.delParams, {
+                                        'Id': model.Id
+                                    });
+                                    _this.server.delUrl.post({
+                                        data: params,
+                                        success: function () {
+                                            msgShowInfo('删除成功');
+                                            _this.refresh();
+                                            form.DelPopup.close();
+                                        }
+                                    });
 
-                                    } else {
-                                        form.DelPopup.close();
-                                    }
+                                } else {
+                                    form.DelPopup.close();
                                 }
-                            });
-                        }
+                            }
+                        });
                         form.DelPopup.open();
                         break;
                 }
 
             });
         },
-        ConvertModelToArray: function(model) {
+        ConvertModelToArray: function (model) {
             var array = [];
             for (const key in model) {
                 array.push({
@@ -142,18 +144,18 @@ import {
             }
             return array;
         },
-        createDataSource: function(pageIndex) {
+        createDataSource: function (pageIndex) {
             var _this = this,
                 opts = this.opts;
 
             if (!opts.sources) {
                 var params = $.extend({}, {
-                    pageIndex: pageIndex,
-                    pageSize: opts.pageSize
+                    pageindex: pageIndex,
+                    pagesize: opts.pageSize
                 }, opts.sourceParams);
                 _this.server.CustomSourceUrl.get({
                     data: params,
-                    success: function(obj) {
+                    success: function (obj) {
                         //head也需要处理 
                         if (obj instanceof Array) {
                             if (obj.length > 0) {
@@ -168,7 +170,7 @@ import {
                             opts.headSource = obj.header;
                             opts.sourcesCount = obj.totalCount;
                         }
-                        opts.sources.forEach(function(item) {
+                        opts.sources.forEach(function (item) {
                             item.c = false;
                         });
                         //清除所有不包括自己的所有元素
@@ -182,7 +184,7 @@ import {
             }
         },
         //创建Component表
-        createComponent: function() {
+        createComponent: function () {
             var _this = this,
                 opts = this.opts;
             _this.createTable();
@@ -199,25 +201,25 @@ import {
             _this.Events();
             opts.completeCallback(opts, _this);
         },
-        createCustomForm: function() {
+        createCustomForm: function () {
             var _this = this,
                 opts = this.opts;
             opts.customFormObj = opts.Form.AddPopup.opts.Form.body.customFrom(opts.customFormSetting);
         },
-        createTable: function() {
+        createTable: function () {
             var _this = this,
                 opts = this.opts,
                 form = opts.Form;
             form.thead = $('<thead></thead>');
             //加载全选按钮
             form.allCheck = $('<input type="checkbox" >');
-           
-         
+
+
             if (opts.headSource && opts.headSource.length > 0) {
-                var headtr=$('<tr></tr>');
+                var headtr = $('<tr></tr>');
                 $('<th></th>').append(form.allCheck).appendTo(headtr);
                 //新增一个编辑按钮
-                opts.headSource.forEach(function(item, index) {
+                opts.headSource.forEach(function (item, index) {
                     if (item !== 'c') {
                         var str = opts.headHandle[item] ? opts.headHandle[item] : item;
                         headtr.append('<th data-priority="' + index + '">' + str + '</th>');
@@ -229,7 +231,7 @@ import {
             //加载数据
             if (opts.sources && opts.sources.length > 0) {
                 form.tBody = $('<tbody></tbody>');
-                opts.sources.forEach(function(item) {
+                opts.sources.forEach(function (item) {
                     var tr = $('<tr></tr>');
                     tr.append('<td><input type="checkbox" ></td>');
                     for (var key in item) {
@@ -238,8 +240,7 @@ import {
                     }
                     tr.append('<td><div class="tableOp"><a class="ui-btn ui-icon-edit ui-btn-icon-notext " op="edit"  ></a><a class="ui-btn ui-icon-delete ui-btn-icon-notext" op="del" ></a></div></td>');
                     tr.data('model', item);
-                    form.tBody.append(tr); 
-
+                    form.tBody.append(tr);
                 });
                 $('body').trigger('create');
             }
@@ -247,7 +248,14 @@ import {
             opts._selfFrom.append(form.thead).append(form.tBody);
             opts._selfFrom.table();
         },
-        createPaging: function(pageNo, totalPage, totalSize) {
+        refresh: function () {
+            var _this = this,
+                opts = this.opts,
+                form = opts.Form;
+            opts.sources = undefined;
+            _this.createDataSource(1);
+        },
+        createPaging: function (pageNo, totalPage, totalSize) {
             var _this = this,
                 opts = this.opts,
                 form = opts.Form;
@@ -261,17 +269,16 @@ import {
                         pageNo: pageNo,
                         totalPage: totalPage,
                         totalSize: totalSize,
-                        callback: function(num) {
+                        callback: function (num) {
                             opts.sources = undefined;
                             _this.createDataSource(num);
-                            
                         }
                     })
                 }
             }
 
         },
-        Add: function() {
+        Add: function () {
             var _this = this,
                 opts = this.opts,
                 form = opts.Form;
@@ -280,7 +287,7 @@ import {
                 //渲染添加
                 form.Add = $('<a style="float: right;" class="ui-table-columntoggle-btn ui-btn ui-btn-a ui-corner-all ui-shadow ui-mini">新 增</a>');
                 //新增按钮
-                form.Add.click(function() {
+                form.Add.click(function () {
                     if (opts.sources.length > 0) {
                         var mo = opts.sources[0];
                         var cur = {};
@@ -288,6 +295,8 @@ import {
                             cur[key] = "";
                         }
                         form.AddPopup.opts.Form.title.find('h1').text('新 增');
+                        opts.customFormObj.opts.edit = false;
+                        opts.customFormObj.opts.Id = '';
                         opts.customFormObj.setValue(_this.ConvertModelToArray(cur));
                     }
                     form.AddPopup.open();
@@ -297,10 +306,12 @@ import {
                     _selfFrom: form.Add,
                     title: '新增',
                     content: $('<div style="margin: 15px;"></div>'),
-                    callback: function(index) {
+                    callback: function (index) {
                         if (index === 1) {
-
-                            console.log(opts.customFormObj.save());
+                            if (opts.customFormObj.save()) {
+                                _this.refresh();
+                                form.AddPopup.close();
+                            }
                         } else {
                             form.AddPopup.close();
                         }
@@ -308,7 +319,7 @@ import {
                 });
             }
         },
-        Del: function() {
+        Del: function () {
             var _this = this,
                 opts = this.opts,
                 form = opts.Form;
@@ -316,22 +327,24 @@ import {
             if (Del.state) {
                 //渲染添加
                 form.Del = $('<span style="float: right;" class="ui-table-columntoggle-btn ui-btn ui-btn-a ui-corner-all ui-shadow ui-mini">删 除</span>');
-                form.Del.click(function() {
-                    var check = opts.sources.filter(function(item) {
+                form.Del.click(function () {
+                    var check = opts.sources.filter(function (item) {
                         return item.c;
                     });
                     if (check.length > 0) {
                         var checkStr = [];
-                        check.forEach(function(item) {
+                        check.forEach(function (item) {
                             checkStr.push(item.Id);
                         });
                         var params = $.extend({}, opts.delParams, {
                             'Id': checkStr
                         });
-                        _this.server.delUrl.del({
+                        _this.server.delUrl.post({
                             data: params,
-                            success: function() {
+                            success: function () {
+                                debugger;
                                 msgShowInfo('删除成功');
+                                _this.refresh();
                             }
                         });
                     } else {
@@ -341,10 +354,10 @@ import {
                 opts._selfFrom.before(form.Del);
             }
         },
-        getValue: function() {
+        getValue: function () {
             return;
         },
-        setValue: function(arr) {
+        setValue: function (arr) {
             return;
         }
     };

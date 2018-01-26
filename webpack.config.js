@@ -6,8 +6,8 @@ var path = require('path');
 module.exports = {
     entry: __dirname+'/js/Component/'+componentType+'/CustomFrom.js',
     output: {
-        path: __dirname+'/built',
-        //path:'D:\\项目\\NewProject\\Sy.UI\\Areas\\App\\Scripts',
+        //path: __dirname+'/built',
+        path:'D:\\项目\\NewProject\\Sy.UI\\Areas\\App\\Scripts',
         filename: 'bundle.js'
     }, 
     // plugins:[

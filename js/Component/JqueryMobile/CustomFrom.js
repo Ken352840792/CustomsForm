@@ -33,6 +33,8 @@ import {
         var defaults = {
             saveUrl: '',
             saveParams: {},
+            edit:false,
+            Id:'',//开启编辑后会使用ID
             ruleUrl: '',
             ruleParams: {},
             ruleData: [],
@@ -106,7 +108,6 @@ import {
                         html.html(obj);
                         opts.sourceData = _this.convertData();
                         html.remove();
-                        console.log(opts.sourceData);
                         callback();
                     }
                 });
@@ -267,15 +268,22 @@ import {
         save: function () {
             var _this = this,
                 opts = this.opts;
+                var is=false;
             if (_this.valid()) {
                 var params = $.extend({}, opts.saveParams, _this.getValue());
+                if(opts.edit){
+                    $.extend(params,{Id:opts.Id});
+                }
                 _this.server.saveUrl.post({
                     data: params,
+                    async:false,
                     success: function (obj) {
                         msgShowInfo('提交成功');
+                        is=true;
                     }
                 });
-            }  
+            }
+            return is;
         }
     };
     $.fn.extend({
