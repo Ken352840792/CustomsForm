@@ -105,7 +105,7 @@
         };
         opts.url = option.url ? option.url : this.url;
         opts.beforeSend = optionDefault.befoureFn;
-        opts.type = postType;
+        opts.type =  !app.global.debug?postType:'get';
         opts.complete = optionDefault.completeFn;
         opts.success = optionDefault.successFn;
         opts.error = optionDefault.errorFn;

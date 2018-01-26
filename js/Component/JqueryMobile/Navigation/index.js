@@ -7,18 +7,19 @@ import {
             form: {},
             arr: [],
             initData: [],
-            initData: apiUrl + '/FormManager/GetFormDataList',
+            //**//initData: apiUrl + '/FormManager/GetFormDataList',
+            initData: '/data/Server/GetFormDataList.json',
             initDataParams: {
                 pageindex: 1,
-                pagesize: 1 ,
+                pagesize: 1,
                 order: 'createTime desc'
             },
-            ButtonsSelectUrl: apiUrl + '/FormList/GetFormListById/1',
-            // ButtonsSelectUrl: '/data/ServerData/GetFormListById.json',
-            // navUrl: '../data/ServerData/Tab.json',
-            navUrl: apiUrl + '/FormList/Select',
+            //**//ButtonsSelectUrl: apiUrl + '/FormList/GetFormListById/1',
+            ButtonsSelectUrl: '/data/Server/GetFormListById.json',
+            //**// navUrl: apiUrl + '/FormList/Select',
+            navUrl: '/data/Server/Select.json',
             MultiData: {},
-            curMultiData:{},//当前多维数据选择的项
+            curMultiData: {}, //当前多维数据选择的项
             navParams: {},
             navSource: [],
             value: "" //双向数据绑定字段
@@ -48,10 +49,10 @@ import {
                     .eq(index)
                     .addClass("ul_selected")
                     .siblings()
-                    .removeClass("ul_selected"); 
-                    if(index===1&&opts.curMultiData!==opts.MultiData){
-                        _this.begin();
-                    }
+                    .removeClass("ul_selected");
+                if (index === 1 && opts.curMultiData !== opts.MultiData) {
+                    _this.begin();
+                }
             });
             _this.buttonStart()
         },
@@ -75,7 +76,7 @@ import {
                                 'type': item.InputFrequency
                             });
                         });
-                        opts.curMultiData=opts.MultiData;
+                        opts.curMultiData = opts.MultiData;
                         _this.createComponent(arr);
                     }
                 });
@@ -108,15 +109,15 @@ import {
                         _this.server.initData.get({
                             data: $.extend({}, opts.initDataParams, callbackOpts.initParams),
                             success: function (obj) {
-                                console.log(obj);
-                                debugger;
-                                var data=obj.data[0];
-                                var cusArr=[];
-                                if(!data){return;}
+                                var data = obj.data[0];
+                                var cusArr = [];
+                                if (!data) {
+                                    return;
+                                }
                                 for (const key in data) {
-                                    var customData={};
-                                    customData.name=key;
-                                    customData.value=data[key];
+                                    var customData = {};
+                                    customData.name = key;
+                                    customData.value = data[key];
                                     cusArr.push(customData);
                                 }
                                 customForm.setValue(cusArr);
@@ -124,44 +125,60 @@ import {
                         });
                     });
                 } else if (item.type === 1) {
-                    //     form.type = $(' <table data-role="table" class="ui-responsive" ></table>')
-                    //     if (Object.is(index, 0)) {
-                    //         form.lable.append(form.table_s);
+                    form.type = $(' <table data-role="table" class="ui-responsive" ></table>')
+                    if (Object.is(index, 0)) {
+                        form.lable.append(form.table_s);
 
-                    //     } else {
-                    //         form.lable.append(form.table);
-                    //     }
+                    } else {
+                        form.lable.append(form.table);
+                    }
 
-                    //     form.swiper.append(form.type);
-                    //     new CustomTable({
-                    //         _selfFrom: form.type,
-                    //         sourceUrl: '/data/customTable.json',
-                    //         headHandle: {
-                    //             'username': '用户名',
-                    //             'age': '年龄'
-                    //         },
-                    //         delUrl: '/data/del.json',
-                    //         delParams: {
-                    //             'tableName': 'ceshi'
-                    //         },
-                    //         saveParams: {
-                    //             'tableName': 'saveceshi'
-                    //         },
-                    //         sourceParams: {
-                    //             'tableName': 'selectceshi'
-                    //         },
-                    //         customFormSetting: {
-                    //             myRuleGuid: '1111',
-                    //             sourceData: [],
-                    //             ruleUrl: "/data/ruledata.json",
-                    //             sourceUrl: "/data/ceshi.json",
-                    //             completeCallback: function() {
-                    //                 console.log('我是全部加载完了!');
-                    //                 console.log(new Date());
-                    //             },
-                    //             saveUrl: "/data/save.json"
-                    //         }
-                    //     })
+                    form.swiper.append(form.type);
+                    new CustomTable({
+                        _selfFrom: form.type,
+                        sourceUrl: '/data/customTable.json',
+                        headHandle: {
+                            'username': '用户名',
+                            'age': '年龄'
+                        },
+                        delUrl: '/data/del.json',
+                        delParams: {
+                            'tableName': 'ceshi'
+                        },
+                        saveParams: {
+                            'tableName': 'saveceshi'
+                        },
+                        sourceParams: {
+                            'tableName': 'selectceshi'
+                        },
+                        customFormSetting: {
+                            completeCallback: function () {
+                                
+                                console.log('我是全部加载完了!');
+                                console.log(new Date());
+                            },
+                            myRuleGuid: app.Cookie('RoleIds') ? app.Cookie('RoleIds').split(',') : ['cb33b16e-b088-4124-92d8-918fdd2a5922'],
+                            sourceData: [],
+                            ruleUrl: '/data/Server/GetCustomFormRoleRelation.json',
+                            //**//ruleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
+                            ruleParams: {
+                                'TableName': item.TableName
+                            },
+                            sourceUrl: "/data/Server/LoadFormView.json",
+                            //**//sourceUrl: "/FormManager/LoadFormView",
+                            sourceParams: {
+                                'formName': item.TableName
+                            },
+                            saveUrl: '/data/Server/AddFormData.json',
+                            //**//saveUrl: apiUrl + "/FormManager/AddFormData",
+                            saveParams: {
+                                'tablename': item.TableName
+                            },
+                            initParams: {
+                                'tablename': item.TableName
+                            }
+                        }
+                    })
                 }
                 form.lable_div.append(form.swiper);
                 form.save.data('customForm', customForm);
@@ -170,18 +187,6 @@ import {
             _this.transfer();
             _this.BOXheight();
         },
-        // ajax请求
-        // Interaction: function (url, type, data, callback) {
-        //     $.ajax({
-        //         url: url,
-        //         type: type,
-        //         data: data,
-        //         async: true,
-        //         success: function (data) {
-        //             callback(data);
-        //         }
-        //     })
-        // },
         // 高度计算
         BOXheight: function () {
             var _this = this;
@@ -195,19 +200,20 @@ import {
         // div 组件运行
         formdata: function (data, item, callback) {
             return data.customFrom({
-                myRuleGuid: app.Cookie('RoleIds') ? app.Cookie('RoleIds').split(',') : ['1111'],
+                myRuleGuid: app.Cookie('RoleIds') ? app.Cookie('RoleIds').split(',') : ['cb33b16e-b088-4124-92d8-918fdd2a5922'],
                 sourceData: [],
-                //ruleUrl: "/data/ruledata.json",
-                ruleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
+                ruleUrl: '/data/Server/GetCustomFormRoleRelation.json',
+                //**//ruleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
                 ruleParams: {
                     'TableName': item.TableName
                 },
-                //sourceUrl: "/data/ServerData/CustomFrom.json",
-                sourceUrl: "/FormManager/LoadFormView",
+                sourceUrl: "/data/Server/LoadFormView.json",
+                //**//sourceUrl: "/FormManager/LoadFormView",
                 sourceParams: {
                     'formName': item.TableName
                 },
-                saveUrl: apiUrl + "/FormManager/AddFormData",
+                saveUrl: '/data/Server/AddFormData.json',
+                //**//saveUrl: apiUrl + "/FormManager/AddFormData",
                 saveParams: {
                     'tablename': item.TableName
                 },

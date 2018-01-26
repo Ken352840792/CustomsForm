@@ -1,0 +1,17 @@
+{
+    "Status": 1,
+    "ErrorCode": null,
+    "Data": {
+        "header": ["username", "age", "birthday"],
+        "data": [{
+            "rownumber": 1,
+            "Id": "89dfffdc-2c60-4990-a034-a874008e998c",
+            "createtime": "2018-01-26 08:39:11",
+            "username": "45645645",
+            "age": "6",
+            "birthday": "2018-01-25",
+            "stutdentclass": "3"
+        }],
+        "totalCount": 6
+    }
+}

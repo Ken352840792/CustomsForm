@@ -4,7 +4,6 @@ import {
 import {
     Popup
 } from "../Popup/index";
-
 (function() {
     //数据格式为 {'total':1000,data:[{}]
     let CustomTable = function(options) {
@@ -212,18 +211,20 @@ import {
             form.thead = $('<thead></thead>');
             //加载全选按钮
             form.allCheck = $('<input type="checkbox" >');
-            var th = $('<th></th>').append(form.allCheck);
-            //加载头
-            form.thead.append(th);
+           
+         
             if (opts.headSource && opts.headSource.length > 0) {
+                var headtr=$('<tr></tr>');
+                $('<th></th>').append(form.allCheck).appendTo(headtr);
                 //新增一个编辑按钮
                 opts.headSource.forEach(function(item, index) {
                     if (item !== 'c') {
                         var str = opts.headHandle[item] ? opts.headHandle[item] : item;
-                        form.thead.append('<th data-priority="' + index + '">' + str + '</th>');
+                        headtr.append('<th data-priority="' + index + '">' + str + '</th>');
                     }
                 });
-                form.thead.append('<th>编 辑</th>');
+                headtr.append('<th>编 辑</th>');
+                form.thead.append(headtr);
             }
             //加载数据
             if (opts.sources && opts.sources.length > 0) {
@@ -238,10 +239,13 @@ import {
                     tr.append('<td><div class="tableOp"><a class="ui-btn ui-icon-edit ui-btn-icon-notext " op="edit"  ></a><a class="ui-btn ui-icon-delete ui-btn-icon-notext" op="del" ></a></div></td>');
                     tr.data('model', item);
                     form.tBody.append(tr); 
+
                 });
+                $('body').trigger('create');
             }
             opts._selfFrom.html('');
             opts._selfFrom.append(form.thead).append(form.tBody);
+            opts._selfFrom.table();
         },
         createPaging: function(pageNo, totalPage, totalSize) {
             var _this = this,
@@ -260,6 +264,7 @@ import {
                         callback: function(num) {
                             opts.sources = undefined;
                             _this.createDataSource(num);
+                            
                         }
                     })
                 }
@@ -301,7 +306,6 @@ import {
                         }
                     }
                 });
-
             }
         },
         Del: function() {

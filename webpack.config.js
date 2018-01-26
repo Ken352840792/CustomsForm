@@ -7,7 +7,7 @@ module.exports = {
     entry: __dirname+'/js/Component/'+componentType+'/CustomFrom.js',
     output: {
         path: __dirname+'/built',
-        //path:path.join(__dirname, '..', 'D:/项目/NewProject/Sy.UI/Areas/App/Scripts'),
+        //path:'D:\\项目\\NewProject\\Sy.UI\\Areas\\App\\Scripts',
         filename: 'bundle.js'
     }, 
     // plugins:[

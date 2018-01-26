@@ -1,0 +1,18 @@
+{
+    "Status": 1,
+    "ErrorCode": null,
+    "Data": [{
+        "FormTempleteId": "9cb3133c-2605-4b4c-9f26-a873009af1bb",
+        "ConfigFileName": "t_student",
+        "FormName": "学生表",
+        "FormListName": "新增维度",
+        "InputFrequency": 0
+    },
+    {
+        "FormTempleteId": "9cb3133c-2605-4b4c-9f26-a873009af1cc",
+        "ConfigFileName": "t_student",
+        "FormName": "学生表2",
+        "FormListName": "新增维度2",
+        "InputFrequency": 1
+    }]
+}

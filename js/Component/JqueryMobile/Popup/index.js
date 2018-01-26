@@ -51,11 +51,10 @@
                    opts.callback($(this).data('index'));
                 });
                 h1.append(but);
-
             });
             form.popupBody.append(group.append(h1));
             opts._selfFrom.after(form.popupBody);
-            $('body').trigger('create');
+           $('body').trigger('create');
         },
         getValue: function () {
             return undefined;
