@@ -216,8 +216,10 @@ import {
 
 
             if (opts.headSource && opts.headSource.length > 0) {
-                var headtr = $('<tr></tr>');
-                $('<th></th>').append(form.allCheck).appendTo(headtr);
+                var headtr = $('<tr></tr>'),
+                checkboxDiv=$('<div class="ui-checkbox"></div>')
+
+                $('<th></th>').append(checkboxDiv.append(form.allCheck)).appendTo(headtr);
                 //新增一个编辑按钮
                 opts.headSource.forEach(function (item, index) {
                     if (item !== 'c') {

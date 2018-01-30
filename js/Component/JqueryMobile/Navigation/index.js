@@ -356,7 +356,6 @@ import {
                 $(this).data('customForm').save()
             });
         }
-
     };
     window.Nav = Nav;
 })();
