@@ -1,7 +1,4 @@
 import {
-    app
-} from "../../../Comment/basepage";
-import {
     Popup
 } from "../Popup/index";
 (function () {
@@ -11,8 +8,7 @@ import {
         let defaults = {
             initCallback: function () {}, //加载前
             completeCallback: function () {}, //加载完成后
-            sources: undefined, //数据源,
-            sourceUrl: '', //数据源URL
+
             sourcesCount: 0, //分页总条数
             pageSize: 5, //页显示数量
             headSource: [], //表头的列名 按照顺序填充数据
@@ -22,11 +18,12 @@ import {
             customFormSource: [], //CustomForm数据源
             Paging: true, //是否分页
 
-            delUrl: '', //删除的URL
+            customFormSetting: {},
+            delUrl: {}, //删除的URL
+            sourceUrl: {}, //数据源URL
             delParams: {}, //删除的url附带参数
             sourceParams: {}, //获取数据源的附带参数
-            saveUrl: '', //保存数据
-            customFormSetting: {},
+            sources: undefined, //数据源,
             Events: {
                 Add: {
                     state: true,
@@ -38,14 +35,7 @@ import {
                 },
             }
         };
-        this.server = app.server;
-
         this.opts = $.extend({}, defaults, options);
-        this.server.add({
-            CustomSourceUrl: this.opts.sourceUrl,
-            delUrl: this.opts.delUrl,
-            saveUrl: this.opts.saveUrl,
-        });
         this.opts.initCallback(this.opts);
         this.init();
         return this;
@@ -93,7 +83,6 @@ import {
                 }
             });
             form.tBody.on('click', 'a', function () {
-                debugger;
                 var ele_this = $(this);
                 var model = $(this).parents('tr:first').data('model');
                 switch ($(this).attr('op')) {
@@ -114,7 +103,7 @@ import {
                                     var params = $.extend({}, opts.delParams, {
                                         'Id': model.Id
                                     });
-                                    _this.server.delUrl.post({
+                                    opts.delUrl.post({
                                         data: params,
                                         success: function () {
                                             msgShowInfo('删除成功');
@@ -147,13 +136,11 @@ import {
         createDataSource: function (pageIndex) {
             var _this = this,
                 opts = this.opts;
-
             if (!opts.sources) {
-                var params = $.extend({}, {
-                    pageindex: pageIndex,
-                    pagesize: opts.pageSize
-                }, opts.sourceParams);
-                _this.server.CustomSourceUrl.get({
+                var params = $.extend({}, opts.sourceParams, {
+                    pageindex: pageIndex
+                });
+                opts.sourceUrl.get({
                     data: params,
                     success: function (obj) {
                         //head也需要处理 
@@ -187,7 +174,7 @@ import {
         createComponent: function () {
             var _this = this,
                 opts = this.opts;
-            _this.createTable();
+
             if (!opts.PagingInit) {
                 _this.Del();
                 _this.Add();
@@ -196,14 +183,29 @@ import {
                 if (event.Add.state || event.Edit.state) {
                     //加载Form
                     _this.createCustomForm();
+                    return;
                 }
             }
+            _this.createTable();
             _this.Events();
             opts.completeCallback(opts, _this);
         },
         createCustomForm: function () {
             var _this = this,
                 opts = this.opts;
+            opts.customFormSetting.completeCallback = function (obj) {
+                //设置Hander数据
+                var hander = {};
+                obj.sourceData.forEach(function (item) {
+                    if (opts.headSource.indexOf(item.name) > -1) {
+                        hander[item.name] = item.lable;
+                    }
+                });
+                opts.headHandle = hander;
+                _this.createTable();
+                _this.Events();
+                opts.completeCallback(opts, _this);
+            };
             opts.customFormObj = opts.Form.AddPopup.opts.Form.body.customFrom(opts.customFormSetting);
         },
         createTable: function () {
@@ -217,7 +219,7 @@ import {
 
             if (opts.headSource && opts.headSource.length > 0) {
                 var headtr = $('<tr></tr>'),
-                checkboxDiv=$('<div class="ui-checkbox"></div>')
+                    checkboxDiv = $('<div class="ui-checkbox"></div>')
 
                 $('<th></th>').append(checkboxDiv.append(form.allCheck)).appendTo(headtr);
                 //新增一个编辑按钮
@@ -240,7 +242,7 @@ import {
                         if (key === 'c' || opts.headSource.indexOf(key) === -1) continue;
                         tr.append('<td>' + item[key] + '</td>');
                     }
-                    tr.append('<td><div class="tableOp"><a class="ui-btn ui-icon-edit ui-btn-icon-notext " op="edit"  ></a><a class="ui-btn ui-icon-delete ui-btn-icon-notext" op="del" ></a></div></td>');
+                    tr.append('<td><div class="tableOp clearfix"><a class="ui-btn ui-icon-edit ui-btn-icon-notext " op="edit"  ></a><a class="ui-btn ui-icon-delete ui-btn-icon-notext" op="del" ></a></div></td>');
                     tr.data('model', item);
                     form.tBody.append(tr);
                 });
@@ -341,10 +343,9 @@ import {
                         var params = $.extend({}, opts.delParams, {
                             'Id': checkStr
                         });
-                        _this.server.delUrl.post({
+                        opts.delUrl.post({
                             data: params,
                             success: function () {
-                                debugger;
                                 msgShowInfo('删除成功');
                                 _this.refresh();
                             }

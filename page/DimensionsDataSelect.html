@@ -190,58 +190,20 @@
 <body>
     <!--维度选择-->
     <!--自定义表单-->
-    <div class="app">
-        <div class="menu"></div>
-        <div class='center'>
-            <div style="margin-left:150px;">
-                <div data-role="content">
-                    <div data-role="tabs">
-                        <div>
-                            <div data-role="navbar">
-                                <ul class="mytabs" id="ul_label">
-                                    <li>
-                                        <a class="ui-btn-active">维度选择</a>
-                                    </li>
-                                    <li>
-                                        <a id="ul_a">自定义表单</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="box clearfix " id="ul_box">
-                                <div class="wd_box ul_selected fl">
-                                    <form action="" id="form"></form>
-                                    <a class="ui-btn ui-mini ui-corner-all ui-btn-inline ui-btn-color" id="btn">确定</a>
-                                </div>
-                                <div class="zdy_box  fl">
-                                    <div class="container">
-                                        <div class="swiper-container swiper1">
-                                            <div class="swiper-wrapper" id="lable">
-
-                                            </div>
-                                        </div>
-
-                                        <div class="swiper-container swiper2">
-                                            <div class="swiper-wrapper" id="lable_div">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+    <div id='aa'></div>
 </body>
 <script>
     function msgShowInfo(msg){
         alert(msg);
     }
     $(function(){
-
-        var a = new Nav();
+        app.server.add({
+            DimensionsDataSelectUrl:'/data/Server/GetFormListById.json' 
+        });        
+      window.data=  new DimensionsDataSelect({
+            _selfFrom:$('#aa'),
+            sourceUrl:app.server.DimensionsDataSelectUrl
+        });
     })
   
 </script>

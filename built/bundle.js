@@ -339,23 +339,29 @@ var _index6 = __webpack_require__(1);
 
 var _index7 = __webpack_require__(8);
 
+var _index8 = __webpack_require__(9);
+
+var _index9 = __webpack_require__(10);
+
 (function () {
     var componentMapping = {
         text: _index.Text,
         number: _index2.TextNumber,
-        datetime: _index3.TextData,
+        datetime: _index3.DateSelect,
         button: _index4.Buttons
     };
     var _customFrom = function _customFrom(_self, options) {
         var defaults = {
-            saveUrl: '',
+            saveUrl: {},
             saveParams: {},
-            ruleUrl: '',
+            edit: false,
+            Id: '', //开启编辑后会使用ID
+            ruleUrl: {},
             ruleParams: {},
             ruleData: [],
             myRuleData: [],
             myRuleGuid: '',
-            sourceUrl: '',
+            sourceUrl: {},
             sourceParams: {},
             sourceData: [],
             componentsInitCount: 0,
@@ -363,14 +369,7 @@ var _index7 = __webpack_require__(8);
             completeCallback: function completeCallback() {},
             components: {} //组件集合
         };
-        this._self_ = _self, this.opts = $.extend({}, defaults, options), this.server = _basepage.app.server;
-        if (this.opts.sourceData.length === 0 && !this.opts.sourceUrl) return;
-        this.server.add({
-            ruleUrl: this.opts.ruleUrl,
-            sourceUrl: this.opts.sourceUrl,
-            saveUrl: this.opts.saveUrl
-        });
-        this.init();
+        this._self_ = _self, this.opts = $.extend({}, defaults, options), this.init();
     };
     _customFrom.prototype = {
         init: function init() {
@@ -393,7 +392,7 @@ var _index7 = __webpack_require__(8);
                         item.completeCallback = function () {
                             opts.componentsFactCompleteCount += 1;
                             if (opts.componentsFactCompleteCount === opts.componentsInitCount) {
-                                opts.completeCallback(opts);
+                                opts.completeCallback(opts, _this);
                             }
                         };
                         opts.components[componentName] = new componentMapping[item.type](item);
@@ -411,16 +410,15 @@ var _index7 = __webpack_require__(8);
             var _this = this,
                 opts = this.opts;
             if (opts.sourceData.length === 0) {
-                _this.server.sourceUrl.get({
+                opts.sourceUrl.get({
                     data: opts.sourceParams,
                     success: function success(obj) {
                         //返回的是HTML
                         var html = $('<div style="display:none;"><div>');
                         $('body').append(html);
                         html.html(obj);
-                        opts.sourceData = _this.convertData();
+                        opts.sourceData = _this.convertData(html);
                         html.remove();
-                        console.log(opts.sourceData);
                         callback();
                     }
                 });
@@ -428,10 +426,9 @@ var _index7 = __webpack_require__(8);
                 callback();
             }
         },
-        convertData: function convertData() {
+        convertData: function convertData(html) {
             var _this = this;
             var array = [];
-
             var formName = _this.opts.sourceParams.formName;
             var defaultsData = formSetting[formName].defaults;
             var attributes = formSetting[formName].attributes;
@@ -450,17 +447,7 @@ var _index7 = __webpack_require__(8);
                     _customEvent = customevents[name];
                 if (!_defaults) return;
                 var type = _defaults['widget-type'] === "input" ? 'text' : _defaults['widget-type'];
-                // if(){
-                //     type='text';
-                // }else{
-
-                // }
-                // if (_defaults.tag === 'input') {
-                //     type = ? _defaults.type : 'text';
-                // } else {
-                //     type = _defaults.tag;
-                // }
-                var input = $('#' + _this.opts.sourceParams.formName + ' [name=' + name + "]")[0];
+                var input = html.find('[name=' + name + "]")[0];
                 var cur = {
                     type: type,
                     name: name,
@@ -489,14 +476,10 @@ var _index7 = __webpack_require__(8);
             var _this = this,
                 opts = this.opts;
             if (opts.ruleData.length === 0) {
-                _this.server.ruleUrl.get({
+                opts.ruleUrl.get({
                     data: opts.ruleParams,
                     async: false,
                     success: function success(obj) {
-                        // var arr=[];
-                        // for (const key in obj) {
-                        //     arr.push({'name':key,'roleGuids':obj[key]}); 
-                        // }
                         opts.ruleData = obj;
                     }
                 });
@@ -580,15 +563,24 @@ var _index7 = __webpack_require__(8);
         save: function save() {
             var _this = this,
                 opts = this.opts;
+            var is = false;
             if (_this.valid()) {
                 var params = $.extend({}, opts.saveParams, _this.getValue());
-                _this.server.saveUrl.post({
+                if (opts.edit) {
+                    $.extend(params, {
+                        Id: opts.Id
+                    });
+                }
+                opts.saveUrl.post({
                     data: params,
+                    async: false,
                     success: function success(obj) {
                         msgShowInfo('提交成功');
+                        is = true;
                     }
                 });
             }
+            return is;
         }
     };
     $.fn.extend({
@@ -788,7 +780,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 (function () {
-    var TextData = function TextData(options) {
+    var DateSelect = function DateSelect(options) {
         var defaults = {
             Form: {},
             _selfFrom: '', //要添加到的位置
@@ -796,11 +788,12 @@ Object.defineProperty(exports, "__esModule", {
             completeCallback: function completeCallback() {}, //加载完成后
             value: "" //双向数据绑定字段
         };
+        debugger;
         this.opts = $.extend({}, defaults, options);
         this.init();
         return this;
     };
-    TextData.prototype = {
+    DateSelect.prototype = {
         init: function init() {
             var _this = this,
                 opts = this.opts,
@@ -882,9 +875,9 @@ Object.defineProperty(exports, "__esModule", {
             this.opts.des = val;
         }
     };
-    window.TextData = TextData;
+    window.DateSelect = DateSelect;
 })();
-exports.TextData = TextData;
+exports.DateSelect = DateSelect;
 
 /***/ }),
 /* 6 */
@@ -1114,8 +1107,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.CustomTable = undefined;
 
-var _basepage = __webpack_require__(0);
-
 var _index = __webpack_require__(1);
 
 (function () {
@@ -1125,8 +1116,7 @@ var _index = __webpack_require__(1);
         var defaults = {
             initCallback: function initCallback() {}, //加载前
             completeCallback: function completeCallback() {}, //加载完成后
-            sources: undefined, //数据源,
-            sourceUrl: '', //数据源URL
+
             sourcesCount: 0, //分页总条数
             pageSize: 5, //页显示数量
             headSource: [], //表头的列名 按照顺序填充数据
@@ -1136,12 +1126,12 @@ var _index = __webpack_require__(1);
             customFormSource: [], //CustomForm数据源
             Paging: true, //是否分页
 
-            delUrl: '', //删除的URL
-            delParams: {}, //删除的url附带参数
-            saveParams: {}, //保存的URL附带参数
-            sourceParams: {}, //获取数据源的附带参数
-            saveUrl: '', //保存数据
             customFormSetting: {},
+            delUrl: {}, //删除的URL
+            sourceUrl: {}, //数据源URL
+            delParams: {}, //删除的url附带参数
+            sourceParams: {}, //获取数据源的附带参数
+            sources: undefined, //数据源,
             Events: {
                 Add: {
                     state: true,
@@ -1153,14 +1143,7 @@ var _index = __webpack_require__(1);
                 }
             }
         };
-        this.server = _basepage.app.server;
-
         this.opts = $.extend({}, defaults, options);
-        this.server.add({
-            CustomSourceUrl: this.opts.sourceUrl,
-            delUrl: this.opts.delUrl,
-            saveUrl: this.opts.saveUrl
-        });
         this.opts.initCallback(this.opts);
         this.init();
         return this;
@@ -1213,32 +1196,34 @@ var _index = __webpack_require__(1);
                 switch ($(this).attr('op')) {
                     case 'edit':
                         form.AddPopup.opts.Form.title.find('h1').text('编 辑');
+                        opts.customFormObj.opts.edit = true;
+                        opts.customFormObj.opts.Id = model.Id;
                         opts.customFormObj.setValue(_this.ConvertModelToArray(model));
                         form.AddPopup.open();
                         break;
                     case 'del':
-                        if (!form.DelPopup) {
-                            form.DelPopup = new _index.Popup({
-                                _selfFrom: ele_this,
-                                title: '删除提示',
-                                content: $('<div style="margin: 15px;width:200px;height:100px;text-align: center;line-height: 100px;">确认要删除吗？</div>'),
-                                callback: function callback(index) {
-                                    if (index === 1) {
-                                        var params = $.extend({}, opts.delParams, {
-                                            'delItem': model.Id
-                                        });
-                                        _this.server.delUrl.del({
-                                            data: params,
-                                            success: function success() {
-                                                msgShowInfo('删除成功');
-                                            }
-                                        });
-                                    } else {
-                                        form.DelPopup.close();
-                                    }
+                        form.DelPopup = new _index.Popup({
+                            _selfFrom: ele_this,
+                            title: '删除提示',
+                            content: $('<div style="margin: 15px;width:200px;height:100px;text-align: center;line-height: 100px;">确认要删除吗？</div>'),
+                            callback: function callback(index) {
+                                if (index === 1) {
+                                    var params = $.extend({}, opts.delParams, {
+                                        'Id': model.Id
+                                    });
+                                    opts.delUrl.post({
+                                        data: params,
+                                        success: function success() {
+                                            msgShowInfo('删除成功');
+                                            _this.refresh();
+                                            form.DelPopup.close();
+                                        }
+                                    });
+                                } else {
+                                    form.DelPopup.close();
                                 }
-                            });
-                        }
+                            }
+                        });
                         form.DelPopup.open();
                         break;
                 }
@@ -1257,13 +1242,11 @@ var _index = __webpack_require__(1);
         createDataSource: function createDataSource(pageIndex) {
             var _this = this,
                 opts = this.opts;
-
             if (!opts.sources) {
-                var params = $.extend({}, {
-                    pageIndex: pageIndex,
-                    pageSize: opts.pageSize
-                }, opts.sourceParams);
-                _this.server.CustomSourceUrl.get({
+                var params = $.extend({}, opts.sourceParams, {
+                    pageindex: pageIndex
+                });
+                opts.sourceUrl.get({
                     data: params,
                     success: function success(obj) {
                         //head也需要处理 
@@ -1297,7 +1280,7 @@ var _index = __webpack_require__(1);
         createComponent: function createComponent() {
             var _this = this,
                 opts = this.opts;
-            _this.createTable();
+
             if (!opts.PagingInit) {
                 _this.Del();
                 _this.Add();
@@ -1306,14 +1289,29 @@ var _index = __webpack_require__(1);
                 if (event.Add.state || event.Edit.state) {
                     //加载Form
                     _this.createCustomForm();
+                    return;
                 }
             }
+            _this.createTable();
             _this.Events();
             opts.completeCallback(opts, _this);
         },
         createCustomForm: function createCustomForm() {
             var _this = this,
                 opts = this.opts;
+            opts.customFormSetting.completeCallback = function (obj) {
+                //设置Hander数据
+                var hander = {};
+                obj.sourceData.forEach(function (item) {
+                    if (opts.headSource.indexOf(item.name) > -1) {
+                        hander[item.name] = item.lable;
+                    }
+                });
+                opts.headHandle = hander;
+                _this.createTable();
+                _this.Events();
+                opts.completeCallback(opts, _this);
+            };
             opts.customFormObj = opts.Form.AddPopup.opts.Form.body.customFrom(opts.customFormSetting);
         },
         createTable: function createTable() {
@@ -1325,8 +1323,10 @@ var _index = __webpack_require__(1);
             form.allCheck = $('<input type="checkbox" >');
 
             if (opts.headSource && opts.headSource.length > 0) {
-                var headtr = $('<tr></tr>');
-                $('<th></th>').append(form.allCheck).appendTo(headtr);
+                var headtr = $('<tr></tr>'),
+                    checkboxDiv = $('<div class="ui-checkbox"></div>');
+
+                $('<th></th>').append(checkboxDiv.append(form.allCheck)).appendTo(headtr);
                 //新增一个编辑按钮
                 opts.headSource.forEach(function (item, index) {
                     if (item !== 'c') {
@@ -1347,7 +1347,7 @@ var _index = __webpack_require__(1);
                         if (key === 'c' || opts.headSource.indexOf(key) === -1) continue;
                         tr.append('<td>' + item[key] + '</td>');
                     }
-                    tr.append('<td><div class="tableOp"><a class="ui-btn ui-icon-edit ui-btn-icon-notext " op="edit"  ></a><a class="ui-btn ui-icon-delete ui-btn-icon-notext" op="del" ></a></div></td>');
+                    tr.append('<td><div class="tableOp clearfix"><a class="ui-btn ui-icon-edit ui-btn-icon-notext " op="edit"  ></a><a class="ui-btn ui-icon-delete ui-btn-icon-notext" op="del" ></a></div></td>');
                     tr.data('model', item);
                     form.tBody.append(tr);
                 });
@@ -1356,6 +1356,13 @@ var _index = __webpack_require__(1);
             opts._selfFrom.html('');
             opts._selfFrom.append(form.thead).append(form.tBody);
             opts._selfFrom.table();
+        },
+        refresh: function refresh() {
+            var _this = this,
+                opts = this.opts,
+                form = opts.Form;
+            opts.sources = undefined;
+            _this.createDataSource(1);
         },
         createPaging: function createPaging(pageNo, totalPage, totalSize) {
             var _this = this,
@@ -1396,6 +1403,8 @@ var _index = __webpack_require__(1);
                             cur[key] = "";
                         }
                         form.AddPopup.opts.Form.title.find('h1').text('新 增');
+                        opts.customFormObj.opts.edit = false;
+                        opts.customFormObj.opts.Id = '';
                         opts.customFormObj.setValue(_this.ConvertModelToArray(cur));
                     }
                     form.AddPopup.open();
@@ -1407,8 +1416,10 @@ var _index = __webpack_require__(1);
                     content: $('<div style="margin: 15px;"></div>'),
                     callback: function callback(index) {
                         if (index === 1) {
-
-                            console.log(opts.customFormObj.save());
+                            if (opts.customFormObj.save()) {
+                                _this.refresh();
+                                form.AddPopup.close();
+                            }
                         } else {
                             form.AddPopup.close();
                         }
@@ -1436,10 +1447,11 @@ var _index = __webpack_require__(1);
                         var params = $.extend({}, opts.delParams, {
                             'Id': checkStr
                         });
-                        _this.server.delUrl.del({
+                        opts.delUrl.post({
                             data: params,
                             success: function success() {
                                 msgShowInfo('删除成功');
+                                _this.refresh();
                             }
                         });
                     } else {
@@ -1474,21 +1486,29 @@ exports.Nav = undefined;
 
 var _basepage = __webpack_require__(0);
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 (function () {
     var Nav = function Nav(options) {
-        var _defaults;
-
-        var defaults = (_defaults = {
+        var defaults = {
             form: {},
             arr: [],
-            initData: []
-        }, _defineProperty(_defaults, 'initData', '/data/Server/GetFormDataList.json'), _defineProperty(_defaults, 'initDataParams', {
-            pageindex: 1,
-            pagesize: 1,
-            order: 'createTime desc'
-        }), _defineProperty(_defaults, 'ButtonsSelectUrl', '/data/Server/GetFormListById.json'), _defineProperty(_defaults, 'navUrl', '/data/Server/Select.json'), _defineProperty(_defaults, 'MultiData', {}), _defineProperty(_defaults, 'curMultiData', {}), _defineProperty(_defaults, 'navParams', {}), _defineProperty(_defaults, 'navSource', []), _defineProperty(_defaults, 'value', ""), _defaults);
+            //**//initData: [],
+            //initData: apiUrl + '/FormManager/GetFormDataList',
+            initData: '/data/Server/GetFormDataList.json',
+            initDataParams: {
+                pageindex: 1,
+                pagesize: 1,
+                order: 'createTime desc'
+            },
+            //ButtonsSelectUrl: apiUrl + '/FormList/GetFormListById/1',
+            ButtonsSelectUrl: '/data/Server/GetFormListById.json',
+            //navUrl: apiUrl + '/FormList/Select',
+            navUrl: '/data/Server/Select.json',
+            MultiData: {},
+            curMultiData: {}, //当前多维数据选择的项
+            navParams: {},
+            navSource: [],
+            value: "" //双向数据绑定字段
+        };
         this.opts = $.extend({}, defaults, options);
         this.server = _basepage.app.server;
         this.server.add({
@@ -1596,41 +1616,41 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     form.swiper.append(form.type);
                     new CustomTable({
                         _selfFrom: form.type,
-                        sourceUrl: '/data/customTable.json',
+                        //**//sourceUrl: '/data/customTable.json',
+                        sourceUrl: _this.server.initData,
+                        sourceParams: $.extend({}, opts.initDataParams, { 'tablename': item.TableName, 'pagesize': 5 }),
                         headHandle: {
                             'username': '用户名',
-                            'age': '年龄'
+                            'age': '年龄',
+                            'birthday': '出生年月日'
                         },
                         delUrl: '/data/del.json',
+                        //delUrl: apiUrl+'/FormManager/DelFormData',
                         delParams: {
-                            'tableName': 'ceshi'
+                            'tableName': item.TableName
                         },
                         saveParams: {
                             'tableName': 'saveceshi'
                         },
-                        sourceParams: {
-                            'tableName': 'selectceshi'
-                        },
                         customFormSetting: {
                             completeCallback: function completeCallback() {
-
                                 console.log('我是全部加载完了!');
                                 console.log(new Date());
                             },
                             myRuleGuid: _basepage.app.Cookie('RoleIds') ? _basepage.app.Cookie('RoleIds').split(',') : ['cb33b16e-b088-4124-92d8-918fdd2a5922'],
                             sourceData: [],
                             ruleUrl: '/data/Server/GetCustomFormRoleRelation.json',
-                            //**//ruleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
+                            //ruleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
                             ruleParams: {
                                 'TableName': item.TableName
                             },
                             sourceUrl: "/data/Server/LoadFormView.json",
-                            //**//sourceUrl: "/FormManager/LoadFormView",
+                            //sourceUrl: "/FormManager/LoadFormView",
                             sourceParams: {
                                 'formName': item.TableName
                             },
                             saveUrl: '/data/Server/AddFormData.json',
-                            //**//saveUrl: apiUrl + "/FormManager/AddFormData",
+                            //saveUrl: apiUrl + "/FormManager/AddFormData",
                             saveParams: {
                                 'tablename': item.TableName
                             },
@@ -1641,7 +1661,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     });
                 }
                 form.lable_div.append(form.swiper);
-                form.save.data('customForm', customForm);
+                if (form.save) {
+                    form.save.data('customForm', customForm);
+                }
             });
             _this.btnData();
             _this.transfer();
@@ -1663,17 +1685,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 myRuleGuid: _basepage.app.Cookie('RoleIds') ? _basepage.app.Cookie('RoleIds').split(',') : ['cb33b16e-b088-4124-92d8-918fdd2a5922'],
                 sourceData: [],
                 ruleUrl: '/data/Server/GetCustomFormRoleRelation.json',
-                //**//ruleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
+                //ruleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
                 ruleParams: {
                     'TableName': item.TableName
                 },
                 sourceUrl: "/data/Server/LoadFormView.json",
-                //**//sourceUrl: "/FormManager/LoadFormView",
+                //sourceUrl: "/FormManager/LoadFormView",
                 sourceParams: {
                     'formName': item.TableName
                 },
                 saveUrl: '/data/Server/AddFormData.json',
-                //**//saveUrl: apiUrl + "/FormManager/AddFormData",
+                //saveUrl: apiUrl + "/FormManager/AddFormData",
                 saveParams: {
                     'tablename': item.TableName
                 },
@@ -1705,6 +1727,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             swiper1.slides.each(function (index, val) {
                 var ele = $(this);
                 ele.on("click", function () {
+                    debugger;
                     setCurrentSlide(ele, index);
                     swiper2.slideTo(index, 0, false);
                 });
@@ -1824,11 +1847,292 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 $(this).data('customForm').save();
             });
         }
-
     };
     window.Nav = Nav;
 })();
 exports.Nav = Nav;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.DimensionsDataSelect = undefined;
+
+var _basepage = __webpack_require__(0);
+
+(function () {
+    var DimensionsDataSelect = function DimensionsDataSelect(options) {
+        var defaults = {
+            initCallback: function initCallback() {}, //加载前
+            completeCallback: function completeCallback() {}, //加载完成后
+            sourceUrl: {}, //数据源URL
+            sourceParams: {}, //数据源发送附带参数
+            sourceData: [], //直接数据源
+            singleSelect: true,
+            sourceConvertCall: undefined, //自定义转换数据
+            lable: ['工厂', '车间', '生产线', '设备', '工序', '产品', '班组'] //按照顺序加载
+        };
+        this.opts = $.extend({}, defaults, options);
+        this.init();
+        return this;
+    };
+    DimensionsDataSelect.prototype = {
+        init: function init() {
+            var _this = this,
+                opts = this.opts;
+            opts.initCallback(this.opts);
+            _this.initData();
+        },
+        convertData: function convertData(obj) {
+            //默认处理转换方法
+            var _this = this,
+                opts = this.opts;
+            var data = [];
+            //转换数据
+            var index_obj = 0;
+            for (var key in obj) {
+                if (obj[key] && obj[key] != null && key != 'FormTemplete') {
+                    var o = {
+                        'data': []
+                    };
+                    obj[key].forEach(function (item, index) {
+                        o.data.push({
+                            'name': item.Name,
+                            'id': item.Id
+                        });
+                    });
+                    data.push($.extend({}, {
+                        "tag": "button",
+                        "type": "button",
+                        "singleSelect": opts.singleSelect
+                    }, {
+                        'sourceData': o,
+                        'name': key,
+                        'lable': opts.lable[index_obj]
+                    }));
+                    index_obj++;
+                }
+            }
+            return data;
+        },
+        initData: function initData() {
+            var _this = this,
+                opts = this.opts;
+            if (!opts.sourceData || opts.sourceData.length === 0) {
+                opts.sourceUrl.get({
+                    data: opts.sourceParams,
+                    success: function success(obj) {
+                        //转换数据
+                        var data = opts.sourceConvertCall ? opts.sourceConvertCall(obj, _this) : _this.convertData(obj);
+                        _this.createComponent(data);
+                    }
+                });
+            } else {
+                _this.createComponent(opts.sourceData);
+            }
+        },
+        //创建Component表
+        createComponent: function createComponent(data) {
+            var _this = this;
+            var objs = {};
+            data.forEach(function (item) {
+                item._selfFrom = _this.opts._selfFrom;
+                objs[item.name] = new Buttons(item);
+            });
+            _this.ButtonsComponents = objs;
+            _this.opts.completeCallback(); //最终执行完后回调执行方法
+        },
+        getValue: function getValue() {
+            var _this = this;
+            var obj = {};
+            for (var key in _this.ButtonsComponents) {
+                var val = _this.ButtonsComponents[key].getValue();
+                if (val && val.length != 0) {
+                    obj[key] = val;
+                }
+            }
+            return obj;
+        },
+        setValue: function setValue(values) {
+            var _this = this;
+
+            var _loop = function _loop(key) {
+                button = _this.ButtonsComponents[key];
+                buttonOpts = button.opts;
+
+                values.forEach(function (item) {
+                    if (item.name === key) {
+                        if (item.value instanceof Array) {
+                            button.setValue(item.value);
+                        } else {
+                            var array = [];
+                            array.push(item.value);
+                            button.setValue(array);
+                        }
+                    }
+                });
+            };
+
+            for (var key in _this.ButtonsComponents) {
+                var button, buttonOpts;
+
+                _loop(key);
+            }
+        }
+    };
+    window.DimensionsDataSelect = DimensionsDataSelect;
+})();
+exports.DimensionsDataSelect = DimensionsDataSelect;
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.DataNav = undefined;
+
+var _basepage = __webpack_require__(0);
+
+(function () {
+    var DataNav = function DataNav(options) {
+        var defaults = {
+            tabComponents: {}, //每个Table都有自己的
+            initCallback: function initCallback() {}, //加载前
+            completeCallback: function completeCallback() {}, //加载完成后
+            sourceUrl: {}, //数据源URL
+            sourceParams: {}, //数据源发送附带参数
+            sourceData: [], //直接数据源
+            sourceConvertCall: undefined //自定义转换数据
+        };
+        this.opts = $.extend({}, defaults, options);
+        this.init();
+        return this;
+    };
+    DataNav.prototype = {
+        init: function init() {
+            var _this = this,
+                opts = this.opts;
+            opts.initCallback(this.opts);
+            _this.initData();
+        },
+        EventInit: function EventInit() {
+            var _this = this,
+                opts = this.opts;
+            opts.SwiperSelect = new Swiper(opts.ele_selectBody, {
+                slidesPerView: 8,
+                paginationClickable: true, //此参数设置为true时，点击分页器的指示点分页器会控制Swiper切换。
+                spaceBetween: 10, //slide之间的距离（单位px）。
+                freeMode: true, //默认为false，普通模式：slide滑动时只滑动一格，并自动贴合wrapper，设置为true则变为free模式，slide会根据惯性滑动且不会贴合。
+                loop: false //是否可循环
+            });
+            opts.SwiperBody = new Swiper(opts.ele_divBody, {
+                //freeModeSticky  设置为true 滑动会自动贴合  
+                direction: 'horizontal', //Slides的滑动方向，可设置水平(horizontal)或垂直(vertical)。
+                loop: false,
+                autoHeight: false
+            });
+        },
+        convertData: function convertData(data) {
+            //默认处理转换方法
+            var _this = this,
+                opts = this.opts;
+            var arr = [];
+            data.forEach(function (item) {
+                arr.push({
+                    'Id': item.FormTempleteId,
+                    'Name': item.FormListName,
+                    'TableName': item.ConfigFileName,
+                    'type': item.InputFrequency
+                });
+            });
+            return arr;
+        },
+        initData: function initData() {
+            var _this = this,
+                opts = this.opts;
+            if (!opts.sourceData || opts.sourceData.length === 0) {
+                opts.sourceUrl.get({
+                    data: opts.sourceParams,
+                    success: function success(obj) {
+                        //转换数据
+                        var data = opts.sourceConvertCall ? opts.sourceConvertCall(obj, _this) : _this.convertData(obj);
+                        _this.createComponent(data);
+                    }
+                });
+            } else {
+                _this.createComponent(opts.sourceData);
+            }
+        },
+        //创建Component表
+        createComponent: function createComponent(data) {
+            var _this = this,
+                opts = this.opts,
+                tabs = opts.tabs;
+            var context = $('<div class="container"></div>');
+            //tab内容
+            var selectBody = $('<div class="swiper-container swiper1"></div>');
+            //对应Tab的内容
+            var selectBody_wrapper = $('<div class="swiper-wrapper"></div>');
+            var divBody = $('<div class="swiper-container swiper2"></div>');
+            var divBody_wrapper = $('<div class="swiper-wrapper"></div>');
+            var swiper = [];
+            data.forEach(function (item, index) {
+                var cur = {};
+                cur.data = item;
+                cur.lab = $('<div class = "swiper-slide ">' + item.Name + '</div>');
+                cur.lab.click(function () {
+                    opts.tabComponents.forEach(function (it) {
+                        it.lab.removeClass("selected");
+                    });
+                    $(this).addClass("selected");
+                    opts.SwiperBody.slideTo($(this).index(), 0, false);
+                });
+                selectBody_wrapper.append(cur.lab);
+                cur.div = $('<div class="swiper-slide swiper-no-swiping"></div>');
+                swiper.push(cur);
+                divBody_wrapper.append(cur.div);
+            });
+            selectBody.append(selectBody_wrapper);
+            divBody.append(divBody_wrapper);
+            opts._selfFrom.html('');
+            context.append(selectBody).append(divBody);
+            opts._selfFrom.append(context);
+            opts._ele_context = context;
+            opts.ele_selectBody = selectBody;
+            opts.ele_divBody = divBody;
+            opts.tabComponents = swiper;
+            _this.opts.completeCallback(opts, _this); //最终执行完后回调执行方法
+            _this.EventInit();
+            _this.autoHeight();
+        },
+        autoHeight: function autoHeight() {
+            var _this = this,
+                opts = _this.opts;
+            opts.ele_divBody.height(opts._ele_context.height() - opts.ele_selectBody.height());
+        },
+        getValue: function getValue() {
+            //获取当前tab的信息
+            return null;
+        },
+        setValue: function setValue(values) {
+            //设置当前选中
+            return null;
+        }
+    };
+    window.DataNav = DataNav;
+})();
+exports.DataNav = DataNav;
 
 /***/ })
 /******/ ]);

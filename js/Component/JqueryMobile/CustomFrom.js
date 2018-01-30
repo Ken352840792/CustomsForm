@@ -8,7 +8,7 @@ import {
     TextNumber
 } from './Number/index';
 import {
-    TextData
+    DateSelect
 } from './Date/index';
 import {
     Buttons
@@ -22,25 +22,31 @@ import {
 import {
     Nav
 } from './Navigation/index';
+import {
+    DimensionsDataSelect
+} from './DimensionsDataSelect/index';
+import {
+    DataNav
+} from './DataNav/index';
 (function () {
     var componentMapping = {
         text: Text,
         number: TextNumber,
-        datetime: TextData,
+        datetime: DateSelect,
         button: Buttons
     };
     var customFrom = function (_self, options) {
         var defaults = {
-            saveUrl: '',
+            saveUrl: {},
             saveParams: {},
-            edit:false,
-            Id:'',//开启编辑后会使用ID
-            ruleUrl: '',
+            edit: false,
+            Id: '', //开启编辑后会使用ID
+            ruleUrl: {},
             ruleParams: {},
             ruleData: [],
             myRuleData: [],
             myRuleGuid: '',
-            sourceUrl: '',
+            sourceUrl: {},
             sourceParams: {},
             sourceData: [],
             componentsInitCount: 0,
@@ -50,13 +56,6 @@ import {
         };
         this._self_ = _self,
             this.opts = $.extend({}, defaults, options),
-            this.server = app.server;
-        if (this.opts.sourceData.length === 0 && !this.opts.sourceUrl) return;
-        this.server.add({
-            ruleUrl: this.opts.ruleUrl,
-            sourceUrl: this.opts.sourceUrl,
-            saveUrl: this.opts.saveUrl
-        });
         this.init();
     };
     customFrom.prototype = {
@@ -80,7 +79,7 @@ import {
                         item.completeCallback = function () {
                             opts.componentsFactCompleteCount += 1;
                             if (opts.componentsFactCompleteCount === opts.componentsInitCount) {
-                                opts.completeCallback(opts);
+                                opts.completeCallback(opts,_this);
                             }
                         };
                         opts.components[componentName] = new componentMapping[item.type](item);
@@ -90,7 +89,6 @@ import {
                                 opts.components[componentName].input.on(e, typeof item.events[e] === "string" ? Function("return " + item.events[e])() : item.events[e]);
                             }
                         }
-
                     }
                 });
             });
@@ -99,14 +97,14 @@ import {
             var _this = this,
                 opts = this.opts;
             if (opts.sourceData.length === 0) {
-                _this.server.sourceUrl.get({
+               opts.sourceUrl.get({
                     data: opts.sourceParams,
                     success: function (obj) {
                         //返回的是HTML
                         var html = $('<div style="display:none;"><div>');
                         $('body').append(html);
                         html.html(obj);
-                        opts.sourceData = _this.convertData();
+                        opts.sourceData = _this.convertData(html);
                         html.remove();
                         callback();
                     }
@@ -115,11 +113,10 @@ import {
                 callback();
             }
         },
-        convertData: function () {
+        convertData: function (html) {
             var _this = this;
             var array = [];
-            
-            var formName=_this.opts.sourceParams.formName;
+            var formName = _this.opts.sourceParams.formName;
             var defaultsData = formSetting[formName].defaults;
             var attributes = formSetting[formName].attributes;
             var validateMsg = formSetting[formName].validateMsg;
@@ -136,18 +133,8 @@ import {
                     _events = events[name],
                     _customEvent = customevents[name];
                 if (!_defaults) return;
-                var type=_defaults['widget-type']==="input"?'text':_defaults['widget-type'];
-                // if(){
-                //     type='text';
-                // }else{
-
-                // }
-                // if (_defaults.tag === 'input') {
-                //     type = ? _defaults.type : 'text';
-                // } else {
-                //     type = _defaults.tag;
-                // }
-                var input = $('#'+_this.opts.sourceParams.formName+' [name=' + name + "]")[0];
+                var type = _defaults['widget-type'] === "input" ? 'text' : _defaults['widget-type'];
+                var input = html.find('[name=' + name + "]")[0];
                 var cur = {
                     type: type,
                     name: name,
@@ -176,24 +163,20 @@ import {
             var _this = this,
                 opts = this.opts;
             if (opts.ruleData.length === 0) {
-                _this.server.ruleUrl.get({
+                opts.ruleUrl.get({
                     data: opts.ruleParams,
                     async: false,
                     success: function (obj) {
-                        // var arr=[];
-                        // for (const key in obj) {
-                        //     arr.push({'name':key,'roleGuids':obj[key]}); 
-                        // }
                         opts.ruleData = obj;
                     }
                 });
             }
             opts.sourceData.forEach(function (item) {
                 opts.ruleData.forEach(function (ruleItem) {
-                    var is=false;
-                    opts.myRuleGuid.forEach(function(myguid){
-                        if(ruleItem.roleGuids.indexOf(myguid)!==-1){
-                            is=true;
+                    var is = false;
+                    opts.myRuleGuid.forEach(function (myguid) {
+                        if (ruleItem.roleGuids.indexOf(myguid) !== -1) {
+                            is = true;
                         }
                     });
                     if (ruleItem.name === item.name && is) {
@@ -268,18 +251,20 @@ import {
         save: function () {
             var _this = this,
                 opts = this.opts;
-                var is=false;
+            var is = false;
             if (_this.valid()) {
                 var params = $.extend({}, opts.saveParams, _this.getValue());
-                if(opts.edit){
-                    $.extend(params,{Id:opts.Id});
+                if (opts.edit) {
+                    $.extend(params, {
+                        Id: opts.Id
+                    });
                 }
-                _this.server.saveUrl.post({
+                opts.saveUrl.post({
                     data: params,
-                    async:false,
+                    async: false,
                     success: function (obj) {
                         msgShowInfo('提交成功');
-                        is=true;
+                        is = true;
                     }
                 });
             }

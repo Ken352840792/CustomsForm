@@ -7,17 +7,17 @@ import {
             form: {},
             arr: [],
             //**//initData: [],
-            initData: apiUrl + '/FormManager/GetFormDataList',
-             //**//initData: '/data/Server/GetFormDataList.json',
+            //initData: apiUrl + '/FormManager/GetFormDataList',
+            initData: '/data/Server/GetFormDataList.json',
             initDataParams: {
                 pageindex: 1,
                 pagesize: 1,
                 order: 'createTime desc'
             },
-            ButtonsSelectUrl: apiUrl + '/FormList/GetFormListById/1',
-            //**//ButtonsSelectUrl: '/data/Server/GetFormListById.json',
-            navUrl: apiUrl + '/FormList/Select',
-            //**//navUrl: '/data/Server/Select.json',
+            //ButtonsSelectUrl: apiUrl + '/FormList/GetFormListById/1',
+            ButtonsSelectUrl: '/data/Server/GetFormListById.json',
+            //navUrl: apiUrl + '/FormList/Select',
+            navUrl: '/data/Server/Select.json',
             MultiData: {},
             curMultiData: {}, //当前多维数据选择的项
             navParams: {},
@@ -144,8 +144,8 @@ import {
                             'age': '年龄',
                             'birthday':'出生年月日'
                         },
-                        //**//delUrl: '/data/del.json',
-                        delUrl: apiUrl+'/FormManager/DelFormData',
+                        delUrl: '/data/del.json',
+                        //delUrl: apiUrl+'/FormManager/DelFormData',
                         delParams: {
                             'tableName': item.TableName
                         },
@@ -159,18 +159,18 @@ import {
                             },
                             myRuleGuid: app.Cookie('RoleIds') ? app.Cookie('RoleIds').split(',') : ['cb33b16e-b088-4124-92d8-918fdd2a5922'],
                             sourceData: [],
-                            //**//ruleUrl: '/data/Server/GetCustomFormRoleRelation.json',
-                            ruleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
+                            ruleUrl: '/data/Server/GetCustomFormRoleRelation.json',
+                            //ruleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
                             ruleParams: {
                                 'TableName': item.TableName
                             }, 
-                            //**//sourceUrl: "/data/Server/LoadFormView.json",
-                            sourceUrl: "/FormManager/LoadFormView",
+                            sourceUrl: "/data/Server/LoadFormView.json",
+                            //sourceUrl: "/FormManager/LoadFormView",
                             sourceParams: {
                                 'formName': item.TableName
                             },
-                            //**//saveUrl: '/data/Server/AddFormData.json',
-                            saveUrl: apiUrl + "/FormManager/AddFormData",
+                            saveUrl: '/data/Server/AddFormData.json',
+                            //saveUrl: apiUrl + "/FormManager/AddFormData",
                             saveParams: {
                                 'tablename': item.TableName
                             },
@@ -204,18 +204,18 @@ import {
             return data.customFrom({
                 myRuleGuid: app.Cookie('RoleIds') ? app.Cookie('RoleIds').split(',') : ['cb33b16e-b088-4124-92d8-918fdd2a5922'],
                 sourceData: [],
-                //**//ruleUrl: '/data/Server/GetCustomFormRoleRelation.json',
-                ruleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
+                ruleUrl: '/data/Server/GetCustomFormRoleRelation.json',
+                //ruleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
                 ruleParams: {
                     'TableName': item.TableName
                 },
-                //**//sourceUrl: "/data/Server/LoadFormView.json",
-                sourceUrl: "/FormManager/LoadFormView",
+                sourceUrl: "/data/Server/LoadFormView.json",
+                //sourceUrl: "/FormManager/LoadFormView",
                 sourceParams: {
                     'formName': item.TableName
                 },
-                //**//saveUrl: '/data/Server/AddFormData.json',
-                saveUrl: apiUrl + "/FormManager/AddFormData",
+                saveUrl: '/data/Server/AddFormData.json',
+                //saveUrl: apiUrl + "/FormManager/AddFormData",
                 saveParams: {
                     'tablename': item.TableName
                 },
@@ -247,6 +247,7 @@ import {
             swiper1.slides.each(function (index, val) {
                 var ele = $(this);
                 ele.on("click", function () {
+                    debugger;
                     setCurrentSlide(ele, index);
                     swiper2.slideTo(index, 0, false);
                 });

@@ -14,5 +14,12 @@
         "FormName": "学生表2",
         "FormListName": "新增维度2",
         "InputFrequency": 1
+    },
+    {
+        "FormTempleteId": "9cb3133c-2605-4b4c-9f26-a873009af1c2",
+        "ConfigFileName": "t_student",
+        "FormName": "学生表3",
+        "FormListName": "新增维度2",
+        "InputFrequency": 1
     }]
 }

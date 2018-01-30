@@ -1,7 +1,7 @@
 (function(){
     var app = {
         global: {
-            debug: 0,
+            debug: 1,
             remoteBaseUri:'',
             debugBaseUri:''
         },

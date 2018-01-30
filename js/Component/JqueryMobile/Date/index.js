@@ -1,5 +1,5 @@
 (function () {
-    let TextData = function (options) {
+    let DateSelect = function (options) {
         let defaults = {
             Form: {},
             _selfFrom: '', //要添加到的位置
@@ -7,11 +7,12 @@
             completeCallback: function () {}, //加载完成后
             value: "" //双向数据绑定字段
         };
+        debugger;
         this.opts = $.extend({}, defaults, options);
         this.init();
         return this;
     };
-    TextData.prototype = {
+    DateSelect.prototype = {
         init: function () {
             var _this = this,
                 opts = this.opts,
@@ -81,8 +82,8 @@
             this.opts.des = val;
         }
     };
-    window.TextData = TextData;
+    window.DateSelect = DateSelect;
 })();
 export {
-    TextData
+    DateSelect
 }
