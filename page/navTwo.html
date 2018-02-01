@@ -24,20 +24,21 @@
     <script src="/js/plugins/paging.js"></script>
 
     <script src="/built/bundle.js"></script>
-
+    <script src='/js/Script/index.js'></script>
     <link rel="stylesheet" href="/css/index.css">
+
     <style>
         .ui-btn.ui-btn-inline {
             min-width: 100px;
         }
-
+        
         .grid-div-label {
             width: 20%;
             float: left;
             position: relative;
             line-height: 48px;
         }
-
+        
         .overflow-auto .grid-div-content {
             width: 80%;
             display: inline-block;
@@ -45,28 +46,28 @@
             overflow: hidden;
             float: left;
         }
-
+        
         .grid-div-tool {
             width: 0px;
             float: right;
             left: -35px;
             position: relative;
         }
-
+        
         .hr-line {
             border: 1px dashed #dcdcdc;
         }
-
+        
         .clearfix:before,
         .clearfix:after {
             content: "";
             display: table;
         }
-
+        
         .clearfix:after {
             clear: both;
         }
-
+        
         .clearfix {
             *zoom: 1;
             /*IE/7/6*/
@@ -77,11 +78,10 @@
             padding: 0;
             margin: 0;
         }
-
         /*
               * 外面盒子样式---自己定义
               */
-
+        
         .page_div {
             margin-top: 20px;
             margin-bottom: 20px;
@@ -93,11 +93,10 @@
             float: right;
             box-sizing: border-box;
         }
-
         /*
              * 页数按钮样式
              */
-
+        
         .page_div a {
             min-width: 30px;
             height: 33px;
@@ -112,43 +111,43 @@
             display: inline-block;
             width: 70px !important;
         }
-
+        
         #firstPage,
         #lastPage {
             width: 50px;
             color: #0073A9;
             border: 1px solid #0073A9 !important;
         }
-
+        
         #prePage,
         #nextPage {
             width: 70px;
             color: #0073A9;
             border: 1px solid #0073A9 !important;
         }
-
+        
         .page_div .current {
             background-color: #0073A9;
             border-color: #0073A9;
             color: #FFFFFF;
         }
-
+        
         .totalPages {
             margin: 0 10px;
         }
-
+        
         .totalPages span,
         .totalSize span {
             color: #0073A9;
             margin: 0 5px;
         }
-
+        
         .ui-field-contain label {
             float: left !important;
             width: 20% !important;
             margin: .5em 2% 0 0 !important;
         }
-
+        
         .ui-field-contain .ui-body-inherit {
             float: left !important;
             width: 78% !important;
@@ -163,28 +162,32 @@
             border: 1px solid #d3d3d3;
             text-align: center !important;
         }
-
+        
         table input[type=checkbox] {
             -webkit-appearance: checkbox;
             margin-top: -5px;
         }
-
+        
         table td {
             text-align: center !important;
         }
-
+        
         table thead .ui-checkbox {
             width: 1em;
         }
-
+        
         .tableOp {
             margin-left: 38%;
         }
-
+        
         table tbody a {
             float: left;
             border-radius: 20px;
             margin-left: 5% !important;
+        }
+        
+        .container {
+            height: 649px;
         }
     </style>
 </head>
@@ -199,7 +202,7 @@
                 <div data-role="content">
                     <div data-role="tabs">
                         <div>
-                            <div data-role="navbar">
+                            <div data-role="navbar" id="ui-navbar">
                                 <ul class="mytabs" id="ul_label">
                                     <li>
                                         <a class="ui-btn-active">维度选择</a>
@@ -215,18 +218,8 @@
                                     <a class="ui-btn ui-mini ui-corner-all ui-btn-inline ui-btn-color" id="btn">确定</a>
                                 </div>
                                 <div class="zdy_box  fl">
-                                    <div class="container">
-                                        <div class="swiper-container swiper1">
-                                            <div class="swiper-wrapper" id="lable">
+                                    <div id="customizeFrom">
 
-                                            </div>
-                                        </div>
-
-                                        <div class="swiper-container swiper2">
-                                            <div class="swiper-wrapper" id="lable_div">
-
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -237,23 +230,17 @@
         </div>
 
 </body>
-<script>
+<!--<script>
     function msgShowInfo(msg) {
         alert(msg);
     }
-    $(function () {
-        app.server.add({
-            DimensionsDataSelectUrl: '/data/Server/GetFormListById.json'
-        });
-        var DDS = new DimensionsDataSelect({
-            _selfFrom: $('#form'),
-            sourceUrl: app.server.DimensionsDataSelectUrl
-        });
-        $('#btn').click(function () {
-           console.log(DDS.getValue());
+    $(function() {
+
+        $('#btn').click(function() {
+            console.log(DDS.getValue());
         });
 
     })
-</script>
+</script>-->
 
 </html>

@@ -1,14 +1,28 @@
-(function(){
+(function() {
     var app = {
         global: {
             debug: 1,
-            remoteBaseUri:'',
-            debugBaseUri:''
+            remoteBaseUri: '',
+            debugBaseUri: ''
         },
-        deepClone: function (obj) {
+        deepClone: function(obj) {
             return JSON.parse(JSON.stringify(obj));
         },
-        Cookie: function (name, value, options) {
+        isObjectValueEqual: function(a, b) {
+            var aProps = Object.getOwnPropertyNames(a);
+            var bProps = Object.getOwnPropertyNames(b);
+            if (aProps.length != bProps.length) {
+                return false;
+            }
+            for (var i = 0; i < aProps.length; i++) {
+                var propName = aProps[i];
+                if (a[propName] !== b[propName]) {
+                    return false;
+                }
+            }
+            return true;
+        },
+        Cookie: function(name, value, options) {
             if (typeof value != 'undefined') {
                 // name and value given, set cookie
                 options = options || {};
@@ -62,14 +76,13 @@
                 if (jQuery.evalJSON && cookieValue && cookieValue.match(/^\s*\{/)) {
                     try {
                         cookieValue = jQuery.evalJSON(cookieValue);
-                    } catch (e) {
-                    }
+                    } catch (e) {}
                 }
                 return cookieValue;
             }
         }
     };
-    var srvFn = function (url) {
+    var srvFn = function(url) {
         //this.url = url.replace(/^['/']/, '');
         if (!app.global.debug) {
             this.url = app.global.remoteBaseUri + url;
@@ -77,22 +90,23 @@
             this.url = app.global.debugBaseUri + url;
         }
     };
+
     function makeParam(postType, option) {
         var opts = app.deepClone(option);
         var optionDefault = {
-            befoureFn: function (xhr, data2) {
+            befoureFn: function(xhr, data2) {
                 var authorization = "Basic " + encodeURI(app.Cookie("Authorization"));
                 xhr.setRequestHeader("Authorization", authorization);
                 option.beforeSend ? option.beforeSend() : '';
             },
-            completeFn: function () {
+            completeFn: function() {
                 option.complete ? option.complete() : '';
             },
-            errorFn: function () {
+            errorFn: function() {
                 option.error ? option.error() : '';
             },
-            successFn: function (json) {
-                if (opts.forceSuccess) {//是否强制回调
+            successFn: function(json) {
+                if (opts.forceSuccess) { //是否强制回调
                     option.success ? option.success(json) : '';
                 } else {
                     if (json.Status) {
@@ -105,14 +119,14 @@
         };
         opts.url = option.url ? option.url : this.url;
         opts.beforeSend = optionDefault.befoureFn;
-        opts.type =  !app.global.debug?postType:'get';
+        opts.type = !app.global.debug ? postType : 'get';
         opts.complete = optionDefault.completeFn;
         opts.success = optionDefault.successFn;
         opts.error = optionDefault.errorFn;
         opts.dataType = option.dataType ? option.dataType : 'json';
-    
+
         if (postType == "DELETE" || postType == 'PUT') {
-    
+
             //临时解决
             opts.url += "?";
             opts.contentType = option.contentType ? option.contentType : 'application/json';
@@ -124,31 +138,31 @@
         }
         return opts;
     }
-    
+
     srvFn.prototype = {
-        toString: function () {
+        toString: function() {
             return this.url;
         },
-        post: function (option) {
+        post: function(option) {
             $.ajax(makeParam.call(this, 'POST', option));
         },
-        get: function (option) {
+        get: function(option) {
             $.ajax(makeParam.call(this, 'GET', option));
         },
-        del: function (option) {
+        del: function(option) {
             $.ajax(makeParam.call(this, 'DELETE', option));
-    
+
         },
-        put: function (option) {
+        put: function(option) {
             $.ajax(makeParam.call(this, 'PUT', option));
         }
     };
-    app.basepage=function(){
+    app.basepage = function() {
         var srv = {
-            add: function (uriHashSet) {
+            add: function(uriHashSet) {
                 var key;
                 for (key in uriHashSet) {
-                    if(uriHashSet[key]){
+                    if (uriHashSet[key]) {
                         this[key] = new srvFn(uriHashSet[key]);
                     }
                 }
@@ -157,6 +171,6 @@
         app.server = srv;
         return app;
     }
-    window.app=new app.basepage();
+    window.app = new app.basepage();
 })();
-export {app}
+export { app }

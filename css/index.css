@@ -22,10 +22,11 @@
  }
  
  .grid-div-label {
-     width: 10%;
+     width: 10% !important;
      float: left;
      position: relative;
      line-height: 48px;
+     color: #333;
  }
  
  .overflow-auto .grid-div-content {
@@ -111,6 +112,7 @@
      position: absolute;
      bottom: 20px;
      right: 20px;
+     text-shadow: 0 0 !important;
  }
  
  .ul_selected {
@@ -152,6 +154,7 @@
      -webkit-align-items: center;
      align-items: center;
      cursor: pointer;
+     text-shadow: 0 0 !important;
  }
  
  .swiper2 {
@@ -170,11 +173,152 @@
      color: #333333;
  }
  
- .grid-div-label {
-     color: #333;
-     width: 19%;
- }
- 
  #form {
      overflow: auto;
  }
+ /* table 表格样式 */
+ 
+ .page_div {
+     margin-top: 20px;
+     margin-bottom: 20px;
+     font-size: 15px;
+     font-family: "microsoft yahei";
+     color: #666666;
+     margin-right: 10px;
+     padding-left: 20px;
+     float: right;
+     box-sizing: border-box;
+ }
+ /*
+             * 页数按钮样式
+             */
+ 
+ .page_div a {
+     min-width: 30px;
+     height: 33px;
+     border: 1px solid #dce0e0!important;
+     text-align: center;
+     margin: 0 4px;
+     cursor: pointer;
+     border-radius: 20px;
+     line-height: 33px;
+     color: #666666;
+     font-size: 13px;
+     display: inline-block;
+     width: 50px !important;
+ }
+ 
+ #firstPage,
+ #lastPage {
+     width: 50px;
+     color: #0073A9;
+     border: 1px solid #0073A9!important;
+ }
+ 
+ #prePage,
+ #nextPage {
+     width: 70px;
+     color: #0073A9;
+     border: 1px solid #0073A9!important;
+ }
+ 
+ .page_div .current {
+     background-color: #0073A9;
+     border-color: #0073A9;
+     color: #FFFFFF;
+ }
+ 
+ .totalPages {
+     margin: 0 10px;
+ }
+ 
+ .totalPages span,
+ .totalSize span {
+     color: #0073A9;
+     margin: 0 5px;
+ }
+ 
+ .ui-field-contain label {
+     float: left !important;
+     width: 20% !important;
+     margin: .5em 2% 0 0 !important;
+     text-align: left;
+ }
+ 
+ .ui-field-contain .ui-body-inherit {
+     float: left !important;
+     width: 78% !important;
+     -webkit-box-sizing: border-box !important;
+     -moz-box-sizing: border-box !important;
+     box-sizing: border-box !important;
+ }
+ /* 按钮样式 */
+ 
+ table thead th {
+     background: #e6e6e6;
+     border: 1px solid #d3d3d3;
+     text-align: center !important;
+ }
+ 
+ table input[type=checkbox] {
+     -webkit-appearance: checkbox;
+     margin-top: -5px;
+ }
+ 
+ table td {
+     text-align: center !important;
+ }
+ 
+ table thead .ui-checkbox {
+     width: 1em;
+ }
+ 
+ .tableOp {
+     margin-left: 38%;
+ }
+ 
+ .ui-btn {
+     line-height: 1.7 !important;
+ }
+ 
+ table tbody .ui-btn {
+     float: left;
+     border-radius: 20px;
+     margin: 0.2em 0 0.2em 5% !important;
+ }
+ /* table 修整 */
+ 
+ .ui-checkbox {
+     width: auto !important;
+ }
+ 
+ .ui-field-contain {
+     border-bottom-width: 0px !important;
+ }
+ 
+ .ui-checkbox input {
+     width: 18px;
+     height: 18px;
+     left: 0.266em;
+ }
+ /*.ui-table-reflow thead tr th,
+ .ui-table-reflow tbody tr td {
+     vertical-align: center !important;
+ }*/
+ 
+ .ui-table th,
+ .ui-table td {
+     /*padding: 0.5em 0.4em 0.2em;*/
+ }
+ 
+ .ui-loader {
+     left: 25% !important;
+ }
+ 
+ .tableOp {
+     margin-left: 30% !important;
+ }
+ /* 这句代码只有在正式版本上面才加 */
+ /*.swiper-wrapper {
+     height: auto !important;
+ }*/

@@ -2,15 +2,15 @@ import {
     app
 } from "../../../Comment/basepage";
 
-(function () {
-    let DimensionsDataSelect = function (options) {
+(function() {
+    let DimensionsDataSelect = function(options) {
         let defaults = {
-            initCallback: function () {}, //加载前
-            completeCallback: function () {}, //加载完成后
+            initCallback: function() {}, //加载前
+            completeCallback: function() {}, //加载完成后
             sourceUrl: {}, //数据源URL
             sourceParams: {}, //数据源发送附带参数
             sourceData: [], //直接数据源
-            singleSelect:true,
+            singleSelect: true,
             sourceConvertCall: undefined, //自定义转换数据
             lable: ['工厂', '车间', '生产线', '设备', '工序', '产品', '班组'] //按照顺序加载
         };
@@ -19,15 +19,15 @@ import {
         return this;
     };
     DimensionsDataSelect.prototype = {
-        init: function () {
+        init: function() {
             var _this = this,
                 opts = this.opts;
             opts.initCallback(this.opts);
             _this.initData();
         },
-        convertData: function (obj) { //默认处理转换方法
+        convertData: function(obj) { //默认处理转换方法
             var _this = this,
-            opts = this.opts;
+                opts = this.opts;
             var data = [];
             //转换数据
             var index_obj = 0;
@@ -36,7 +36,7 @@ import {
                     var o = {
                         'data': []
                     };
-                    obj[key].forEach(function (item, index) {
+                    obj[key].forEach(function(item, index) {
                         o.data.push({
                             'name': item.Name,
                             'id': item.Id
@@ -56,13 +56,13 @@ import {
             }
             return data;
         },
-        initData: function () {
+        initData: function() {
             var _this = this,
-                    opts = this.opts;
+                opts = this.opts;
             if (!opts.sourceData || opts.sourceData.length === 0) {
                 opts.sourceUrl.get({
                     data: opts.sourceParams,
-                    success: function (obj) {
+                    success: function(obj) {
                         //转换数据
                         var data = opts.sourceConvertCall ? opts.sourceConvertCall(obj, _this) : _this.convertData(obj);
                         _this.createComponent(data);
@@ -73,17 +73,17 @@ import {
             }
         },
         //创建Component表
-        createComponent: function (data) {
+        createComponent: function(data) {
             var _this = this;
             var objs = {};
-            data.forEach(function (item) {
-                item._selfFrom=_this.opts._selfFrom;
+            data.forEach(function(item) {
+                item._selfFrom = _this.opts._selfFrom;
                 objs[item.name] = new Buttons(item);
             });
             _this.ButtonsComponents = objs;
-            _this.opts.completeCallback();//最终执行完后回调执行方法
+            _this.opts.completeCallback(); //最终执行完后回调执行方法
         },
-        getValue: function () {
+        getValue: function() {
             var _this = this;
             var obj = {};
             for (const key in _this.ButtonsComponents) {
@@ -94,12 +94,12 @@ import {
             }
             return obj;
         },
-        setValue: function (values) {
+        setValue: function(values) {
             var _this = this;
             for (const key in _this.ButtonsComponents) {
-                var button =_this.ButtonsComponents[key],
+                var button = _this.ButtonsComponents[key],
                     buttonOpts = button.opts;
-                values.forEach(function (item) {
+                values.forEach(function(item) {
                     if (item.name === key) {
                         if (item.value instanceof Array) {
                             button.setValue(item.value);
