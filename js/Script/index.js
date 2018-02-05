@@ -28,16 +28,16 @@ $(function() {
     var Business = {
         // 数据暂存
         data: {
-            isTrue: true,
             form: {}
         },
         init: function() {
             var _this = this;
             data = _this.data;
-            this.tableSwitch();
-            this.buttonForm();
-            this.boxHeight();
-            this.buttonLogic();
+            _this.customizeFrom();
+            _this.tableSwitch();
+            _this.buttonForm();
+            _this.boxHeight();
+            _this.buttonLogic();
         },
         // table 切换
         tableSwitch: function(element) {
@@ -47,10 +47,10 @@ $(function() {
                 var index = $(this).index();
 
                 $("#ul_box > div").eq(index).addClass("ul_selected").siblings().removeClass("ul_selected");
-                if (index === 1 && data.isTrue) {
-                    _this.customizeFrom();
-                    data.isTrue = false;
-                }
+                // if (index === 1 && data.isTrue) {
+                //     _this.customizeFrom();
+                //     data.isTrue = false;
+                // }
             });
         },
         // 设置高度
@@ -171,7 +171,7 @@ $(function() {
                 var newdata = data.DDS.getValue();
                 if (!app.isObjectValueEqual(newdata, data.form)) {
                     data.form = newdata;
-                    data.isTrue = true;
+                    _this.customizeFrom();
                 }
                 $('#ul_a').click();
             });

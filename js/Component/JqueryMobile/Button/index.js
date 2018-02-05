@@ -1,16 +1,16 @@
 import {
     app
 } from "../../../Comment/basepage";
-(function () {
-    let Buttons = function (options) {
+(function() {
+    let Buttons = function(options) {
         let defaults = {
             Form: {},
             buttons: {},
             key: "id", //唯一键
             keyName: 'name', //显示的名称
             singleSelect: true, //单选多选
-            initCallback:function(){},//加载前
-            completeCallback:function(){},//加载完成后
+            initCallback: function() {}, //加载前
+            completeCallback: function() {}, //加载完成后
             value: [] //双向数据绑定字段
         };
         this.opts = $.extend({}, defaults, options);
@@ -22,7 +22,7 @@ import {
         return this;
     };
     Buttons.prototype = {
-        init: function () {
+        init: function() {
             let _this = this;
             _this.opts.initCallback(this.opts);
             _this.createComponent()
@@ -30,25 +30,25 @@ import {
             _this.behavior()
         },
         // 双向数据绑定
-        Events: function () {
+        Events: function() {
             var _this = this,
                 opts = this.opts,
                 arrData = opts.sourceData.data;
             Object.defineProperty(opts, 'des', {
-                get: function () { //获取数据
+                get: function() { //获取数据
                     return this.value;
                 },
-                set: function (arr) { //设置值
+                set: function(arr) { //设置值
                     for (let a in opts.buttons) {
                         opts.buttons[a].removeClass('ui-btn-active');
                     }
-                    opts.sourceData.data.forEach(function(item){
-                        item.isTrue =false;
+                    opts.sourceData.data.forEach(function(item) {
+                        item.isTrue = false;
                     });
                     arr.forEach((it) => {
-                        opts.sourceData.data.forEach(function(item){
-                            if(item[opts.key]===it){
-                                item.isTrue =true;
+                        opts.sourceData.data.forEach(function(item) {
+                            if (item[opts.key] === it) {
+                                item.isTrue = true;
                             }
                         });
 
@@ -58,20 +58,20 @@ import {
                 }
             });
         },
-        getValue: function () {
-            if(this.opts.singleSelect){
+        getValue: function() {
+            if (this.opts.singleSelect) {
                 return this.opts.value[0];
-            }else{
-                 
+            } else {
+
                 return this.opts.value;
             }
-           
+
         },
-        setValue:function(arr){
+        setValue: function(arr) {
             this.opts.des = arr;
         },
         // 创建菜单
-        createComponent: function () {
+        createComponent: function() {
             let _this = this,
                 opts = this.opts,
                 form = opts.Form;
@@ -85,7 +85,7 @@ import {
                 _this.server.ButtonsSourceUrl.get({
                     data: {},
                     async: false,
-                    success: function (data) {
+                    success: function(data) {
                         Data == data.sourceData.data;
                         Component(Data)
                     }
@@ -111,25 +111,25 @@ import {
                 opts._selfFrom.append(form.content);
                 opts._selfFrom.append(form.hr);
                 setTimeout(() => {
-                    opts.completeCallback(opts,_this);
+                    opts.completeCallback(opts, _this);
                 }, 5000);
-              
+
             }
         },
         // 按钮的行为变化
-        behavior: function () {
+        behavior: function() {
             let _this = this,
                 opts = this.opts,
                 form = opts.Form;
             // 实现按钮的展开或者关闭
-            form.arrow.on('click', function () {
+            form.arrow.on('click', function() {
                 _this.CollapseClick()
             })
             this.Multiple(opts.sourceData.data)
         },
 
         // 展开关闭操作
-        CollapseClick: function () {
+        CollapseClick: function() {
             let _this = this,
                 opts = this.opts,
                 form = opts.Form;
@@ -145,38 +145,49 @@ import {
             }
         },
         // 按钮单多选操作
-        Multiple: function (data) {
-            let _this = this,
+        Multiple: function Multiple(data) {
+            var _this = this,
                 opts = this.opts,
                 arr = data;
-            opts.Form.Now.delegate('a', 'click', function (ev) {
-                if (opts.singleSelect) {
-                    arr.forEach(function (item) {
-                        item.isTrue = false;
+            opts.Form.Now.delegate('a', 'click', function(ev) {
+                var model = $(this).data('model');
+                var arrData = [];
+
+                function non() {
+                    arr.forEach(function(item) {
+                        if (model === item) {
+                            item.isTrue = !item.isTrue;
+                        }
                     });
                 }
-                var model = $(this).data('model');
-                let arrData = [];
-                arr.forEach(function(item){
-                    if (model === item) {
-                        item.isTrue = !item.isTrue;
+                if (opts.singleSelect) {
+                    if (opts.des.indexOf(model[opts.key]) === -1) {
+                        arr.forEach(function(item) {
+                            item.isTrue = false;
+                        });
+                        non();
+                    } else {
+                        non();
                     }
-                });
-                arr.forEach(function(item){
+                } else {
+                    non();
+                }
+
+                arr.forEach(function(item) {
                     if (item.isTrue) {
-                        arrData.push(item[opts.key])
+                        arrData.push(item[opts.key]);
                     }
                 });
-                 
+
                 // 点击的时候如果有回调函数执行回调函数
-                let callback = model.callback ? model.callback : null;
+                var callback = model.callback ? model.callback : null;
                 if (callback && model.isTrue) {
                     callback();
                 }
                 opts.des = arrData;
-            })
+            });
         }
-    }
+    };
     window.Buttons = Buttons;
 })();
 export {

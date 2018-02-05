@@ -1,13 +1,13 @@
-(function () {
+(function() {
     //绑定一个A标签
-    let Popup = function (options) {
+    let Popup = function(options) {
         let defaults = {
             Form: {},
             _selfFrom: '', //A标签
             title: '你好标题', //标题
             content: '', //内容
-            buttons: ['取  消','确    认'], //
-            callback: function () {},
+            buttons: ['取  消', '确    认'], //
+            callback: function() {},
         };
         this.opts = $.extend({}, defaults, options);
         this.opts.iid = 'pup_' + parseInt(Math.random() * (1000000000 - 1 + 1) + 1, 10);;
@@ -15,20 +15,20 @@
         return this;
     };
     Popup.prototype = {
-        init: function () {
+        init: function() {
             var _this = this,
                 opts = this.opts,
                 form = opts.Form;
             _this.createComponent();
         },
-        open:function(){
-            $('#'+this.opts.iid).popup('open');
+        open: function() {
+            $('#' + this.opts.iid).popup('open');
         },
-        close:function(){
-            $('#'+this.opts.iid).popup('close');
+        close: function() {
+            $('#' + this.opts.iid).popup('close');
         },
         //创建Component表
-        createComponent: function () {
+        createComponent: function() {
             var _this = this,
                 opts = this.opts,
                 form = opts.Form;
@@ -44,22 +44,22 @@
             var group = $(' <div data-role="footer"></div>');
             var h1 = $('<h1></h1>');
 
-            opts.buttons.forEach(function (item, index) {
-                var but = $('<span class="ui-table-columntoggle-btn ui-btn ui-btn-a ui-corner-all ui-shadow ui-mini">' + item + '</span>');
-                but.data('index',index);
-                but.click(function(){
-                   opts.callback($(this).data('index'));
+            opts.buttons.forEach(function(item, index) {
+                var but = $('<span class="ui-table-columntoggle-btn ui-btn ui-btn-a ui-corner-all ui-shadow ui-mini customize-btn">' + item + '</span>');
+                but.data('index', index);
+                but.click(function() {
+                    opts.callback($(this).data('index'));
                 });
                 h1.append(but);
             });
             form.popupBody.append(group.append(h1));
             opts._selfFrom.after(form.popupBody);
-           $('body').trigger('create');
+            $('body').trigger('create');
         },
-        getValue: function () {
+        getValue: function() {
             return undefined;
         },
-        setValue: function (arr) {
+        setValue: function(arr) {
             return undefined;
         }
     };

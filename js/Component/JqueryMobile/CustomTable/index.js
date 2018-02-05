@@ -304,7 +304,7 @@ import {
             var add = opts.Events.Add;
             if (add.state) {
                 //渲染添加
-                form.Add = $('<a style="float: right;" class="ui-table-columntoggle-btn ui-btn ui-btn-a ui-corner-all ui-shadow ui-mini">新 增</a>');
+                form.Add = $('<a style="float: right;" class="ui-table-columntoggle-btn ui-btn ui-btn-a ui-corner-all ui-shadow ui-mini customize-btn">新 增</a>');
                 //新增按钮
                 form.Add.click(function() {
                     if (opts.sources.length > 0) {
@@ -345,7 +345,7 @@ import {
             var Del = opts.Events.Del;
             if (Del.state) {
                 //渲染添加
-                form.Del = $('<span style="float: right;" class="ui-table-columntoggle-btn ui-btn ui-btn-a ui-corner-all ui-shadow ui-mini">删 除</span>');
+                form.Del = $('<span style="float: right;" class="ui-table-columntoggle-btn ui-btn ui-btn-a ui-corner-all ui-shadow ui-mini customize-btn">删 除</span>');
                 form.Del.click(function() {
                     var check = opts.sources.filter(function(item) {
                         return item.c;
