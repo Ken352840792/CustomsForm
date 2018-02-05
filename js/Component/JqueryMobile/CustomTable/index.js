@@ -232,9 +232,9 @@ import {
                 headtr.append('<th>编 辑</th>');
                 form.thead.append(headtr);
             }
+            form.tBody = $('<tbody></tbody>');
             //加载数据
             if (opts.sources && opts.sources.length > 0) {
-                form.tBody = $('<tbody></tbody>');
                 opts.sources.forEach(function(item, index) {
                     var tr = $('<tr></tr>');
                     tr.append('<td><div class="ui-checkbox"><input type="checkbox" ></div></td>');
@@ -256,13 +256,12 @@ import {
                         }
                         tr.append(td);
                     });
-
                     tr.append('<td><div class="tableOp clearfix"><a class="ui-btn ui-icon-edit ui-btn-icon-notext " op="edit"  ></a><a class="ui-btn ui-icon-delete ui-btn-icon-notext" op="del" ></a></div></td>');
                     tr.data('model', item);
                     form.tBody.append(tr);
                 });
-                $('body').trigger('create');
             }
+            $('body').trigger('create');
             opts._selfFrom.html('');
             opts._selfFrom.append(form.thead).append(form.tBody);
             opts._selfFrom.table();
