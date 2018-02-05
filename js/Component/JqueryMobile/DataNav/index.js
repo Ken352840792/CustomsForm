@@ -116,7 +116,7 @@ import {
         autoHeight: function() {
             var _this = this,
                 opts = _this.opts;
-            opts.ele_divBody.height(opts._ele_context.height() - opts.ele_selectBody.height());
+            opts.ele_divBody.height(opts._ele_context.height() - 50);
         },
         getValue: function() {
             //获取当前tab的信息

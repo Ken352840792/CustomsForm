@@ -235,13 +235,28 @@ import {
             //加载数据
             if (opts.sources && opts.sources.length > 0) {
                 form.tBody = $('<tbody></tbody>');
-                opts.sources.forEach(function(item) {
+                opts.sources.forEach(function(item, index) {
                     var tr = $('<tr></tr>');
                     tr.append('<td><div class="ui-checkbox"><input type="checkbox" ></div></td>');
-                    for (var key in item) {
-                        if (key === 'c' || opts.headSource.indexOf(key) === -1) continue;
-                        tr.append('<td>' + item[key] + '</td>');
-                    }
+                    // for (var key in item) {
+                    //     if (key === 'c' || opts.headSource.indexOf(key) === -1) continue;
+                    //     tr.append('<td>' + item[key] + '</td>');
+                    // }
+                    opts.headSource.forEach(function(cluname) {
+                        var td = $('<td></td>');
+                        if (opts.customFormSetting['Format']) {
+                            var render = opts.customFormSetting.Format[cluname];
+                            if (render) {
+                                td.html(render(index, item[cluname], item));
+                            } else {
+                                td.text(item[cluname]);
+                            }
+                        } else {
+                            td.text(item[cluname]);
+                        }
+                        tr.append(td);
+                    });
+
                     tr.append('<td><div class="tableOp clearfix"><a class="ui-btn ui-icon-edit ui-btn-icon-notext " op="edit"  ></a><a class="ui-btn ui-icon-delete ui-btn-icon-notext" op="del" ></a></div></td>');
                     tr.data('model', item);
                     form.tBody.append(tr);
