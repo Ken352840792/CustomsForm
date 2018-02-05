@@ -10,10 +10,10 @@ module.exports = {
         //path:'D:\\项目\\NewProject\\Sy.UI\\Areas\\App\\Scripts',
         filename: 'bundle.js'
     },
-    plugins: [
-        // 每个成员代表一个插件
-        new UglifyJsPlugin()
-    ],
+    // plugins: [
+    //     // 每个成员代表一个插件
+    //     new UglifyJsPlugin()
+    // ],
     module: {
         loaders: [{
             test: /\.js$/,

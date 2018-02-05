@@ -1,74 +1,170 @@
 ﻿<form id="t_student">
-  <input type="text" name="username" id="dom_core_username" />
-  <input name="age" id="dom_core_age" />
-  <input name="birthday" id="dom_core_birthday" />
-  <input type="text" name="stutdentclass" id="dom_core_stutdentclass" />
-  <p name="text" id="dom_core_text" ></p>
+	<input type="text" name="username" id="dom_core_username" />
+	<input name="age" id="dom_core_age" />
+	<input name="birthday" id="dom_core_birthday" />
+	<input type="text" name="stutdentclass" id="dom_core_stutdentclass" />
+	<p name="aa"></p>
+	<p name="bb"></p>
 </form>
 <script>
-	if(typeof(formSetting)=='undefined')
-	{
-		formSetting={};
+	if (typeof (formSetting) == 'undefined') {
+		formSetting = {};
 	}
-	formSetting['t_student']={
-		defaults:{"username":{"tag":"input","widget-type":"input","type":"text","name":"username","label":"姓名","require":"true","hidden":"false","role":"admin","isColumn":"true","isDataColumn":"true","remark":""},"age":{"tag":"input","widget-type":"number","name":"age","label":"年龄","min":"0","max":"100","step":"1","remark":"数值字段","role":"admin"},"birthday":{"tag":"input","name":"birthday","widget-type":"datetime","label":"出生年月日","role":"admin","startdatetime":"","enddatetime":"","formatstr":"yyyy-mm-dd hh:ii:ss","remark":"日期"},"stutdentclass":{"tag":"input","widget-type":"input","type":"text","name":"stutdentclass","label":"班级","require":"true","hidden":"false","role":"admin","isColumn":"false","isDataColumn":"true","remark":""},"text":{"tag":"p","name":"text","isColumn":"false","isDataColumn":"false","widget-type":"label","text":"文本内容","label":"注意事项","remark":"显示文本"}},
-		attributes:{"username":{"value":"张三","placeholder":"请输入姓名","data-listdata":"['张三']"},"age":{"value":"0","placeholder":"请输入年龄"},"stutdentclass":{"value":"0","placeholder":"请输入班级"}},
-		events:{
-		 username : {
-			"click" : function(){console.log(1);},
-			"focus" : function(){
+	formSetting['t_student'] = {
+		defaults: {
+			"username": {
+				"tag": "input",
+				"widget-type": "input",
+				"type": "text",
+				"name": "username",
+				"label": "姓名",
+				"require": "true",
+				"hidden": "false",
+				"role": "admin",
+				"isColumn": "true",
+				"isDataColumn": "true",
+				"remark": ""
+			},
+			"age": {
+				"tag": "input",
+				"widget-type": "number",
+				"name": "age",
+				"label": "年龄",
+				"min": "0",
+				"max": "100",
+				"step": "1",
+				"remark": "数值字段",
+				"role": "admin"
+			},
+			"birthday": {
+				"tag": "input",
+				"name": "birthday",
+				"widget-type": "datetime",
+				"label": "出生年月日",
+				"role": "admin",
+				"startdatetime": "",
+				"enddatetime": "",
+				"formatstr": "yyyy-mm-dd hh:ii:ss",
+				"remark": "日期"
+			},
+			"stutdentclass": {
+				"tag": "input",
+				"widget-type": "input",
+				"type": "text",
+				"name": "stutdentclass",
+				"label": "班级",
+				"require": "true",
+				"hidden": "false",
+				"role": "admin",
+				"isColumn": "false",
+				"isDataColumn": "true",
+				"remark": ""
+			},
+			"text": {
+				"tag": "p",
+				"name": "text",
+				"isColumn": "false",
+				"isDataColumn": "false",
+				"widget-type": "label",
+				"text": "文本内容",
+				"label": "注意事项",
+				"remark": "显示文本"
+			}
+		},
+		attributes: {
+			"username": {
+				"value": "张三",
+				"placeholder": "请输入姓名",
+				"data-listdata": "['张三']"
+			},
+			"age": {
+				"value": "0",
+				"placeholder": "请输入年龄"
+			},
+			"stutdentclass": {
+				"value": "0",
+				"placeholder": "请输入班级"
+			}
+		},
+		events: {
+			username: {
+				"click": function () {
+					console.log(1);
+				},
+				"focus": function () {
 					console.log("焦点来了");
 					//alert("焦点来了");
 				}
+			},
+			age: {
+				"click": function () {
+					console.log(1);
+				},
+				"focus": function () {
+					console.log(1);
+				}
+			}
 		},
-		 age : {
-			"click" : function(){console.log(1);},
-			"focus" : function(){console.log(1);}
-		}
-		},
-		customevents:{
-		 username : {
-			"oninitialize" : function(context,widget){
+		customevents: {
+			username: {
+				"oninitialize": function (context, widget) {
 					console.log("初始化完成");
 				},
-			"onvalidate" : function(element){
+				"onvalidate": function (element) {
 					console.log("验证通过");
 				}
-		},
-		 age : {
-			"oninitialize" : function(context,widget){
-					
+			},
+			age: {
+				"oninitialize": function (context, widget) {
+
 				},
-			"onvalidate" : ""
-		}
+				"onvalidate": ""
+			}
 		},
-		validaterules:{
-		 username : {
-			"rules" : {required:true,maxlength:16},
-			"definedMethod" : function (value, element, params){
-					if(value.length > 10){
-						console.log('验证失败'); 
+		validaterules: {
+			username: {
+				"rules": {
+					required: true,
+					maxlength: 16
+				},
+				"definedMethod": function (value, element, params) {
+					if (value.length > 10) {
+						console.log('验证失败');
 						return false;
-					}else{
+					} else {
 						return true;
 					}
 				}
-		},
-		 age : {
-			"rules" : { required: true, min: 0, max: 100},
-			"definedMethod" : function (value, element, params){
-					if(value > 100){
-						console.log('验证失败'); 
+			},
+			age: {
+				"rules": {
+					required: true,
+					min: 0,
+					max: 100
+				},
+				"definedMethod": function (value, element, params) {
+					if (value > 100) {
+						console.log('验证失败');
 						return false;
-					}else{
+					} else {
 						return true;
 					}
 				}
+			},
+			birthday: {
+				"rules": {
+					required: true
+				}
+			}
 		},
-		 birthday : {
-			"rules" : {required:true}
+		validateMsg: {
+			"username": {
+				"definedMethod": "字符长度不能大于10"
+			},
+			"age": {
+				"definedMethod": ""
+			},
+			"birthday": {}
 		}
-		},
-		validateMsg:{"username":{"definedMethod":"字符长度不能大于10"},"age":{"definedMethod":""},"birthday":{}}
-		}
+	}
 </script>

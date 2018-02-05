@@ -28,14 +28,14 @@ import {
 import {
     DataNav
 } from './DataNav/index';
-(function() {
+(function () {
     var componentMapping = {
         text: Text,
         number: TextNumber,
         datetime: DateSelect,
         button: Buttons
     };
-    var customFrom = function(_self, options) {
+    var customFrom = function (_self, options) {
         var defaults = {
             saveUrl: {},
             saveParams: {},
@@ -51,7 +51,7 @@ import {
             sourceData: [],
             componentsInitCount: 0,
             componentsFactCompleteCount: 0,
-            completeCallback: function() {},
+            completeCallback: function () {},
             components: {} //组件集合
         };
         this._self_ = _self,
@@ -59,26 +59,30 @@ import {
             this.init();
     };
     customFrom.prototype = {
-        init: function() {
+        init: function () {
             //创建循环创建组件
             var _this = this,
                 opts = this.opts;
             //初始化数据源配置数据
-            _this.setSourceData(function() {
+            _this.setSourceData(function () {
                 //初始化表单角色数据
                 _this.setRuleData();
-                opts.sourceData.forEach(function(item) {
+                opts.sourceData.forEach(function (item) {
                     if (opts.myRuleData.indexOf(item.name) !== -1 && componentMapping.hasOwnProperty(item.type)) {
                         opts.componentsInitCount += 1;
                     }
                 });
-                opts.sourceData.forEach(function(item) {
+                opts.sourceData.forEach(function (item) {
                     if (opts.myRuleData.indexOf(item.name) !== -1 && componentMapping.hasOwnProperty(item.type)) {
                         var componentName = item.type + '_' + item.name;
                         item._selfFrom = _this._self_;
-                        item.completeCallback = function() {
+                        item.completeCallback = function () {
                             opts.componentsFactCompleteCount += 1;
                             if (opts.componentsFactCompleteCount === opts.componentsInitCount) {
+                                //自定义事件
+                                if (typeof FromInit !== 'undefined') {
+                                    FromInit();
+                                }
                                 opts.completeCallback(opts, _this);
                             }
                         };
@@ -89,17 +93,21 @@ import {
                                 opts.components[componentName].input.on(e, typeof item.events[e] === "string" ? Function("return " + item.events[e])() : item.events[e]);
                             }
                         }
+                    } else {
+                        //针对没有定义的控件
+                        _this._self_.append(item.input);
                     }
                 });
+               
             });
         },
-        setSourceData: function(callback) {
+        setSourceData: function (callback) {
             var _this = this,
                 opts = this.opts;
             if (opts.sourceData.length === 0) {
                 opts.sourceUrl.get({
                     data: opts.sourceParams,
-                    success: function(obj) {
+                    success: function (obj) {
                         //返回的是HTML
                         var html = $('<div style="display:none;"><div>');
                         $('body').append(html);
@@ -113,7 +121,7 @@ import {
                 callback();
             }
         },
-        convertData: function(html) {
+        convertData: function (html) {
             var _this = this;
             var array = [];
             var formName = _this.opts.sourceParams.formName;
@@ -123,7 +131,7 @@ import {
             var events = formSetting[formName].events;
             var customevents = formSetting[formName].customevents;
             var validaterules = formSetting[formName].validaterules;
-
+            //标准控件
             for (const key in defaultsData) {
                 var _defaults = defaultsData[key],
                     name = _defaults.name,
@@ -134,6 +142,7 @@ import {
                     _customEvent = customevents[name];
                 if (!_defaults) return;
                 var type = _defaults['widget-type'] === "input" ? 'text' : _defaults['widget-type'];
+
                 var input = html.find('[name=' + name + "]")[0];
                 var cur = {
                     type: type,
@@ -145,7 +154,7 @@ import {
                         require: _validaterules ? _validaterules.rules.required : false,
                         test: _validaterules ? _validaterules.regexp : '',
                         msg: _validateMsg ? _validateMsg.regexp : "",
-                        customMethod: _validaterules ? _validaterules.definedMethod : function() {
+                        customMethod: _validaterules ? _validaterules.definedMethod : function () {
                             return true
                         },
                         customMethodMsg: _validateMsg ? _validateMsg.definedMethod : ''
@@ -157,24 +166,41 @@ import {
                 };
                 array.push(cur);
             };
+            //非标准控件
+            html.find('form').children().not('div').each(function (i, item) {
+                var is = true;
+                for (const key in defaultsData) {
+                    if (defaultsData[key].name === $(item).attr('name')) {
+                        is = false;
+                    }
+                }
+                if (is) {
+                    var cur = {
+                        type: 'customType',
+                        name: $(item).attr('name'),
+                        input: $(item)
+                    };
+                    array.push(cur);
+                }
+            });
             return array;
         },
-        setRuleData: function(url) {
+        setRuleData: function (url) {
             var _this = this,
                 opts = this.opts;
             if (opts.ruleData.length === 0) {
                 opts.ruleUrl.get({
                     data: opts.ruleParams,
                     async: false,
-                    success: function(obj) {
+                    success: function (obj) {
                         opts.ruleData = obj;
                     }
                 });
             }
-            opts.sourceData.forEach(function(item) {
-                opts.ruleData.forEach(function(ruleItem) {
+            opts.sourceData.forEach(function (item) {
+                opts.ruleData.forEach(function (ruleItem) {
                     var is = false;
-                    opts.myRuleGuid.forEach(function(myguid) {
+                    opts.myRuleGuid.forEach(function (myguid) {
                         if (ruleItem.roleGuids.indexOf(myguid) !== -1) {
                             is = true;
                         }
@@ -186,7 +212,7 @@ import {
 
             });
         },
-        getValue: function() {
+        getValue: function () {
             var _this = this,
                 opts = this.opts;
             var retrunObj = {};
@@ -196,24 +222,24 @@ import {
             return retrunObj;
         },
         ///[{'name':'UserName','value':'123'}]
-        setValue: function(values) {
+        setValue: function (values) {
             var _this = this,
                 opts = this.opts;
             for (var itemAttr in opts.components) {
-                values.forEach(function(item) {
+                values.forEach(function (item) {
                     if (item.name === itemAttr.split('_')[1]) {
                         opts.components[itemAttr].setValue(item.value);
                     }
                 });
             }
         },
-        valid: function() {
+        valid: function () {
             var _this = this,
                 opts = this.opts,
                 v = true;
             for (var itemAttr in opts.components) {
                 if (v) {
-                    opts.sourceData.forEach(function(item) {
+                    opts.sourceData.forEach(function (item) {
                         if (v) {
                             if (item.name === itemAttr.split('_')[1]) {
                                 //必须输入
@@ -248,7 +274,7 @@ import {
             }
             return v;
         },
-        save: function() {
+        save: function () {
             var _this = this,
                 opts = this.opts;
             var is = false;
@@ -262,7 +288,7 @@ import {
                 opts.saveUrl.post({
                     data: params,
                     async: false,
-                    success: function(obj) {
+                    success: function (obj) {
                         msgShowInfo('提交成功');
                         is = true;
                     }
@@ -272,7 +298,7 @@ import {
         }
     };
     $.fn.extend({
-        customFrom: function(options) {
+        customFrom: function (options) {
             if (typeof options === 'string') {
                 var data = $(this).data('customFrom');
                 data[options].apply(data, Array.prototype.slice.call(arguments, 1));

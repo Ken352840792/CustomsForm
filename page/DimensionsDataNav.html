@@ -189,9 +189,9 @@
             margin-left: 5% !important;
         }
         
-        #aa {
+        /* #aa {
             display: none !important;
-        }
+        } */
     </style>
 </head>
 
@@ -268,9 +268,11 @@
                             });
                         }
                     };
+                    
                     switch (data.type) {
                         case 0: //自定义单词录入
                             item.tab = item.div.customFrom(customsSetting);
+                            console.log(item.tab._self_.attr('Id',data.Id));
                             break;
                         case 1: //自定义多次录入
                             var table = $(
