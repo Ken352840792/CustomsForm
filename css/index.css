@@ -281,12 +281,13 @@
      line-height: 1.7 !important;
  }
  
- table tbody .ui-btn {
+ .tableOp .ui-btn {
      float: left;
      border-radius: 20px;
      margin: 0.2em 0 0.2em 5% !important;
  }
  /* table 修整 */
+ /* 这句样式在服务器里面应该删除  */
  
  .ui-checkbox {
      width: auto !important;
@@ -301,15 +302,6 @@
      height: 18px;
      left: 0.266em;
  }
- /*.ui-table-reflow thead tr th,
- .ui-table-reflow tbody tr td {
-     vertical-align: center !important;
- }*/
- 
- .ui-table th,
- .ui-table td {
-     /*padding: 0.5em 0.4em 0.2em;*/
- }
  
  .ui-loader {
      left: 25% !important;
@@ -322,3 +314,12 @@
  /*.swiper-wrapper {
      height: auto !important;
  }*/
+ 
+ .customize-btn {
+     min-width: 100px;
+     background-color: #38c;
+ }
+ 
+ .ui-popup-container {
+     width: 600px;
+ }
