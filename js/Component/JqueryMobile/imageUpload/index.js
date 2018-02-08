@@ -2,8 +2,12 @@
     let inputUpload = function(options) {
         let defaults = {
             Form: {},
+            initCallback: function() {}, //加载前
+            completeCallback: function() {}, //加载完成后
         };
         this.opts = $.extend({}, defaults, options);
+        this.opts.initCallback(this.opts);
+        this.opts.completeCallback(this.opts, this);
         this.init();
         return this;
     }
@@ -14,6 +18,7 @@
                 form = opts.Form;
             _this.createComponent();
             _this.createImagesWidget(form.input, opts);
+            // _this.Events()
 
         },
         //创建dom元素
@@ -26,6 +31,7 @@
             form.content.append(form.lable);
             if (opts.regexp && opts.regexp.require) form.lable.append($('<i style ="color: red"> * </i>'));
             form.input = $(opts.input);
+            // form.input.attr('value', '1111');
             form.content.append(form.input);
             form.input.textinput();
             opts._selfFrom.append(form.content);
@@ -38,8 +44,8 @@
                 multiple: options.multiple,
                 imageNum: options.filetotal,
                 fileSize: options.filesize,
-                // url: apiUrl + "/FileConfig/UpLoadFile",
-                url: "www.baidu.com",
+                url: apiUrl + "/FileConfig/UpLoadFile",
+                // url: "www.baidu.com",
                 success: function(data) {
                     if (data && data.Status) {
                         var list = element.data("upload_list");
@@ -62,8 +68,8 @@
                 error: function(data) {
 
                 },
-                // del: apiUrl + "/FileConfig/DeleteUpLoadFile",
-                del: "www.baidu.com",
+                del: apiUrl + "/FileConfig/DeleteUpLoadFile",
+                // del: "www.baidu.com",
                 delType: "DELETE",
                 delData: function(data) {
                     return {
@@ -86,8 +92,16 @@
                     }
                 }
             });
+        },
+        getValue: function() {
+            var _this = this,
+                opts = this.opts,
+                form = opts.Form;
+            return form.input.val();
+        },
+        setValue: function(arr) {
+            return "";
         }
-
     }
 
     window.inputUpload = inputUpload;
