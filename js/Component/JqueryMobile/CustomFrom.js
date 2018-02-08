@@ -13,9 +13,9 @@ import {
 import {
     Buttons
 } from './Button/index';
-import {
-    imageUpload
-} from './imageUpload/index';
+// import {
+//     imageUpload
+// } from './imageUpload/index';
 import {
     CustomTable
 } from './CustomTable/index';
@@ -36,8 +36,8 @@ import {
         text: Text,
         number: TextNumber,
         datetime: DateSelect,
-        button: Buttons,
-        images: inputUpload
+        dropdown: Buttons
+        //images: inputUpload
     };
     var customFrom = function(_self, options) {
         var defaults = {
@@ -153,6 +153,7 @@ import {
                     name: name,
                     lable: _defaults.label,
                     placeholder: _attributes ? _attributes.placeholder : '',
+                    singleSelect:_attributes?_attributes.multiple===undefined?true:!_attributes.multiple:true,
                     input: input ? input.outerHTML : "",
                     regexp: {
                         require: _validaterules ? _validaterules.rules.required : false,

@@ -280,21 +280,21 @@ import {
             //判断是否已经创建过分页组件,如果创建过，则不需要加载原有的事件及方法
             if (!opts.PagingInit) {
                 opts.PagingInit = true;
-                form.paging = $(' <div  class="page_div"></div>');
-                if (opts.Paging) {
-                    opts._selfFrom.after(form.paging);
-                    form.paging.paging({
-                        pageNo: pageNo,
-                        totalPage: totalPage,
-                        totalSize: totalSize,
-                        callback: function(num) {
-                            opts.sources = undefined;
-                            _this.createDataSource(num);
-                        }
-                    })
-                }
             }
-
+            if(form.paging){form.paging.remove();}
+            form.paging = $('<div  class="page_div"></div>');
+            if (opts.Paging) {
+                opts._selfFrom.after(form.paging);
+                form.paging.paging({
+                    pageNo: pageNo,
+                    totalPage: totalPage,
+                    totalSize: totalSize,
+                    callback: function(num) {
+                        opts.sources = undefined;
+                        _this.createDataSource(num);
+                    }
+                })
+            }
         },
         Add: function() {
             var _this = this,
