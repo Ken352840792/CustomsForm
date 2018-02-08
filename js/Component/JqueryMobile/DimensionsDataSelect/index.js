@@ -44,7 +44,7 @@ import {
                     });
                     data.push($.extend({}, {
                         "tag": "button",
-                        "type": "button",
+                        "type": "dropdown",
                         "singleSelect": opts.singleSelect
                     }, {
                         'sourceData': o,
