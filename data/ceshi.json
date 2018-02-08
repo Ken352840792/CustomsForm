@@ -2,188 +2,192 @@
     "Status": 1,
     "ErrorCode": null,
     "Data": [{
-        "type": "text",
-        "name": "username",
-        "lable": "姓名",
-        "placeholder": "请输入姓名",
-        "input": "<input type=\"text\" name=\"username\" id=\"dom_core_username\">",
-        "regexp": {
-            "require": true,
-            "test": "0?(13|14|15|17|18|19)[0-9]{9}",
-            "msg": "输入浮点数",
-            "customMethodMsg": "字符长度不能大于10"
-        },
-        "events": {},
-        "customEvent": {}
-    }, {
-        "type": "number",
-        "name": "age",
-        "lable": "年龄",
-        "placeholder": "请输入年龄",
-        "input": "<input name=\"age\" id=\"dom_core_age\">",
-        "regexp": {
-            "require": true,
-            "test": "0?(13|14|15|17|18|19)[0-9]{9}",
-            "msg": "输入age",
-            "customMethodMsg": "age自定验证失败"
-        },
-        "events": {},
-        "customEvent": {
-            "onvalidate": ""
+            "type": "text",
+            "name": "username",
+            "lable": "姓名",
+            "placeholder": "请输入姓名",
+            "input": "<input type=\"text\" name=\"username\" id=\"dom_core_username\">",
+            "regexp": {
+                "require": true,
+                "test": "0?(13|14|15|17|18|19)[0-9]{9}",
+                "msg": "输入浮点数",
+                "customMethodMsg": "字符长度不能大于10"
+            },
+            "events": {},
+            "customEvent": {}
+        }, {
+            "type": "number",
+            "name": "age",
+            "lable": "年龄",
+            "placeholder": "请输入年龄",
+            "input": "<input name=\"age\" id=\"dom_core_age\">",
+            "regexp": {
+                "require": true,
+                "test": "0?(13|14|15|17|18|19)[0-9]{9}",
+                "msg": "输入age",
+                "customMethodMsg": "age自定验证失败"
+            },
+            "events": {},
+            "customEvent": {
+                "onvalidate": ""
+            }
+        }, {
+            "type": "select",
+            "name": "gender",
+            "lable": "性别",
+            "placeholder": "请选择性别",
+            "input": "<select name=\"gender\" id=\"dom_core_gender\"></select>",
+            "regexp": {
+                "require": true
+            },
+            "events": {},
+            "customEvent": {
+                "onvalidate": ""
+            }
+        }, {
+            "type": "button",
+            "name": "xx1",
+            "lable": "按钮",
+            "placeholder": "",
+            "input": "",
+            "regexp": {
+                "require": false,
+                "test": "",
+                "msg": "",
+                "customMethodMsg": ""
+            },
+            "sourceData": {
+                "SB": true,
+                "data": [{
+                    "name": "唐僧",
+                    "key": "1",
+                    "isTrue": true
+                }, {
+                    "name": "悟空",
+                    "id": "2",
+                    "isTrue": false
+                }, {
+                    "name": "八戒1",
+                    "id": "3",
+                    "isTrue": false
+                }, {
+                    "name": "八戒2",
+                    "id": "4",
+                    "isTrue": false
+                }, {
+                    "name": "八戒3",
+                    "id": "5",
+                    "isTrue": false
+                }, {
+                    "name": "八戒4",
+                    "id": "6",
+                    "isTrue": false
+                }, {
+                    "name": "老沙",
+                    "id": "7",
+                    "isTrue": false
+                }]
+            },
+            "sourceUrl": "ghj"
+        }, {
+            "type": "textarea",
+            "name": "textarea",
+            "lable": "座右铭",
+            "placeholder": "",
+            "input": "<textarea name=\"textarea\" id=\"dom_core_textarea\"></textarea>",
+            "regexp": {
+                "require": true
+            }
+        }, {
+            "type": "hidden",
+            "name": "picture",
+            "lable": "头像",
+            "placeholder": "",
+            "input": "<input type=\"hidden\" name=\"picture\" id=\"dom_core_picture\">",
+            "regexp": {
+                "require": true
+            }
+        }, {
+            "type": "hidden",
+            "name": "files",
+            "lable": "档案材料",
+            "input": "<input type=\"hidden\" name=\"files\" id=\"dom_core_files\">",
+            "regexp": {
+                "require": true
+            }
+        }, {
+            "type": "div",
+            "name": "nationality",
+            "lable": "国别",
+            "placeholder": "",
+            "input": "",
+            "regexp": {
+                "require": true
+            }
+        }, {
+            "type": "div",
+            "name": "hobby",
+            "lable": "爱好",
+            "placeholder": "",
+            "input": "",
+            "regexp": {
+                "require": true
+            },
+            "events": {}
+        }, {
+            "type": "text",
+            "name": "birthday",
+            "lable": "出生年月日",
+            "placeholder": "",
+            "input": "<input name=\"birthday\" id=\"dom_core_birthday\">",
+            "regexp": {
+                "require": true
+            }
+        }, {
+            "type": "data",
+            "name": "time",
+            "lable": "日期",
+            "placeholder": "",
+            "input": "<input name=\"time\" id=\"dom_core_time\">",
+            "regexp": {
+                "require": true
+            }
+        }, {
+            "type": "div",
+            "name": "history",
+            "lable": "审批历史",
+            "placeholder": "",
+            "input": "",
+            "regexp": {
+                "require": false,
+                "test": "",
+                "msg": "",
+                "customMethodMsg": ""
+            }
+        }, {
+            "type": "textarea",
+            "name": "remark",
+            "lable": "备注",
+            "placeholder": "",
+            "input": "<textarea name=\"remark\" id=\"dom_core_remark\"></textarea>",
+            "regexp": {
+                "require": true
+            }
+        }, {
+            "type": "p",
+            "name": "text",
+            "lable": "注意事项",
+            "placeholder": "",
+            "input": "<p name=\"text\" id=\"dom_core_text\"></p>",
+            "regexp": {
+                "require": false,
+                "test": "",
+                "msg": "",
+                "customMethodMsg": ""
+            }
+        }, {
+            "type": ""
         }
-    }, {
-        "type": "select",
-        "name": "gender",
-        "lable": "性别",
-        "placeholder": "请选择性别",
-        "input": "<select name=\"gender\" id=\"dom_core_gender\"></select>",
-        "regexp": {
-            "require": true
-        },
-        "events": {},
-        "customEvent": {
-            "onvalidate": ""
-        }
-    }, {
-        "type": "button",
-        "name": "xx1",
-        "lable": "按钮",
-        "placeholder": "",
-        "input": "",
-        "regexp": {
-            "require": false,
-            "test": "",
-            "msg": "",
-            "customMethodMsg": ""
-        },
-        "sourceData": {
-            "SB": true,
-            "data": [{
-                "name": "唐僧",
-                "key": "1",
-                "isTrue": true
-            }, {
-                "name": "悟空",
-                "id": "2",
-                "isTrue": false
-            }, {
-                "name": "八戒1",
-                "id": "3",
-                "isTrue": false
-            }, {
-                "name": "八戒2",
-                "id": "4",
-                "isTrue": false
-            }, {
-                "name": "八戒3",
-                "id": "5",
-                "isTrue": false
-            }, {
-                "name": "八戒4",
-                "id": "6",
-                "isTrue": false
-            }, {
-                "name": "老沙",
-                "id": "7",
-                "isTrue": false
-            }]
-        },
-        "sourceUrl": "ghj"
-    }, {
-        "type": "textarea",
-        "name": "textarea",
-        "lable": "座右铭",
-        "placeholder": "",
-        "input": "<textarea name=\"textarea\" id=\"dom_core_textarea\"></textarea>",
-        "regexp": {
-            "require": true
-        }
-    }, {
-        "type": "hidden",
-        "name": "picture",
-        "lable": "头像",
-        "placeholder": "",
-        "input": "<input type=\"hidden\" name=\"picture\" id=\"dom_core_picture\">",
-        "regexp": {
-            "require": true
-        }
-    }, {
-        "type": "hidden",
-        "name": "files",
-        "lable": "档案材料",
-        "input": "<input type=\"hidden\" name=\"files\" id=\"dom_core_files\">",
-        "regexp": {
-            "require": true
-        }
-    }, {
-        "type": "div",
-        "name": "nationality",
-        "lable": "国别",
-        "placeholder": "",
-        "input": "",
-        "regexp": {
-            "require": true
-        }
-    }, {
-        "type": "div",
-        "name": "hobby",
-        "lable": "爱好",
-        "placeholder": "",
-        "input": "",
-        "regexp": {
-            "require": true
-        },
-        "events": {}
-    }, {
-        "type": "text",
-        "name": "birthday",
-        "lable": "出生年月日",
-        "placeholder": "",
-        "input": "<input name=\"birthday\" id=\"dom_core_birthday\">",
-        "regexp": {
-            "require": true
-        }
-    }, {
-        "type": "data",
-        "name": "time",
-        "lable": "日期",
-        "placeholder": "",
-        "input": "<input name=\"time\" id=\"dom_core_time\">",
-        "regexp": {
-            "require": true
-        }
-    }, {
-        "type": "div",
-        "name": "history",
-        "lable": "审批历史",
-        "placeholder": "",
-        "input": "",
-        "regexp": {
-            "require": false,
-            "test": "",
-            "msg": "",
-            "customMethodMsg": ""
-        }
-    }, {
-        "type": "textarea",
-        "name": "remark",
-        "lable": "备注",
-        "placeholder": "",
-        "input": "<textarea name=\"remark\" id=\"dom_core_remark\"></textarea>",
-        "regexp": {
-            "require": true
-        }
-    }, {
-        "type": "p",
-        "name": "text",
-        "lable": "注意事项",
-        "placeholder": "",
-        "input": "<p name=\"text\" id=\"dom_core_text\"></p>",
-        "regexp": {
-            "require": false,
-            "test": "",
-            "msg": "",
-            "customMethodMsg": ""
-        }
-    }]
+
+    ]
 }

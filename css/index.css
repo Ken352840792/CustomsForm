@@ -130,8 +130,6 @@
  
  .swiper1 .selected {
      color: #fff;
-     /*border-bottom: 2px solid #38c;
-            */
      background-color: #38c;
      box-sizing: border-box;
  }
@@ -140,7 +138,6 @@
      text-align: center;
      font-size: 16px;
      height: 50px;
-     /* Center slide text vertically */
      display: -webkit-box;
      display: -ms-flexbox;
      display: -webkit-flex;
@@ -273,10 +270,6 @@
      width: 1em;
  }
  
- .tableOp {
-     margin-left: 38%;
- }
- 
  .ui-btn {
      line-height: 1.7 !important;
  }
@@ -306,10 +299,6 @@
  .ui-loader {
      left: 25% !important;
  }
- 
- .tableOp {
-     margin-left: 30% !important;
- }
  /* 这句代码只有在正式版本上面才加 */
  /*.swiper-wrapper {
      height: auto !important;
@@ -322,4 +311,8 @@
  
  .ui-popup-container {
      width: 600px;
+ }
+ 
+ .tableOp {
+     display: -webkit-inline-box;
  }

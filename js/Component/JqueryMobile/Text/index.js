@@ -1,9 +1,9 @@
-(function () {
-    let Text = function (options) {
+(function() {
+    let Text = function(options) {
         let defaults = {
             Form: {},
-            initCallback: function () {}, //加载前
-            completeCallback: function () {}, //加载完成后
+            initCallback: function() {}, //加载前
+            completeCallback: function() {}, //加载完成后
             value: "" //双向数据绑定字段
         };
         this.opts = $.extend({}, defaults, options);
@@ -11,7 +11,7 @@
         return this;
     };
     Text.prototype = {
-        init: function () {
+        init: function() {
             var _this = this,
                 opts = this.opts,
                 form = opts.Form;
@@ -24,24 +24,24 @@
             }
             opts.completeCallback();
         },
-        Events: function () {
+        Events: function() {
             var _this = this,
                 opts = this.opts;
             Object.defineProperty(opts, 'des', {
-                get: function () { //获取数据
+                get: function() { //获取数据
                     return this.value;
                 },
-                set: function (val) { //设置值
+                set: function(val) { //设置值
                     _this.input.val(val);
                     this.value = val;
                 }
             });
-            _this.input.on('change', function () {
+            _this.input.on('change', function() {
                 opts.des = this.value;
             })
         },
         //创建Component表
-        createComponent: function () {
+        createComponent: function() {
             var _this = this,
                 opts = this.opts,
                 form = opts.Form;
@@ -50,16 +50,17 @@
             form.content.append(form.lable);
             //必选lable上给星号
             if (opts.regexp && opts.regexp.require) form.lable.append($('<i style ="color: red"> * </i>'));
+
             _this.input = $(opts.input)
             _this.input.attr('placeholder', opts.placeholder);
             form.content.append(_this.input);
             opts._selfFrom.append(form.content);
             _this.input.textinput();
         },
-        getValue: function () {
+        getValue: function() {
             return this.opts.value;
         },
-        setValue: function (arr) {
+        setValue: function(arr) {
             this.opts.des = arr;
         }
     };

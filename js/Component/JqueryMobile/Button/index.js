@@ -75,7 +75,7 @@ import {
             let _this = this,
                 opts = this.opts,
                 form = opts.Form;
-            form.content = $('<div id="OperatorWorkShopContentId" class="overflow-auto clearfix">');
+            form.content = $('<div class="overflow-auto clearfix">');
             form.lable = $(' <div class="grid-div-label">' + opts.lable + '</div>');
             form.content.append(form.lable)
             let Data = opts.sourceData.data ? opts.sourceData.data : null;

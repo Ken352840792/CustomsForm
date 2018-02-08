@@ -13,5 +13,8 @@
     }, {
         "name": "birthday",
         "roleGuids": ["cb33b16e-b088-4124-92d8-918fdd2a5922"]
+    }, {
+        "name": "picture",
+        "roleGuids": ["cb33b16e-b088-4124-92d8-918fdd2a5922"]
     }]
 }

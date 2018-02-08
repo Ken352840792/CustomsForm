@@ -54,7 +54,8 @@ import {
                     'Id': item.FormTempleteId,
                     'Name': item.FormListName,
                     'TableName': item.ConfigFileName,
-                    'type': item.InputFrequency
+                    'type': item.InputFrequency,
+                    'code': item.DimensionCode
                 });
             });
             return arr;

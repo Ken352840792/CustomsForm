@@ -261,7 +261,7 @@ import {
                     form.tBody.append(tr);
                 });
             }
-            $('body').trigger('create');
+            $('.container').trigger('create');
             opts._selfFrom.html('');
             opts._selfFrom.append(form.thead).append(form.tBody);
             opts._selfFrom.table();

@@ -17,11 +17,16 @@
     <script src="/Component/swiper/js/swiper.jquery.min.js"></script>
     <!-- keyboard 数字键盘组件 -->
     <script src="/Component/keyboard/keyboard.js"></script>
+
     <!-- mobiscroll 日期组件 -->
     <link rel="stylesheet" href="/Component/Mobiscroll/css/mobiscroll.custom-3.0.0-beta6.min.css">
     <link rel="stylesheet" href="/Component/Mobiscroll/css/theme.self.css">
     <script src="/Component/Mobiscroll/js/mobiscroll.custom-3.0.0-beta6.min.js"></script>
     <script src="/js/plugins/paging.js"></script>
+
+    <!-- 图片 上传插件 -->
+    <link rel="stylesheet" href="/Component/imageupload/image_upload.css">
+    <script src="/Component/imageupload/imageupload.js"></script>
 
     <script src="/built/bundle.js"></script>
     <script src="/js/ConvertFormSetting.js"></script>
@@ -188,7 +193,6 @@
             border-radius: 20px;
             margin-left: 5% !important;
         }
-        
         /* #aa {
             display: none !important;
         } */
@@ -207,15 +211,12 @@
     $(function() {
         app.server.add({
             DimensionsDataSelectUrl: '/data/Server/Select.json',
-
             CustomFormRuleUrl: '/data/Server/GetCustomFormRoleRelation.json',
             CustomFormSourceUrl: '/data/Server/LoadFormView.json',
             CustomFormSaveUrl: '/data/Server/AddFormData.json',
             CustomFormInitData: '/data/Server/GetFormDataList.json',
-
             CustomTableSourceUrl: '/data/Server/GetFormDataList.json',
             CustomTableDelUrl: '/data/del.json',
-
         });
         var urls = app.server;
         window.data = new DataNav({
@@ -268,31 +269,31 @@
                             });
                         }
                     };
-                    
+
                     switch (data.type) {
                         case 0: //自定义单词录入
                             item.tab = item.div.customFrom(customsSetting);
-                            console.log(item.tab._self_.attr('Id',data.Id));
+                            console.log(item.tab._self_.attr('Id', data.Id));
                             break;
-                        case 1: //自定义多次录入
-                            var table = $(
-                                '<table data-role="table" class="ui-responsive" ></table>'
-                            );
-                            item.div.append(table);
-                            item.tab = new CustomTable({
-                                _selfFrom: table,
-                                sourceUrl: urls.CustomTableSourceUrl,
-                                sourceParams: {
-                                    tablename: data.TableName,
-                                    pagesize: 5,
-                                    pageindex: 1,
-                                    order: 'createTime desc'
-                                },
-                                delUrl: urls.CustomTableDelUrl,
-                                delParams: defaultParams,
-                                customFormSetting: customsSetting
-                            })
-                            break;
+                            // case 1: //自定义多次录入
+                            //     var table = $(
+                            //         '<table data-role="table" class="ui-responsive" ></table>'
+                            //     );
+                            //     item.div.append(table);
+                            //     item.tab = new CustomTable({
+                            //         _selfFrom: table,
+                            //         sourceUrl: urls.CustomTableSourceUrl,
+                            //         sourceParams: {
+                            //             tablename: data.TableName,
+                            //             pagesize: 5,
+                            //             pageindex: 1,
+                            //             order: 'createTime desc'
+                            //         },
+                            //         delUrl: urls.CustomTableDelUrl,
+                            //         delParams: defaultParams,
+                            //         customFormSetting: customsSetting
+                            //     })
+                            //     break;
                     }
                 });
                 //第一个选中
