@@ -13,9 +13,12 @@ import {
 import {
     Buttons
 } from './Button/index';
-// import {
-//     imageUpload
-// } from './imageUpload/index';
+import {
+    imageUpload
+} from './imageUpload/index';
+import {
+    dropDown
+} from './DropDown/index';
 import {
     CustomTable
 } from './CustomTable/index';
@@ -36,8 +39,9 @@ import {
         text: Text,
         number: TextNumber,
         datetime: DateSelect,
-        dropdown: Buttons
-        //images: inputUpload
+        dropdown: Buttons,
+        images: inputUpload,
+        autocomplete: dropDown
     };
     var customFrom = function(_self, options) {
         var defaults = {
@@ -143,7 +147,9 @@ import {
                     _validateMsg = validateMsg[name],
                     _validaterules = validaterules[name],
                     _events = events[name],
-                    _customEvent = customevents[name];
+                    _customEvent = customevents[name],
+                    _params = eval('(' + _defaults.params + ')');
+
                 if (!_defaults) return;
                 var type = _defaults['widget-type'] === "input" ? 'text' : _defaults['widget-type'];
 
@@ -153,7 +159,7 @@ import {
                     name: name,
                     lable: _defaults.label,
                     placeholder: _attributes ? _attributes.placeholder : '',
-                    singleSelect:_attributes?_attributes.multiple===undefined?true:!_attributes.multiple:true,
+                    singleSelect: _attributes ? _attributes.multiple === undefined ? true : !_attributes.multiple : true,
                     input: input ? input.outerHTML : "",
                     regexp: {
                         require: _validaterules ? _validaterules.rules.required : false,
@@ -163,6 +169,10 @@ import {
                             return true
                         },
                         customMethodMsg: _validateMsg ? _validateMsg.definedMethod : ''
+                    },
+                    params: {
+                        eqid: _params ? _params.eqid : '',
+                        type: _params ? _params.type : '',
                     },
                     sourceData: _defaults.sourceData,
                     sourceUrl: _defaults.sourceUrl,

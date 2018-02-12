@@ -18,8 +18,6 @@
                 form = opts.Form;
             _this.createComponent();
             _this.createImagesWidget(form.input, opts);
-            // _this.Events()
-
         },
         //创建dom元素
         createComponent: function() {
@@ -31,7 +29,9 @@
             form.content.append(form.lable);
             if (opts.regexp && opts.regexp.require) form.lable.append($('<i style ="color: red"> * </i>'));
             form.input = $(opts.input);
-            // form.input.attr('value', '1111');
+            form.input.attr('value', '1111');
+            // console.log( )
+            // form.input.parent('div').css('border', '0px');
             form.content.append(form.input);
             form.input.textinput();
             opts._selfFrom.append(form.content);
@@ -44,8 +44,7 @@
                 multiple: options.multiple,
                 imageNum: options.filetotal,
                 fileSize: options.filesize,
-                url: apiUrl + "/FileConfig/UpLoadFile",
-                // url: "www.baidu.com",
+                url: app.server.CustomTableImageUpLoadFile.url,
                 success: function(data) {
                     if (data && data.Status) {
                         var list = element.data("upload_list");
@@ -68,8 +67,7 @@
                 error: function(data) {
 
                 },
-                del: apiUrl + "/FileConfig/DeleteUpLoadFile",
-                // del: "www.baidu.com",
+                del: app.server.CustomTableDeleteUpLoadFile.url,
                 delType: "DELETE",
                 delData: function(data) {
                     return {

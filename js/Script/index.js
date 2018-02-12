@@ -2,28 +2,27 @@ $(function() {
 
     app.server.add(app.global.debug ? {
         DimensionsDataSelectUrl: '/data/Server/Select.json',
-
         CustomFormRuleUrl: '/data/Server/GetCustomFormRoleRelation.json',
         CustomFormSourceUrl: '/data/Server/LoadFormView.json',
         CustomFormSaveUrl: '/data/Server/AddFormData.json',
         CustomFormInitData: '/data/Server/GetFormDataList.json',
-
         CustomTableSourceUrl: '/data/Server/GetFormDataList.json',
         CustomTableDelUrl: '/data/del.json',
-        DimensionsDataButtonUrl: '/data/Server/GetFormListById.json'
+        DimensionsDataButtonUrl: '/data/Server/GetFormListById.json',
+        CustomTableImageUpLoadFile: 'www.baidu.com',
+        CustomTableDeleteUpLoadFile: 'www.baidu.com'
 
     } : {
         DimensionsDataSelectUrl: apiUrl + '/FormList/Select',
-
         CustomFormRuleUrl: apiUrl + "/FormManager/GetCustomFormRoleRelation",
         CustomFormSourceUrl: "/FormManager/LoadFormView",
         CustomFormSaveUrl: apiUrl + "/FormManager/AddFormData",
         CustomFormInitData: apiUrl + '/FormManager/GetFormDataList',
-
         CustomTableSourceUrl: apiUrl + '/FormManager/GetFormDataList',
         CustomTableDelUrl: apiUrl + '/FormManager/DelFormData',
         DimensionsDataButtonUrl: apiUrl + '/FormList/GetFormListById/1',
-
+        CustomTableImageUpLoadFile: apiUrl + "/FileConfig/UpLoadFile",
+        CustomTableDeleteUpLoadFile: apiUrl + "/FileConfig/DeleteUpLoadFile"
     });
     var Business = {
         // 数据暂存
@@ -45,12 +44,7 @@ $(function() {
                 data = _this.data;
             $('#ul_label').on('click', 'li', function() {
                 var index = $(this).index();
-
                 $("#ul_box > div").eq(index).addClass("ul_selected").siblings().removeClass("ul_selected");
-                // if (index === 1 && data.isTrue) {
-                //     _this.customizeFrom();
-                //     data.isTrue = false;
-                // }
             });
         },
         // 设置高度
@@ -58,11 +52,11 @@ $(function() {
             var height = $(window).height() - ($('.ui-content').innerHeight() - $('.ui-content').height()) - 87
             $('#form').height(height);
             $('.container').height(height);
+            $('#help_').parent('div').css('border', '0px');
         },
         // 自定义表单数据渲染
         customizeFrom: function() {
             var __this = this;
-
             var urls = app.server;
             window.page = new DataNav({
                 _selfFrom: $('#customizeFrom'),
@@ -111,6 +105,7 @@ $(function() {
                                             cusArr.push(customData);
                                         }
                                         _FormThis.setValue(cusArr);
+                                        $('#help_').parent('div').css('border', '0px');
                                     }
                                 });
                             }
@@ -124,6 +119,7 @@ $(function() {
                                     $(this).data('model').tab.save();
                                 });
                                 item.div.append(saveButton);
+
                                 break;
                             case 1: //自定义多次录入
                                 var table = $(
@@ -176,8 +172,6 @@ $(function() {
                 $('#ul_a').click();
             });
         }
-
     }
-
     Business.init()
 })

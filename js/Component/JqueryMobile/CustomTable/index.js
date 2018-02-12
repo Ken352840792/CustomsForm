@@ -281,7 +281,7 @@ import {
             if (!opts.PagingInit) {
                 opts.PagingInit = true;
             }
-            if(form.paging){form.paging.remove();}
+            if (form.paging) { form.paging.remove(); }
             form.paging = $('<div  class="page_div"></div>');
             if (opts.Paging) {
                 opts._selfFrom.after(form.paging);
